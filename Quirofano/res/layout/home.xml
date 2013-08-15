@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#BFE6EE"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/home_string" />
+    
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textColor="#002266"
+        android:text="@string/procedimientos_string" />
+	
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:textColor="#545454"
+        android:layout_marginTop="10dp"
+        android:text="@string/agendaDia_string" />
+	
+	<TableLayout
+	    android:orientation="horizontal"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="12dp"
+	    android:stretchColumns="0,1,2,3"
+	    android:layout_gravity="center">
+	    <TableRow
+	        android:layout_gravity="left"
+	        android:background="#C0C0C0">
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="@string/hora_string" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="@string/sala_string" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="@string/paciente_string" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="@string/diagnostico_string" />
+		</TableRow>
+		
+	    <TableRow>
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="8:00" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="7" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="Sifuentes" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="Tumor maligno" />
+		</TableRow>
+		
+	    <TableRow>
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="9:00" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="8" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="Avendaño" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="Apendicitis aguda" />
+		</TableRow>
+		
+	    <TableRow>
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="10:00" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="9" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="Triana" />
+			<TextView
+	        	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:text="Cambio de cerebro" />
+		</TableRow>
+		
+	    
+		
+	</TableLayout>
+</LinearLayout>
