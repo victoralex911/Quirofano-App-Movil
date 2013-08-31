@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#BFE6EE"
+    android:layout_height="match_parent" >
+
+   	<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+        
+        <TextView 
+            android:id="@+id/qCentralString"
+			android:text="@string/qcentral_string"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_alignParentTop="true"
+			android:layout_centerInParent="true"
+			android:textSize="20sp"
+			android:layout_marginTop="10dp"/>  
+			
+        <TextView
+            android:id="@+id/stringSala"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/qCentralString"
+            android:text="Sala" />
+        
+        <!-- android:layout_marginRight="120dp" -->
+        
+        <TextView
+            android:id="@+id/stringFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_alignBaseline="@id/stringSala"
+            android:layout_centerHorizontal="true"
+            android:text="Fecha" />
+
+        <TextView
+            android:id="@+id/stringHoraPropuesta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/stringSala"
+			android:layout_alignParentRight="true"
+            android:text="Hora propuesta" />
+        
+        <Spinner
+            android:id="@+id/salaOpciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:layout_below="@+id/stringSala" />
+        
+         <EditText
+		     android:id="@+id/fecha"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:background="#55ffffff"
+		     android:ems="10"
+		     android:inputType="text"
+		     android:layout_alignBaseline="@+id/salaOpciones"
+	         android:layout_centerHorizontal="true" /> 
+	    
+         <EditText
+		     android:id="@+id/horaPropuesta"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:background="#55ffffff"
+		     android:ems="10"
+		     android:inputType="text"
+		     android:layout_alignBaseline="@+id/salaOpciones"
+	         android:layout_alignParentRight="true" />
+         
+         <!-- AHORA VIENEN 2 SPINNER: DURACION Y TIPO DE PROGRAMACION -->
+         
+         <TextView
+            android:id="@+id/stringDuracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/salaOpciones"
+            android:layout_marginTop="10dp"
+            android:text="Duración" />
+         
+         <TextView
+            android:id="@+id/stringTipoDeProgramacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_alignBaseline="@id/stringDuracion"
+            android:layout_centerHorizontal="true"
+            android:text="Tipo de programación" />
+          
+         <Spinner
+            android:id="@+id/duracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:layout_below="@+id/stringDuracion" />
+         
+         <Spinner
+            android:id="@+id/tipoDeProgramacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBaseline="@id/duracion" />
+         
+         <TextView
+             android:id="@+id/stringRegistro"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Registro"
+             android:layout_below="@+id/duracion" />
+         
+         <EditText
+		     android:id="@+id/registro"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:background="#55ffffff"
+		     android:ems="10"
+		     android:inputType="text"
+		     android:layout_below="@+id/stringRegistro" />
+         
+         <TextView
+             android:id="@+id/stringNombreDelPaciente"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Nombre del paciente"
+             android:layout_below="@+id/registro" />
+         
+         <EditText
+		     android:id="@+id/nombreDelPaciente"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:background="#55ffffff"
+		     android:ems="10"
+		     android:inputType="text"
+		     android:layout_below="@+id/stringNombreDelPaciente" />
+         
+         <TextView
+             android:id="@+id/stringEdad"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Edad"
+             android:layout_below="@+id/nombreDelPaciente" />
+         
+         <TextView
+             android:id="@+id/stringGenero"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Genero"
+             android:layout_alignBaseline="@id/stringEdad"
+             android:layout_centerHorizontal="true" />
+         
+         <TextView
+             android:id="@+id/stringProcedencia"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Procedencia"
+             android:layout_alignBaseline="@id/stringEdad"
+             android:layout_alignParentRight="true" />
+         
+         <EditText
+		     android:id="@+id/edad"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:background="#55ffffff"
+		     android:ems="10"
+		     android:inputType="text"
+		     android:layout_below="@+id/stringEdad" />
+         
+         <EditText
+		     android:id="@+id/genero"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:background="#55ffffff"
+		     android:ems="10"
+		     android:inputType="text"
+		     android:layout_centerHorizontal="true"
+		     android:layout_alignBaseline="@+id/edad" />
+         
+         <EditText
+		     android:id="@+id/procedencia"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:background="#55ffffff"
+		     android:ems="10"
+		     android:inputType="text"
+		     android:layout_alignParentRight="true" 
+		     android:layout_alignBaseline="@+id/edad" />
+         
+         <!-- AHORA VIENEN 1 SPINNER: spinner de servicio -->
+    
+    	 <TextView
+             android:id="@+id/stringServicio"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Servicio"
+             android:layout_below="@+id/edad" />
+    
+         <Spinner
+            android:id="@+id/servicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:layout_below="@id/stringServicio" />
+         
+         <TextView
+             android:id="@+id/stringDiagnostico"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Diagnóstico"
+             android:layout_below="@+id/servicio" />
+         
+         <EditText
+		     android:id="@+id/diagnostico"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:background="#55ffffff"
+		     android:ems="10"
+		     android:inputType="text"
+		     android:layout_below="@id/stringDiagnostico" />
+      
+        
+    </RelativeLayout>
+        
+
+</ScrollView>

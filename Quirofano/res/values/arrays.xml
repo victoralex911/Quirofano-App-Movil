@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="salas">
+		<item>Sala 1</item>
+		<item>Sala 2</item>
+		<item>Sala 3</item>
+		<item>Sala 4</item>
+		<item>Sala 5</item>
+	</string-array>
+	
+	<string-array name="duraciones">
+		<item>1 hora</item>
+		<item>2 horas</item>
+		<item>3 horas</item>
+		<item>4 horas</item>
+		<item>5 horas</item>
+	</string-array>
+	
+	<string-array name="tiposDeProgramacion">
+		<item>Electiva hospitalizado</item>
+		<item>Bla 1</item>
+		<item>Bla 2</item>
+		<item>Bla 3</item>
+		<item>Bla 4</item>
+	</string-array>
+	
+	<string-array name="servicios">
+		<item>General</item>
+		<item>Bla 1</item>
+		<item>Bla 2</item>
+		<item>Bla 3</item>
+		<item>Bla 4</item>
+	</string-array>
+	
+	
+</resources>

@@ -7,12 +7,20 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class MainActivity extends Activity {
 
+	Connection conexionMySQL;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main3);
 		// Boton de entrar
 		Button boton_Entrar = (Button) findViewById(R.id.enterButton);
 		boton_Entrar.setOnClickListener(new View.OnClickListener() {
