@@ -107,5 +107,74 @@ public class ProgramarCirugia extends Activity {
         });
         /*Termina el spinner 4*/
         
+        /*Ahora para el spinner 5 - En atencion a
+         ************************************************** */
+        Spinner sp4 = (Spinner) findViewById(R.id.enAtencionA);
+        ArrayAdapter adapter4 = ArrayAdapter.createFromResource(
+                this, R.array.atencionA, android.R.layout.simple_spinner_item);
+        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp4.setAdapter(adapter4);
+        
+        sp4.setOnItemSelectedListener(new OnItemSelectedListener() {
+            
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+             int position, long id) {
+             Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+            
+            }
+                                 
+            public void onNothingSelected(AdapterView<?> parentView) {
+            
+            }
+        });
+        /*Termina el spinner 5*/
+        
+        /*Ahora para el spinner 6 - Region
+         ************************************************** */
+        Spinner sp5 = (Spinner) findViewById(R.id.region);
+        ArrayAdapter adapter5 = ArrayAdapter.createFromResource(
+                this, R.array.listaRegion, android.R.layout.simple_spinner_item);
+        adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp5.setAdapter(adapter5);
+        
+        sp5.setOnItemSelectedListener(new OnItemSelectedListener() {
+            
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+             int position, long id) {
+             Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+            
+            }
+                                 
+            public void onNothingSelected(AdapterView<?> parentView) {
+            
+            }
+        });
+        /*Termina el spinner 6*/
+        
+        /*Ahora para el spinner 7 - Servicio 2
+         ************************************************** */
+        Spinner sp6 = (Spinner) findViewById(R.id.servicio2);
+        ArrayAdapter adapter6 = ArrayAdapter.createFromResource(
+                this, R.array.servicios2, android.R.layout.simple_spinner_item);
+        adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp6.setAdapter(adapter6);
+        
+        sp6.setOnItemSelectedListener(new OnItemSelectedListener() {
+            
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+             int position, long id) {
+             Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+            
+            }
+                                 
+            public void onNothingSelected(AdapterView<?> parentView) {
+            
+            }
+        });
+        /*Termina el spinner 6*/
+        
     }
 }

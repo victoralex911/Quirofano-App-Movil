@@ -32,5 +32,29 @@
 		<item>Bla 4</item>
 	</string-array>
 	
+	<string-array name="atencionA">
+		<item>Jurídico</item>
+		<item>Bla 1</item>
+		<item>Bla 2</item>
+		<item>Bla 3</item>
+		<item>Bla 4</item>
+	</string-array>
+	
+	<string-array name="listaRegion">
+		<item>Escoge una</item>
+		<item>Bla 1</item>
+		<item>Bla 2</item>
+		<item>Bla 3</item>
+		<item>Bla 4</item>
+	</string-array>
+	
+	<string-array name="servicios2">
+		<item>General</item>
+		<item>Bla 1</item>
+		<item>Bla 2</item>
+		<item>Bla 3</item>
+		<item>Bla 4</item>
+	</string-array>
+	
 	
 </resources>
