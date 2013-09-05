@@ -28,8 +28,8 @@ public class ProgramarCirugia extends Activity {
            
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
              int position, long id) {
-             Toast.makeText(parentView.getContext(), "Has seleccionado " +
-             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+             //Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             //parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
             
             }
                                  
@@ -50,8 +50,8 @@ public class ProgramarCirugia extends Activity {
             
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
              int position, long id) {
-             Toast.makeText(parentView.getContext(), "Has seleccionado " +
-             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+             //Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             //parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
             
             }
                                  
@@ -73,8 +73,8 @@ public class ProgramarCirugia extends Activity {
             
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
              int position, long id) {
-             Toast.makeText(parentView.getContext(), "Has seleccionado " +
-             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+             //Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             //parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
             
             }
                                  
@@ -96,8 +96,8 @@ public class ProgramarCirugia extends Activity {
             
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
              int position, long id) {
-             Toast.makeText(parentView.getContext(), "Has seleccionado " +
-             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+             //Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             //parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
             
             }
                                  
@@ -119,8 +119,8 @@ public class ProgramarCirugia extends Activity {
             
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
              int position, long id) {
-             Toast.makeText(parentView.getContext(), "Has seleccionado " +
-             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+             //Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             //parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
             
             }
                                  
@@ -142,8 +142,8 @@ public class ProgramarCirugia extends Activity {
             
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
              int position, long id) {
-             Toast.makeText(parentView.getContext(), "Has seleccionado " +
-             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+             //Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             //parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
             
             }
                                  
@@ -165,8 +165,8 @@ public class ProgramarCirugia extends Activity {
             
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
              int position, long id) {
-             Toast.makeText(parentView.getContext(), "Has seleccionado " +
-             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+             //Toast.makeText(parentView.getContext(), "Has seleccionado " +
+             //parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
             
             }
                                  

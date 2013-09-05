@@ -4,6 +4,8 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
+import android.view.View;
 
 public class MainActivity2 extends BaseActivity{
 	
@@ -49,6 +51,15 @@ public class MainActivity2 extends BaseActivity{
 		getSlidingMenu().showContent();
 	}
 	
+	//Boton de back
 	
+		 @Override
+		 public boolean onKeyDown(int keyCode, KeyEvent event)  {
+		     if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+		         // no hacemos nada.
+		         return true;
+		     }
 
+		     return super.onKeyDown(keyCode, event);
+		 }
 }

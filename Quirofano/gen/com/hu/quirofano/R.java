@@ -1214,12 +1214,14 @@ containing a value of this type.
         public static final int list=0x7f030023;
         public static final int menu_frame=0x7f030024;
         public static final int programar_cirugia=0x7f030025;
-        public static final int qcentral=0x7f030026;
-        public static final int sherlock_spinner_dropdown_item=0x7f030027;
-        public static final int sherlock_spinner_item=0x7f030028;
-        public static final int slidingmenumain=0x7f030029;
-        public static final int splash=0x7f03002a;
-        public static final int traumatologia=0x7f03002b;
+        public static final int programar_cirugia_ambulatoria=0x7f030026;
+        public static final int programar_cirugia_traumatologia=0x7f030027;
+        public static final int qcentral=0x7f030028;
+        public static final int sherlock_spinner_dropdown_item=0x7f030029;
+        public static final int sherlock_spinner_item=0x7f03002a;
+        public static final int slidingmenumain=0x7f03002b;
+        public static final int splash=0x7f03002c;
+        public static final int traumatologia=0x7f03002d;
     }
     public static final class menu {
         public static final int activity_main=0x7f0c0000;

@@ -37,7 +37,7 @@ public class QCentralActivity extends TabActivity {
 		
 		/*Para tab 2*/
 		intent = new Intent().setClass(this, ProgramarCirugia.class);  
-        spec2 = tabHost.newTabSpec("mitab2").setIndicator("Tab One",res.getDrawable(android.R.drawable.ic_dialog_map)).setContent(intent); 
+        spec2 = tabHost.newTabSpec("mitab2").setIndicator("Programar cirugía",res.getDrawable(android.R.drawable.ic_dialog_map)).setContent(intent); 
         tabHost.addTab(spec2);
 		
 		

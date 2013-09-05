@@ -9,6 +9,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 public class Item5 extends SherlockFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		return inflater.inflate(R.layout.item5, null);
+		return inflater.inflate(R.layout.contacto, null);
 	}
 }//Fin de la clase Item5
