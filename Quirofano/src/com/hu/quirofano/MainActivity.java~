@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     Button boton_Entrar;
     HttpPostAux post;
     String IP_Server="192.168.1.73";//IP DE NUESTRO PC
-    String URL_connect="http://"+IP_Server+"/androidlogin/acces.php";//ruta en donde estan nuestros archivos
+    String URL_connect="http://"+IP_Server+"/droidlogin/acces.php";//ruta en donde estan nuestros archivos
   
     boolean result_back;
     private ProgressDialog pDialog;
