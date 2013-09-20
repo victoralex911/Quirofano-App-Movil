@@ -1,35 +1,30 @@
 package com.hu.quirofano;
 
-import android.os.Bundle;
-import android.content.Intent;
-import android.app.Activity;
-import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import java.util.ArrayList;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.hu.libreria.HttpPostAux;
+
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.TableRow;
 import android.widget.Toast;
+
+import com.hu.libreria.HttpPostAux;
 
 public class MainActivity extends Activity {
 
@@ -37,7 +32,7 @@ public class MainActivity extends Activity {
     EditText pass; //asi esta expresado en el xml
     Button boton_Entrar;
     HttpPostAux post;
-    String IP_Server="192.168.1.73";//IP DE NUESTRO PC
+    String IP_Server="172.16.0.122";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/acces.php";//ruta en donde estan nuestros archivos
   
     boolean result_back;
@@ -284,6 +279,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+
 		return true;
 	}
 	
