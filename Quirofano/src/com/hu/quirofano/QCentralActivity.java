@@ -17,7 +17,7 @@ public class QCentralActivity extends TabActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.qcentral);
+		setContentView(R.layout.qcentral1);
 		// Boton de entrar
 		
 		Resources res = getResources();
