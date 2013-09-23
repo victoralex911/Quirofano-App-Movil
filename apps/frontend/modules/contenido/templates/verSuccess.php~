@@ -1,4 +1,0 @@
-<p>¡Hola, mundo!</p>
-<?php if ($prueba): ?>
-  <p><?php echo time(); ?></p>
-<?php endif; ?>
