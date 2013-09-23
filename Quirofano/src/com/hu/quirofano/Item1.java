@@ -13,7 +13,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+<<<<<<< HEAD
 //prueba1
+=======
+
+>>>>>>> f430b8bdebb5172a872119a5ea0a4c8815fe53e3
 public class Item1 extends SherlockFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
