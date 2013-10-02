@@ -18,7 +18,8 @@ public class RandomList extends ListFragment{
 		"Cirugía ambulatoria",
 		"Traumatología",
 		"Agenda del día",
-		"Contacto"
+		"Contacto",
+		"Cerrar sesión"
 	};
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -50,6 +51,9 @@ public class RandomList extends ListFragment{
 			break;
 		case 4:
 			newFragment = new Item5();
+			break;
+		case 5:
+			newFragment = new Item6();
 			break;
 		}
 		if (newFragment != null)

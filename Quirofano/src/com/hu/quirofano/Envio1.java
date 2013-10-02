@@ -1,40 +1,38 @@
 package com.hu.quirofano;
 
-import java.util.ArrayList;
+import android.os.Bundle;
+import android.content.Intent;
+import android.app.Activity;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 
+import java.util.ArrayList;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.app.Activity;
+import com.hu.libreria.HttpPostAux;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hu.libreria.HttpPostAux;
-
-public class MainActivity extends Activity {
+public class Envio1 extends Activity {
 
 	EditText user; //asi esta expresado en el xml
     EditText pass; //asi esta expresado en el xml
     Button boton_Entrar;
     HttpPostAux post;
-    String IP_Server="172.16.0.141";//IP DE NUESTRO PC
-    String URL_connect="http://"+IP_Server+"/androidlogin/acces.php";//ruta en donde estan nuestros archivos
+    String IP_Server="triana.local";//IP DE NUESTRO PC
+    String URL_connect="http://"+IP_Server+"/androidlogin/Recibo1.php";//ruta en donde estan nuestros archivos
   
     boolean result_back;
     private ProgressDialog pDialog;
@@ -165,7 +163,7 @@ public class MainActivity extends Activity {
         	String user,pass;
             protected void onPreExecute() {
             	//para el progress dialog
-                pDialog = new ProgressDialog(MainActivity.this);
+                pDialog = new ProgressDialog(Envio1.this);
                 pDialog.setMessage("Autenticando....");
                 pDialog.setIndeterminate(false);
                 pDialog.setCancelable(false);
@@ -196,7 +194,7 @@ public class MainActivity extends Activity {
                
                if (result.equals("ok")){
 
-    				Intent i=new Intent(MainActivity.this, MainActivity2.class);
+    				Intent i=new Intent(Envio1.this, MainActivity2.class);
     				i.putExtra("user",user);
     				startActivity(i); 
     				
@@ -246,60 +244,13 @@ public class MainActivity extends Activity {
 	}//Fin de onCreate
 	*/
 	
-	//Nueva conexion***************************************************************+
 	
-	
-	
-	/******************************* conexion ***********************/
-	/*
-	Thread sqlThread = new Thread(){
-		public void run(){
-			try{
-				Class.forName("com.mysql.jdbc.Driver");
-				Connection conn = DriverManager.getConnection(
-				"jdbc:mysql://192.168.1.73:3306/android_login", "root", "PonTuPasswd");
-				String stsql = "Select version()";
-				Statement st = conn.createStatement();
-				ResultSet rs = st.executeQuery(stsql);
-				rs.next();
-				System.out.println( rs.getString(1) );
-				System.out.println("Conexion exitosa");
-				conn.close();
-			}//Fin de try
-			catch (SQLException se) {
-				System.out.println("No se puede conectar. Error: " + se.toString());
-			}//Fin de catch
-			catch (ClassNotFoundException e) {
-			//	 System.out.println("No se encuentra la clase. Error: " + e.getMessage());
-			}//Fin de catch2
-		}//Fin de run
-	};
-	//Error 01, no hay linkeo entre la aplicacion y la BD
-	*/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-
 		return true;
 	}
-	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)  {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-			// no hacemos nada.
-			return true;
-		}
 
-		return super.onKeyDown(keyCode, event);
-	}
-	
-	
-	
-	//Agregar botones para las distintas activities(esqueletos)
-	//---------------------------------------------------------
-	//Home-Menu(Quirofano central, Cirugia ambulatoria, Traumatologia, Agenda del dia, Contacto)-
-	//-Quirofano central-Cirugia ambulatoria-Traumatologia-Agenda global del dia-Contacto-Programar cirugia-
-	//-Inspeccionar salas-Cirugias diferidas...
 
 }//Fin de la clase

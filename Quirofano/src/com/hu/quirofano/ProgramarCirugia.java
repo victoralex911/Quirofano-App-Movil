@@ -18,6 +18,8 @@ public class ProgramarCirugia extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.programar_cirugia);
         
+        //Para el spinner 1 - numero de sala
+        
         Spinner sp = (Spinner) findViewById(R.id.salaOpciones);
         ArrayAdapter adapter = ArrayAdapter.createFromResource(
                 this, R.array.salas, android.R.layout.simple_spinner_item);
