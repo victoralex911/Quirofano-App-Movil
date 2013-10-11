@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
     EditText pass; //asi esta expresado en el xml
     Button boton_Entrar;
     HttpPostAux post;
-    String IP_Server="172.16.0.141";//IP DE NUESTRO PC
+    String IP_Server="172.16.0.101";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/acces.php";//ruta en donde estan nuestros archivos
   
     boolean result_back;
@@ -66,17 +66,15 @@ public class MainActivity extends Activity {
         		if( checklogindata( usuario , passw )==true){
 
         			//si pasamos esa validacion ejecutamos el asynctask pasando el usuario y clave como parametros
-        			
-        		new asynclogin().execute(usuario,passw);        		               
+        			new asynclogin().execute(usuario,passw);        		               
         			      		
-        		
         		}else{
         			//si detecto un error en la primera validacion vibrar y mostrar un Toast con un mensaje de error.
         			err_login();
         		}
         		
         	}
-        													});
+        });
 	}
         
       //vibra y muestra un Toast

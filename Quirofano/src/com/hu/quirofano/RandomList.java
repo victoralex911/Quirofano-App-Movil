@@ -52,9 +52,6 @@ public class RandomList extends ListFragment{
 		case 4:
 			newFragment = new Item5();
 			break;
-		case 5:
-			newFragment = new Item6();
-			break;
 		}
 		if (newFragment != null)
 			switchContent(newFragment);

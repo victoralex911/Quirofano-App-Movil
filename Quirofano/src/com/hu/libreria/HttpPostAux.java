@@ -53,7 +53,7 @@ public class HttpPostAux{
   	        //ejecuto peticion enviando datos por POST
   	        HttpResponse response = httpclient.execute(httppost); 
   	        HttpEntity entity = response.getEntity();
-  	         is = entity.getContent();
+  	        is = entity.getContent();
   	         
   	}catch(Exception e){
   	        Log.e("log_tag", "Error in http connection "+e.toString());

@@ -16,7 +16,7 @@ public class ProgramarCirugia extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.programar_cirugia);
+        setContentView(R.layout.programar_cirugia1);
         
         //Para el spinner 1 - numero de sala
         
