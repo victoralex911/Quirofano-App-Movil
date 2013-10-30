@@ -8,15 +8,15 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/qCentralString"
-			android:text="@string/qcentral_string"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:layout_gravity="center"
-			android:textSize="20sp"
-			android:layout_marginTop="10dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="@string/qcentral_string"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -54,10 +54,18 @@
                     android:layout_height="wrap_content"
                     android:text="Fecha" />
 
+                
+                <!-- <DatePicker
+			        android:id="@+id/dpFecha"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+			    -->
+                
                 <EditText
                     android:id="@+id/fecha"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
+                
             </LinearLayout>
 
             <LinearLayout
@@ -126,10 +134,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical" >
-
             </LinearLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -168,7 +175,7 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -207,7 +214,7 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -231,13 +238,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical" >
-                
+
                 <TextView
                     android:id="@+id/stringGenero"
                     android:layout_width="fill_parent"
@@ -255,7 +262,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical" >
-                
+
                 <TextView
                     android:id="@+id/stringProcedencia"
                     android:layout_width="fill_parent"
@@ -268,7 +275,7 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -292,12 +299,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
+                android:orientation="vertical" >
             </LinearLayout>
 
             <LinearLayout
@@ -307,7 +314,7 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -331,12 +338,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
+                android:orientation="vertical" >
             </LinearLayout>
 
             <LinearLayout
@@ -346,7 +353,7 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -366,53 +373,24 @@
                     android:text="Protocolo" />
 
                 <RadioGroup
-		        	android:id="@+id/groupProtocolo"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:orientation="horizontal">
-			        <RadioButton
-			       		android:id="@+id/protocoloNo"
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:checked="true"
-			            android:text="No" />
-		        	<RadioButton
-			            android:id="@+id/protocoloSi"
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:text="Sí" />
-		        </RadioGroup>
-            </LinearLayout>
-			
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" > 
-                
-                <TextView
-                    android:id="@+id/stringReintervencion"
-                    android:layout_width="fill_parent"
+                    android:id="@+id/groupProtocolo"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reintervención" />
+                    android:orientation="horizontal" >
 
-                <RadioGroup
-		        	android:id="@+id/groupReintervencion"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:orientation="horizontal">
-			        <RadioButton
-			        	android:id="@+id/reintervencionNo"
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:checked="true"
-			            android:text="No" />
-		        	<RadioButton
-			            android:id="@+id/reintervencionSi"
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:text="Sí" />
-		        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/protocoloNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="No" />
+
+                    <RadioButton
+                        android:id="@+id/protocoloSi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sí" />
+                </RadioGroup>
             </LinearLayout>
 
             <LinearLayout
@@ -420,9 +398,42 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical" >
-        	</LinearLayout>
+
+                <TextView
+                    android:id="@+id/stringReintervencion"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Reintervención" />
+
+                <RadioGroup
+                    android:id="@+id/groupReintervencion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/reintervencionNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="No" />
+
+                    <RadioButton
+                        android:id="@+id/reintervencionSi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sí" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+            </LinearLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -446,12 +457,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
+                android:orientation="vertical" >
             </LinearLayout>
 
             <LinearLayout
@@ -461,7 +472,7 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -485,12 +496,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
+                android:orientation="vertical" >
             </LinearLayout>
 
             <LinearLayout
@@ -500,149 +511,46 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
+
         <!-- BARRA SEPARADORA -->
-        
-    	<LinearLayout
+
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/stringProcedimientoOCirugia"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Procedimiento o cirugía planeado" />
-
-                <EditText
-                    android:id="@+id/procedimientoOCirugia"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-			
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" > 
-            </LinearLayout>
-            
-            <!-- IMAGEN DE AGREGAR -->
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-            </LinearLayout>
-        </LinearLayout>    
-        
-    	<LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/stringRegion"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Región" />
-
-                <Spinner
-                    android:id="@+id/region"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-			
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" > 
-                
-                <TextView
-                    android:id="@+id/stringDetallesAdicionales"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Detalles adicionales" />
-                
-                <EditText
-                    android:id="@+id/detallesAdicionales"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-            </LinearLayout>
-        </LinearLayout> 
-        
-    	<LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3" >
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/stringServicio2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Servicio" />
-
-                <Spinner
-                    android:id="@+id/servicio2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-			
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" > 
-                
-                <CheckBox
-			      	android:id="@+id/eliminar"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:text="Eliminar"
-			        android:textSize="14sp" />
-	        </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-            </LinearLayout>
+            android:layout_height="1px"
+            android:background="#000000"
+            android:orientation="horizontal" >
         </LinearLayout>
-        
-    	<!-- BARRA SEPARADORA -->
-    	
-    	<LinearLayout
+
+        <LinearLayout
+            android:id="@+id/add_linear"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="#000000"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/agregar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar" >
+        </Button>
+
+        <Button
+            android:id="@+id/eliminar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar" >
+        </Button>
+        <!-- BARRA SEPARADORA -->
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -665,13 +573,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
-	        </LinearLayout>
+                android:orientation="vertical" >
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -680,8 +588,8 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
-    	<LinearLayout
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -704,13 +612,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
-	        </LinearLayout>
+                android:orientation="vertical" >
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -719,8 +627,8 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
-    	<LinearLayout
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -743,13 +651,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
-	        </LinearLayout>
+                android:orientation="vertical" >
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -758,8 +666,8 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
-    	<LinearLayout
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -782,13 +690,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
-	        </LinearLayout>
+                android:orientation="vertical" >
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -797,8 +705,8 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
-    	<LinearLayout
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -821,13 +729,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
-	        </LinearLayout>
+                android:orientation="vertical" >
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -836,8 +744,8 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
-    	<LinearLayout
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -860,13 +768,13 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
-	        </LinearLayout>
+                android:orientation="vertical" >
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -875,12 +783,12 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
-    	<LinearLayout
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginBottom="30dp"
+            android:orientation="horizontal"
             android:weightSum="3" >
 
             <LinearLayout
@@ -889,21 +797,21 @@
                 android:layout_weight="1"
                 android:orientation="vertical" >
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
-                
+                android:orientation="vertical" >
+
                 <Button
-		            android:id="@+id/botonGuardar"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:text="Guardar"
-		            android:layout_gravity="center_horizontal"
-		            android:textSize="18sp" />
-	        </LinearLayout>
+                    android:id="@+id/botonGuardar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Guardar"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -912,12 +820,12 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
-    	<LinearLayout
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
             android:weightSum="3" >
 
             <LinearLayout
@@ -926,19 +834,19 @@
                 android:layout_weight="1"
                 android:orientation="vertical" >
             </LinearLayout>
-			
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" > 
-                
+                android:orientation="vertical" >
+
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/derechos" />
-	        </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -947,7 +855,6 @@
                 android:orientation="vertical" >
             </LinearLayout>
         </LinearLayout>
-        
     </LinearLayout>
 
 </ScrollView>

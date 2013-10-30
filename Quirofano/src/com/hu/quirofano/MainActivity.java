@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
     EditText pass; //asi esta expresado en el xml
     Button boton_Entrar;
     HttpPostAux post;
-    String IP_Server="172.16.0.101";//IP DE NUESTRO PC
+    String IP_Server="172.16.0.150";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/acces.php";//ruta en donde estan nuestros archivos
   
     boolean result_back;
