@@ -43,6 +43,7 @@ public class HttpPostAux extends Activity{
     
 	  InputStream is = null;
 	  String result = "";
+	  ArrayList<String> albuilder = new ArrayList<String>();
 	  
 	  public JSONArray getserverdata(ArrayList<NameValuePair> parameters, String urlwebserver ){
 	
@@ -87,14 +88,21 @@ public class HttpPostAux extends Activity{
   
   	//Convierte respuesta a String
   	try{
+  			int n = 0;
   	        BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
-  	        StringBuilder sb = new StringBuilder();
+  			//BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+  			StringBuilder sb = new StringBuilder();
+  	        	        
   	        String line = null;
   	        while ((line = reader.readLine()) != null) {
-  	                sb.append(line + "\n");
+  	        	System.out.println("line "+n+" = "+line);
+  	        	//sb.append(line + "\n");
+  	        	sb.append(line);
+  	        	n++;
+  	        	//albuilder.add(line+"\n");
   	        }
   	        is.close();
-  	 
+  	        //albuilder.add(sb);
   	        result=sb.toString();
   	        Log.e("getpostresponse aux"," result= "+sb.toString());
   	}catch(Exception e){
@@ -106,7 +114,9 @@ public class HttpPostAux extends Activity{
   	//parse json data
   	try{
           JSONArray jArray = new JSONArray(result);
+          System.out.println(result);
           
+          System.out.println("jArray-HTTP = "+jArray.toString());
           return jArray;
   	}
   	catch(JSONException e){

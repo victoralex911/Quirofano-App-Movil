@@ -64,7 +64,8 @@
                 <EditText
                     android:id="@+id/fecha"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content" 
+                    android:hint="YYYY-MM-DD" />
                 
             </LinearLayout>
 
@@ -83,7 +84,8 @@
                 <EditText
                     android:id="@+id/horaPropuesta"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content" 
+                    android:hint="HH:MM" />
             </LinearLayout>
         </LinearLayout>
 
@@ -548,6 +550,14 @@
             android:layout_height="wrap_content"
             android:text="Eliminar" >
         </Button>
+        
+        <Button
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TEST" >
+        </Button>
+        
         <!-- BARRA SEPARADORA -->
 
         <LinearLayout

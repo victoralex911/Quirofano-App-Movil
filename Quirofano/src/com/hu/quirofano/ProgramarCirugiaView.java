@@ -18,25 +18,35 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class ProgramarCirugiaView extends Activity {
-	
+
 	/*
 	 * 17 oct 
 	 * 
 	 * Las posiciones de los spinners estan dados por el entero "position"
 	 * 
 	 * */
+	ArrayList<ObjectoX> vista = new ArrayList<ObjectoX>();
+	static //ObjetoSpinner obj = new ObjetoSpinner();
 	
+	int sala;
+	static int duracion;
+	static int programacion;
+	static int servicio;
+	static int atencion;
+
 	EditText fecha, horaPropuesta, registro, nombrePaciente, edad, genero, procedencia;
 	EditText diagnostico, nombreMedico, riesgoQuirurgico, insumos, requerimientosAnestesiologia;
 	EditText hemoderivados, requisitosLaboratorio, otrasNecesidades;
-	
-	int spin1, spin2, spin3, spin4, spin5, spin6;
+
+	//int spin1, spin2, spin3, spin4, spin5, spin6;
 	ArrayList<Integer> spins = new ArrayList<Integer>();
-	
+
 	//public ProgramarCirugiaView(final LayoutInflater inflater, View view, final Context context){
 
 	public void prog(final LayoutInflater inflater, View view, final Context context){
 		/*Spinner 1 - Salas*/
+
+		final ObjetoSpinner obj = new ObjetoSpinner(inflater, context);
 		
 		Spinner sp = (Spinner) view.findViewById(R.id.salaOpciones);
 		ArrayAdapter adapter = ArrayAdapter.createFromResource(
@@ -55,7 +65,12 @@ public class ProgramarCirugiaView extends Activity {
 				//Log.e("arreglo spins", "s1="+spins);
 				Log.e("spiner1 = ", "posicion1="+position);
 				//spin1 = position;
-				spin1 = position;
+				//setSala(position);
+				
+				int sala=position;
+				ProgramarCirugiaView.sala = sala;
+				//System.out.println("sala origi="+sala);
+				//= position;
 			}
 
 			public void onNothingSelected(AdapterView<?> parentView) {
@@ -79,7 +94,10 @@ public class ProgramarCirugiaView extends Activity {
 				//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 				parentView.getItemAtPosition(position);
 				//spins.add(position);
-				spin2 = position;
+				//setDuracion(position);
+				int duracion = position;
+				ProgramarCirugiaView.duracion = duracion;
+				//duracion = position;
 			}
 
 			public void onNothingSelected(AdapterView<?> parentView) {
@@ -104,7 +122,11 @@ public class ProgramarCirugiaView extends Activity {
 				//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 				parentView.getItemAtPosition(position);
 				//spins.add(position);
-				spin3 = position;
+				//obj.programacion = position;
+				//setProgramacion(position);
+				//programacion = position;
+				int programacion = position;
+				ProgramarCirugiaView.programacion = programacion;
 			}
 
 			public void onNothingSelected(AdapterView<?> parentView) {
@@ -129,8 +151,11 @@ public class ProgramarCirugiaView extends Activity {
 				//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 				parentView.getItemAtPosition(position);
 				//spins.add(position);
-				spin4 = position;
-
+				//obj.servicio = position;
+				//setServicio(position);
+				//servicio = position;
+				int servicio = position;
+				ProgramarCirugiaView.servicio = servicio;
 			}
 
 			public void onNothingSelected(AdapterView<?> parentView) {
@@ -155,7 +180,11 @@ public class ProgramarCirugiaView extends Activity {
 				//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 				parentView.getItemAtPosition(position);
 				//spins.add(position);
-				spin5 = position;
+				//obj.atencion = position;
+				//setAtencion(position);
+				//atencion = position;
+				int atencion = position;
+				ProgramarCirugiaView.atencion = atencion;
 			}
 
 			public void onNothingSelected(AdapterView<?> parentView) {
@@ -163,88 +192,114 @@ public class ProgramarCirugiaView extends Activity {
 			}
 		});
 		final LinearLayout parent = (LinearLayout)view.findViewById(R.id.add_linear);
-		
+
 		Button agregar = (Button)view.findViewById(R.id.agregar);
 		Button eliminar = (Button)view.findViewById(R.id.eliminar);
+		Button test = (Button)view.findViewById(R.id.test);
+		test.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				for (int index = 0; index<vista.size(); index++){
+					System.out.println(index+"####################################");
+					System.out.println(vista.get(index).getServicio());
+					System.out.println(vista.get(index).getRegion());
+					System.out.println(vista.get(index).getProc());
+					System.out.println(vista.get(index).getDetalles());
+				}
+
+			}});
 		agregar.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.add_linear, null);
+				final ObjectoX objeto = new ObjectoX(inflater, context);
+				vista.add(objeto);
+				LinearLayout ll = (LinearLayout) objeto.getView();
 				parent.addView(ll);
-				
-				Spinner sp5 = (Spinner) ll.findViewById(R.id.region);
+
+				Spinner region = (Spinner) ll.findViewById(R.id.region);
 				ArrayAdapter adapter5 = ArrayAdapter.createFromResource(
 						context, R.array.listaRegion, android.R.layout.simple_spinner_item);
 				adapter5.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				sp5.setAdapter(adapter5);
+				region.setAdapter(adapter5);
 
-				sp5.setOnItemSelectedListener(new OnItemSelectedListener() {
+				region.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 					public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
 							int position, long id) {
-						parentView.getItemAtPosition(position);
-						//spin6 = position;
-						//spins.add(position);
+						objeto.region = position;
 					}
 					public void onNothingSelected(AdapterView<?> parentView) {
 
 					}
 				});
 				
-				Spinner sp6 = (Spinner) ll.findViewById(R.id.servicio2);
+				Spinner servicio = (Spinner) ll.findViewById(R.id.servicio2);
 				ArrayAdapter adapter6 = ArrayAdapter.createFromResource(
 						context, R.array.servicios2, android.R.layout.simple_spinner_item);
 				adapter6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				sp6.setAdapter(adapter6);
-
-				sp6.setOnItemSelectedListener(new OnItemSelectedListener() {
+				servicio.setAdapter(adapter6);
+				
+				servicio.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 					public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
 							int position, long id) {
-						parentView.getItemAtPosition(position);
-						//spins.add(position);
+						objeto.servicio = position;
 					}
-
 					public void onNothingSelected(AdapterView<?> parentView) {
 
 					}
 				});
-						
 			}});
-		
+
 		eliminar.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				int index =  parent.getChildCount();
 				parent.removeViewAt(index-1);
-					
+				vista.remove(vista.size()-1);
 			}});
 	}/*Fin de constructor*/
 	
-	public ArrayList<Integer> getPosition(){
-		//Toast toast1 = Toast.makeText(this, "spinners1 = "+spins, Toast.LENGTH_SHORT);
- 	    //toast1.show();
-		spins.add(spin1);
-		spins.add(spin2);
-		spins.add(spin3);
-		spins.add(spin4);
-		spins.add(spin5);
-		
-		//Log.e("sp1 = ", "sp1="+getSpin());
-		//Log.e("sp2 = ", "sp2="+spin2);
-		//Log.e("sp3 = ", "sp3="+spin3);
-		//Log.e("sp4 = ", "sp4="+spin4);
-		//Log.e("sp5 = ", "sp5="+spin5);
-		
-		//Log.e("datos = ", "spins="+spins);
-		return spins; // regresa arreglo con todas las posiciones de los spins
-		
-	}/*Fin de getPosition*/
-
-	//public int setSpin1(){
-
-	//}
+	//setters
+	public void setSala(int sala){
+		this.sala = sala;
+	}
+	public void setDuracion(int duracion){
+		this.duracion = duracion;
+	}
+	public void setProgramacion(int programacion){
+		this.programacion = programacion;
+	}
+	public void setServicio(int servicio){
+		this.servicio = servicio;
+	}
+	public void setAtencion(int atencion){
+		this.atencion = atencion;
+	}
+	
+	//getters
+	public int getSala(){
+		return sala;
+	}//Fin de getSala
+	
+	public int getDuracion(){
+		return duracion;
+	}//Fin de getDuracion
+	
+	public int getProgramacion(){
+		return programacion;
+	}//Fin de getDuracion
+	
+	public int getServicio(){
+		return servicio;
+	}//Fin de getServicio
+	
+	public int getAtencion(){
+		return atencion;
+	}//Fin de getDuracion
+	
 	
 }/*Fin de la clase ProgramarCirugiaView*/

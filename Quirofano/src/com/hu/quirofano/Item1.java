@@ -49,8 +49,22 @@ import com.hu.libreria.HttpPostAux;
 public class Item1 extends SherlockFragment{
 	
 	//22oct
-	ArrayList<String> al = new ArrayList<String>();
+	//ArrayList<String> al = new ArrayList<String>(); 1st version
+	
+	//3noviembre
+	ProgramarCirugiaView object = new ProgramarCirugiaView();
+	
+	//Se desplegaran en la agenda los datos de hora, sala, paciente y diagnostico.
+	
+	ArrayList<String> st = new ArrayList<String>();		//Para almacenar las horas ... todavia no implementado
+	ArrayList<String> st1 = new ArrayList<String>();	//Para almacenar las salas
+	ArrayList<String> st2 = new ArrayList<String>();	//Para almacenar los pacientes
+	ArrayList<String> st3 = new ArrayList<String>();	//Para almacenar los diagnosticos
+	
 	//22oct
+	
+	//4 noviembre *** Array de array - prueba ***
+	ArrayList<ArrayList<String>> padre = new ArrayList<ArrayList<String>>();
 	
 	//26oct
 	private TextView mDateDisplay;
@@ -61,13 +75,16 @@ public class Item1 extends SherlockFragment{
 	//26oct
 	
 	//Spinners
+	/*
 	int sala;
 	int duracion;
 	int tipoDeProgramacion;
 	int servicio;
 	int enAtencionA;
-	int region;		//Vista dinamica
-	int servicio2;	//Vista dinamica
+	*/
+	//------------------------------
+	//int region;		//Vista dinamica
+	//int servicio2;	//Vista dinamica
 	
 	//RadioGroup
 	//Devuelve un entero, para conocer el String correspondiente usar RadioButton
@@ -79,7 +96,7 @@ public class Item1 extends SherlockFragment{
 	
 	//EditText
 	EditText fecha;
-	EditText horaPropuesta; //Asi estan declarados en el xml
+	EditText horaPropuesta; 
 	EditText registro;
 	EditText nombreDelPaciente;
 	EditText edad;
@@ -91,13 +108,15 @@ public class Item1 extends SherlockFragment{
 	EditText insumosIndispensables;
 	EditText requerimientos;
 	EditText hemoderivados;
+	EditText requisitos;
+	EditText necesidades;
 	
 	//Button
 	Button botonGuardar;
 	
 	HttpPostAux post;
 	HttpPostAux envio;
-    String IP_Server="172.16.0.150";//IP DE NUESTRO PC
+    String IP_Server="192.168.1.73";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/schedule.php";//ruta en donde estan nuestros archivos
     String URL_connect2 = "http://"+IP_Server+"/androidlogin/mostrarAgenda.php"; //ruta alternativa
   
@@ -136,10 +155,25 @@ public class Item1 extends SherlockFragment{
 		protocolo = (RadioGroup) programar.findViewById(R.id.groupProtocolo);
 		reintervencion = (RadioGroup) programar.findViewById(R.id.groupReintervencion);
 		
+		//EditText
 		fecha = (EditText) programar.findViewById(R.id.fecha);
 		horaPropuesta = (EditText) programar.findViewById(R.id.horaPropuesta);
 		registro = (EditText) programar.findViewById(R.id.registro);
 		nombreDelPaciente = (EditText) programar.findViewById(R.id.nombreDelPaciente);
+		edad =(EditText) programar.findViewById(R.id.edad);
+		genero =(EditText) programar.findViewById(R.id.genero);
+		procedencia =(EditText) programar.findViewById(R.id.procedencia);
+		diagnostico =(EditText) programar.findViewById(R.id.diagnostico);
+		medico =(EditText) programar.findViewById(R.id.medico);
+		edad =(EditText) programar.findViewById(R.id.edad);
+		riesgoQuirurgico =(EditText) programar.findViewById(R.id.riesgoQuirurgico);
+		insumosIndispensables =(EditText) programar.findViewById(R.id.insumosIndispensables);
+		requerimientos =(EditText) programar.findViewById(R.id.requerimientos);
+		hemoderivados =(EditText) programar.findViewById(R.id.hemoderivados);
+		requisitos =(EditText) programar.findViewById(R.id.requisitosDeLaboratorio);
+		necesidades =(EditText) programar.findViewById(R.id.otrasNecesidades);
+		
+		//EditText
 		botonGuardar = (Button) programar.findViewById(R.id.botonGuardar);
 		//***************************************************************
 		
@@ -147,6 +181,7 @@ public class Item1 extends SherlockFragment{
 		TableRow tr = (TableRow) inflater.inflate(R.layout.tablerow, container, false);
 		tl.addView(tr);
 		
+		//-- FABRICADO POR VICTOR
 		/*
 		for(int index = 0; index < 10; index++){
 			View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
@@ -167,18 +202,54 @@ public class Item1 extends SherlockFragment{
 		}
 		*/
 		
+				
 		// 21 oct-----------------------------------------------------------------------
 		
 		/*Lo siguiente ira dentro de la sub-clase Agenda*/
 		String val = "ok";
 		Log.e("antes de agenda", "antes de agenda");
 		new Agenda().execute(val);
+		
+		/*
+		1. Lo primero que traiga todos los registros
+		*/
+		
+		
 		SystemClock.sleep(40);
 		Log.e("paso1", "paso1");
+		
+		//FABRICADO POR TRIANA *****************************************************
+		
+		//System.out.println("largo de padre = "+padre.size());
+		//System.out.println("PADRE = "+padre);
+			
+		//for(int index = 0; index < 10; index++){
+		for(int index = 0; index < padre.size(); index++){
+		
+			View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
+			
+			TextView hora = (TextView)tabler.findViewById(R.id.hora);
+			TextView sala = (TextView)tabler.findViewById(R.id.sala);
+			TextView pa = (TextView)tabler.findViewById(R.id.pa);
+			TextView dg = (TextView)tabler.findViewById(R.id.dg);
+			
+			TableRow trow = (TableRow) tabler;
+						
+			hora.setText(padre.get(index).get(0));	
+			sala.setText(padre.get(index).get(1));
+			pa.setText(padre.get(index).get(2));
+			dg.setText(padre.get(index).get(3));
+				
+			tl.addView(trow);
+		}
+		//FABRICADO POR TRIANA *********************************************************		
+		
 		
 		//ArrayList<String> data = new ArrayList<String>();
 		//data = mostrarAgenda(); YA ESTA EN LA SUB-CLASE
 		
+		//********************************ESCRIBIR EN LA VISTA*****************************+
+		/*
 		View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
 
 		TextView hora = (TextView)tabler.findViewById(R.id.hora);
@@ -188,18 +259,19 @@ public class Item1 extends SherlockFragment{
 
 		TableRow trow = (TableRow) tabler;
 		
-		Log.e("ultimo-array", "ultimo = "+al);
+		Log.e("ultimo-array", "ultimo = "+padre);
 		//Log.e("unico-elemento", "unico = "+al.get(0));
 		
 		//SystemClock.sleep(4450);
 		
-		if( al.size() != 0){
-			hora.setText(al.get(0)); //hora
-			sala.setText(al.get(1)); //sala
-			pa.setText(al.get(2));   //paciente(nombre)
-			dg.setText(al.get(0));   //diagnostico
+		if( padre.size() != 0){
+			hora.setText(padre.get(0).get(0)); //hora
+			sala.setText(padre.get(0).get(1)); //sala
+			pa.setText(padre.get(0).get(2));   //paciente(nombre)
+			dg.setText(padre.get(0).get(3));   //diagnostico
 		}
-		tl.addView(trow);
+		*/
+		//tl.addView(trow);
 		// 21 oct ----------------------------------------------------------------------
 		
 		sv.addView(home);
@@ -214,19 +286,12 @@ public class Item1 extends SherlockFragment{
 			public void onClick(View v) {
 				sv.removeAllViews();
 				
-				//tl.addView(tr);
-				
-				//ArrayList<String> data = new ArrayList<String>();
-				//data = mostrarAgenda();
-				
-				//TextView hora = (TextView)tabler.findViewById(R.id.hora);
-				
-				
+								
 				//SystemClock.sleep(40); //Tiempo de llegada de datos
 				
 				TextView t = new TextView(getActivity());
 				t.setText("Hola otra vez");
-				sv.addView(t);
+				sv.addView(home);
 			}
 
 		});
@@ -270,8 +335,8 @@ public class Item1 extends SherlockFragment{
 		           
 		            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
 		             int position, long id) {
-		             //Toast.makeText(parentView.getContext(), "Has seleccionado " +
-		             //parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+		             Toast.makeText(parentView.getContext(), "Has seleccionado " +
+		             parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 		            
 		            }
 		                                 
@@ -279,8 +344,8 @@ public class Item1 extends SherlockFragment{
 		            
 		            }
 		        });
+				
 				*/
-				 
 				 
 				// TERMINA SPINNER 1
 				
@@ -328,7 +393,18 @@ public class Item1 extends SherlockFragment{
 		        		String hora=horaPropuesta.getText().toString();
 				        String reg = registro.getText().toString();
 				        String paciente = nombreDelPaciente.getText().toString();
-				        
+				        String sEdad = edad.getText().toString();
+				        String sGenero = genero.getText().toString();
+				        String sProcedencia = procedencia.getText().toString();
+				    	String sDiagnostico = diagnostico.getText().toString();
+				        String sMedico = medico.getText().toString();
+				        String sRiesgoQuirurgico = medico.getText().toString();
+				    	String sInsumosIndispensables = insumosIndispensables.getText().toString();
+				    	String sRequerimientos = requerimientos.getText().toString();
+				    	String sHemoderivados = hemoderivados.getText().toString();
+				    	String sRequisitos = requisitos.getText().toString();
+				    	String sNecesidades = necesidades.getText().toString();
+				    	
 				        //Obtener enteros de RadioGroup
 				        int protocoloSelected = 0;
 				        int reintervencionSelected = 0;
@@ -337,6 +413,28 @@ public class Item1 extends SherlockFragment{
 				        
 				        prot = (RadioButton) getActivity().findViewById(protocoloSelected);
 				        reint = (RadioButton) getActivity().findViewById(reintervencionSelected);
+				        //convertir a string para mandar a BD
+				        String sProtocolo = prot.getText().toString();
+				        String sReintervencion = reint.getText().toString();
+				        
+				        int p = 0;
+				        int r = 0;
+				        
+				        if (sProtocolo.equals("No")){
+				        	p = 0;
+				        }
+		        		else p = 1;
+				        
+				        if (sReintervencion.equals("No")){
+				        	r = 0;
+				        }
+				        else p=1;
+				        
+				        System.out.println("intProtocolo = "+ p);
+				        System.out.println("intReintervencion = "+ r);
+				        
+				        System.out.println("tipo sProtocolo = "+sProtocolo.getClass().getName()+"valor = "+sProtocolo);
+				        System.out.println("tipo sReintervencion = "+sReintervencion.getClass().getName()+"valor = "+sReintervencion);
 				        
 				        Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"protocolo = "+prot.getText(), Toast.LENGTH_SHORT);
 				 	    toast1.show();
@@ -345,18 +443,53 @@ public class Item1 extends SherlockFragment{
 				 	   	toast2.show();
 				        
 				        ProgramarCirugiaView pos = new ProgramarCirugiaView();
-				        //int number1 = pos.spin1;
 				        
-				        ArrayList<Integer> posiciones = pos.getPosition();
+				        System.out.println("sala = "+object.getSala());
+				        System.out.println("duracion = "+object.getDuracion());
+				        System.out.println("programacion = "+object.getProgramacion());
+				        System.out.println("servicio = "+object.getServicio());
+				        System.out.println("atencion = "+object.getAtencion());
 				        
-				        Toast toast10 = Toast.makeText(getActivity().getApplicationContext(),"posiciones = "+posiciones, Toast.LENGTH_SHORT);
-				 	    toast10.show();
+				        Toast toa = Toast.makeText(getActivity().getApplicationContext(), 
+				        		"sala = "+object.getSala()+" duracion = "+object.getDuracion()+
+				        		" programacion = "+object.getProgramacion()+" servicio = "+
+				        		object.getServicio()+" atencion = "+object.getAtencion(),
+				        		Toast.LENGTH_SHORT);
+				        toa.show();
+				        
+				        int sala = object.getSala();
+				        int duracion = object.getDuracion();
+				        int programacion = object.getProgramacion();
+				        int servicio = object.getServicio();
+				        int atencion = object.getAtencion();
+				        
+				        String sSala = Integer.toString(sala);
+				        String sDuracion = Integer.toString(duracion);
+				        String sProgramacion = Integer.toString(programacion);
+				        String sServicio = Integer.toString(servicio);
+				        String sAtencion = Integer.toString(atencion);
+				        
+				        String sP = Integer.toString(p);
+				        String sR = Integer.toString(r);
+				        
+				        //Toast toast10 = Toast.makeText(getActivity().getApplicationContext(),"posiciones = "+sala+duracion, Toast.LENGTH_SHORT);
+				 	    //toast10.show();
 				        //ArrayList<Integer> posicion = pos.getPosition();
 				        //Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"posiciones = "+pos.getPosition(), Toast.LENGTH_SHORT);
 				 	    //toast1.show();
 		        		
-		        		if (validarFormulario(date, hora, reg, paciente) == true){
-		        			new Formulario().execute(date, hora);
+		        		if (validarFormulario(date, hora, reg, paciente, sEdad, sGenero, sProcedencia,
+		        				sDiagnostico, sMedico, sRiesgoQuirurgico, sInsumosIndispensables,
+		        				sRequerimientos, sHemoderivados, sRequisitos, sNecesidades) == true){
+		        			
+		        			
+		        			//Primero mandamos los Spinners luego los RadioButton
+		        			new Formulario().execute(date, hora, reg, paciente, sEdad, sGenero, sProcedencia,
+		        					sDiagnostico, sMedico, sRiesgoQuirurgico, sInsumosIndispensables,
+		        					sRequerimientos, sHemoderivados, sRequisitos, sNecesidades, 
+		        					sSala, sDuracion, sProgramacion, sServicio, sAtencion, sP, sR);
+		        			//sv.removeAllViews();
+		        			//sv.addView(home);
 				        }
 				        else{
 				        	error1();
@@ -377,10 +510,17 @@ public class Item1 extends SherlockFragment{
 	}
 	
 	//Primero validamos los campos
-	public boolean validarFormulario(String d, String h, String r, String p){
-		if 	(d.equals("") || h.equals("") || r.equals("") || p.equals("")){
-			Log.e("date = ", "d="+d);
-			Log.e("hora = ", "h="+h);
+	public boolean validarFormulario(String date, String hora, String reg, String paciente, 
+			String sEdad, String sGenero, String sProcedencia, String sDiagnostico, String sMedico,
+			String sRiesgoQuirurgico, String sInsumosIndispensables, String sRequerimientos,
+			String sHemoderivados, String sRequisitos, String sNecesidades){
+		if 	(date.equals("") || hora.equals("") || reg.equals("") || paciente.equals("") ||
+				sEdad.equals("") || sGenero.equals("") || sProcedencia.equals("") || 
+				sDiagnostico.equals("") || sMedico.equals("") || sRiesgoQuirurgico.equals("") ||
+				sInsumosIndispensables.equals("") || sRequerimientos.equals("") || sHemoderivados.equals("") ||
+				sRequisitos.equals("") || sNecesidades.equals("") ){
+			Log.e("date = ", "date="+date);
+			Log.e("hora = ", "hora="+hora);
 			Log.e("Login ui", "checklogindata user or pass error");
 			//Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"Validacion d = "+d+" h = "+h, Toast.LENGTH_SHORT);
 	 	    //toast1.show();
@@ -394,19 +534,45 @@ public class Item1 extends SherlockFragment{
 	}//fin de validarFormulario
 	
 	//Enviar
-	public boolean enviarFormulario(String d, String h){
+	public boolean enviarFormulario(String date, String hora, String reg, String paciente, String sEdad,
+			String sGenero, String sProcedencia, String sDiagnostico, String sMedico,
+			String sRiesgoQuirurgico, String sInsumosIndispensables, String sRequerimientos, 
+			String sHemoderivados, String sRequisitos, String sNecesidades, 
+			String sSala, String sDuracion, String sProgramacion, String sServicio, String sAtencion, 
+			String sP, String sR){
+	
 		int status = -1;
-		
 		
 		/*Creamos un ArrayList del tipo nombre valor para agregar los datos recibidos por los parametros anteriores
     	 * y enviarlo mediante POST a nuestro sistema para relizar la validacion*/
 		
 		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
 		
-		datosEnviar.add(new BasicNameValuePair("date",d));
-		datosEnviar.add(new BasicNameValuePair("hora",h));
-		//datosEnviar.add(new BasicNameValuePair("registro",r));
-		//datosEnviar.add(new BasicNameValuePair("paciente",p));
+		datosEnviar.add(new BasicNameValuePair("date",date));
+		datosEnviar.add(new BasicNameValuePair("hora",hora));
+		datosEnviar.add(new BasicNameValuePair("reg",reg));
+		datosEnviar.add(new BasicNameValuePair("paciente",paciente));
+		datosEnviar.add(new BasicNameValuePair("sEdad",sEdad));
+		datosEnviar.add(new BasicNameValuePair("sGenero",sGenero));
+		datosEnviar.add(new BasicNameValuePair("sProcedencia",sProcedencia));
+		datosEnviar.add(new BasicNameValuePair("sDiagnostico",sDiagnostico));
+		datosEnviar.add(new BasicNameValuePair("sMedico",sMedico));
+		datosEnviar.add(new BasicNameValuePair("sRiesgoQuirurgico",sRiesgoQuirurgico));
+		datosEnviar.add(new BasicNameValuePair("sInsumosIndispensables",sInsumosIndispensables));
+		datosEnviar.add(new BasicNameValuePair("sRequerimientos",sRequerimientos));
+		datosEnviar.add(new BasicNameValuePair("sHemoderivados",sHemoderivados));
+		datosEnviar.add(new BasicNameValuePair("sRequisitos",sRequisitos));
+		datosEnviar.add(new BasicNameValuePair("sNecesidades",sNecesidades));
+		//EditText hasta aqui
+		
+		//Spinners y RadioButton
+		datosEnviar.add(new BasicNameValuePair("sSala", sSala));
+		datosEnviar.add(new BasicNameValuePair("sDuracion", sDuracion));
+		datosEnviar.add(new BasicNameValuePair("sProgramacino", sProgramacion));
+		datosEnviar.add(new BasicNameValuePair("sServicio", sServicio));
+		datosEnviar.add(new BasicNameValuePair("sAtencion", sAtencion));
+		datosEnviar.add(new BasicNameValuePair("sP", sP));
+		datosEnviar.add(new BasicNameValuePair("sR", sR));
 		
 		Log.e("datosEnviar","datosEnviar = "+datosEnviar);
 		Log.e("URL_connect","URL_connect = "+URL_connect);
@@ -448,29 +614,62 @@ public class Item1 extends SherlockFragment{
 		
 	}//Fin de enviar formulario
 	
-	public ArrayList<String> mostrarAgenda(String s){
+	//public ArrayList<String> mostrarAgenda(String s){
+	public void mostrarAgenda(String s) throws JSONException{	
+		//ArrayList<String> st = new ArrayList<String>();
 		
-		ArrayList<String> st = new ArrayList<String>();
-		
-		//String s = "ok";
 		String value = "";
 		String value1 = "";
 		String value2 = "";
 		String value3 = "";
+		String cont = "";
 		
 		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
 		datosEnviar.add(new BasicNameValuePair("stat", s));
 		
 		//SystemClock.sleep(4450);
-		
+		//JSONObject json_objeto;
 		JSONArray jdata = envio.getserverdata(datosEnviar, URL_connect2);
-		
+		//System.out.println("jdata = "+jdata.getString(0));
+		System.out.println(jdata.toString());
+		System.out.println("largo de jdata = "+jdata.length());
 		if (jdata!=null && jdata.length() > 0){
-    		JSONObject json_data; //creamos un objeto JSON
+    		//JSONObject json_data; //creamos un objeto JSON
 			try {
-				json_data = jdata.getJSONObject(0); //leemos el primer segmento en nuestro caso el unico
-				//status=json_data.getInt("logstatus");//accedemos al valor
-				value=json_data.getString("dato");//accedemos al valor
+				
+				for(int n = 0; n < jdata.length(); n++){
+					//st.clear();
+					System.out.println("vuelta:"+n);
+					JSONObject json_data = jdata.getJSONObject(n);
+					value = json_data.getString("dato");
+					value1 = json_data.getString("dato1");
+					value2 = json_data.getString("dato2");
+					value3 = json_data.getString("dato3");
+					
+					ArrayList<String> temporary = new ArrayList<String>();
+					
+					temporary.add(value);
+					temporary.add(value1);
+					temporary.add(value2);
+					temporary.add(value3);
+					//st.add(value);
+					//st.add(value1);
+					//st.add(value2);
+					//st.add(value3);
+					
+					Log.e("log-st", "array temprary = "+temporary);
+					
+					padre.add(temporary);
+					//st.clear();
+				}
+				
+				/*
+				json_data = jdata.getJSONObject(0);
+				cont = json_data.getString("contador");
+				Log.e("cont", "contador = "+cont);
+				
+				json_data = jdata.getJSONObject(0);	//leemos el primer segmento en nuestro caso el unico
+				value=json_data.getString("dato");	//accedemos al valor
 				
 				json_data = jdata.getJSONObject(0);
 				value1=json_data.getString("dato1");
@@ -478,24 +677,19 @@ public class Item1 extends SherlockFragment{
 				json_data = jdata.getJSONObject(0);
 				value2=json_data.getString("dato2");
 				
-				//json_data = jdata.getJSONObject(3);
-				//value3=json_data.getString("dato[]");
+				json_data = jdata.getJSONObject(0);
+				value3=json_data.getString("dato3");
 				
-				//validamos el valor obtenido
-				
-				//String newValue = Integer.toString(value);
-				
-	    		//Log.e("dato ", "valor = " + newValue);
+				System.out.println("Contador = "+cont);
+	    		*/
 	    						
-				st.add(value);
-				st.add(value1);
-				st.add(value2);
-				Log.e("array st", "arrayst = "+st);
+				//st.add(value);
 				//st.add(value1);
 				//st.add(value2);
 				//st.add(value3);
+				Log.e("array padre", "padre = "+padre);
 								
-				return st;
+				//return st;
 				
 				//Log.e("enviarFormulario","status= "+status);//muestro por log que obtuvimos
 			}
@@ -504,13 +698,13 @@ public class Item1 extends SherlockFragment{
 				e.printStackTrace();
 				Log.e("hi", "hi");
 			}		            
-			return st;
+			//return st;
 			
     	}//Fin de if(comprueba si lo obtenido no es "null")
     	
     	else{	//json obtenido invalido verificar parte WEB.
     		Log.e("JSON  ", "ERROR");
-	    	return st;
+	    	//return st;
 	    }
 		
 		
@@ -542,8 +736,13 @@ public class Item1 extends SherlockFragment{
 	class Formulario extends AsyncTask< String, String, String > {
    	 
     	//String date, hora, reg, paciente;
-    	String d2, h2, r2, p2;
-		
+    	String date, hora, reg, paciente, sEdad, sGenero, sProcedencia, sDiagnostico, sMedico,
+    	sRiesgoQuirurgico, sInsumosIndispensables, sRequerimientos, sHemoderivados, sRequisitos,
+    	sNecesidades;
+    	
+    	//Seran convertidos a enteros, excepto duracion, sera convertido a TIME
+    	String sSala, sDuracion, sProgramacion, sServicio, sAtencion, sP, sR;
+    	
     	protected void onPreExecute() {
     		progress = ProgressDialog.show(
     		getActivity(), null, "Programando cirugía ...");
@@ -552,13 +751,35 @@ public class Item1 extends SherlockFragment{
     	
         protected String doInBackground(String... params) {
 			//obtnemos datos
-			d2=params[0];	//Para date
-			h2=params[1];	//Para hora
-			//r2=params[2];
-			//p2=params[3];
-            
+			date=params[0];						//Para date
+			hora=params[1];						//Para hora
+			reg=params[2];  					//Para registro
+			paciente=params[3];					//Para nombre del paciente
+			sEdad=params[4];					//Para edad del paciente
+			sGenero=params[5];					//Para genero del paciente
+			sProcedencia=params[6];				//Para procedencia
+			sDiagnostico=params[7];				//Para diagnostico
+			sMedico=params[8];					//Para nombre del medico
+			sRiesgoQuirurgico=params[9];		//Para riesgo quirurgico
+			sInsumosIndispensables=params[10];  //Para insumos indispensables
+			sRequerimientos=params[11];			//Para requerimientos de anestesiologia
+			sHemoderivados=params[12];			//Para hemoderivados necesarios
+			sRequisitos=params[13];				//Para requisitos de laboratorio
+			sNecesidades=params[14];			//Para otras necesidades
+			
+			sSala = params[15];
+			sDuracion = params[16];
+			sProgramacion = params[17];
+			sServicio = params[18];
+			sAtencion = params[19];
+			sP = params[20];
+			sR = params[21];
+			
 			//enviamos y recibimos y analizamos los datos en segundo plano.
-    		if (enviarFormulario(d2, h2)==true){    		    		
+    		if (enviarFormulario(date, hora, reg, paciente, sEdad, sGenero, sProcedencia,
+    				sDiagnostico, sMedico, sRiesgoQuirurgico, sInsumosIndispensables, sRequerimientos,
+    				sHemoderivados, sRequisitos, sNecesidades, sSala, sDuracion, sProgramacion,
+    				sServicio, sAtencion, sP , sR)==true){    		    		
     			return "ok"; //login valido
     		}else{    		
     			return "error"; //login invalido     	          	  
@@ -571,6 +792,7 @@ public class Item1 extends SherlockFragment{
             
             if (result.equals("ok")){
             	mostrarLeyenda();
+            	
             	//Intent i = new Intent(MainActivity.this, MainActivity2.class);
  				//i.putExtra("user",user);
  				//startActivity(i); 
@@ -598,8 +820,14 @@ public class Item1 extends SherlockFragment{
 			st1=params[0]; //obtenemos el string con "ok" 
 			
 			//enviamos y recibimos y analizamos los datos en segundo plano.
-    		al = mostrarAgenda(st1);		
-    		Log.e("last-array", "last-array = "+al.get(0));
+    		//al = mostrarAgenda(st1);		
+    		try {
+				mostrarAgenda(st1);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Log.e("last-array", "last-array = "+al.get(0));
     		return "ok"; //login valido
     		
 		}//Fin de doInBackground
