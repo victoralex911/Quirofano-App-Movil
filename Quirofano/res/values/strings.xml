@@ -48,6 +48,9 @@
 	<string name="item_1">Item 1</string>	
 	<string name="item_2">Item 2</string>	
 	
+	<!-- 12 Noviembre -->
+	<string name="accion">Acción</string>
+	<string name="fech">Fecha</string>
 	
 	
 	

@@ -119,6 +119,12 @@ public class Item1 extends SherlockFragment{
     String IP_Server="192.168.1.73";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/schedule.php";//ruta en donde estan nuestros archivos
     String URL_connect2 = "http://"+IP_Server+"/androidlogin/mostrarAgenda.php"; //ruta alternativa
+    
+    /*
+     * Programadas 1
+     * Diferidas   -50
+     * 
+     * */
   
     boolean result_back;
     private ProgressDialog progress;
@@ -178,7 +184,7 @@ public class Item1 extends SherlockFragment{
 		//***************************************************************
 		
 		TableLayout tl = (TableLayout)home.findViewById(R.id.table);
-		TableRow tr = (TableRow) inflater.inflate(R.layout.tablerow, container, false);
+		TableRow tr = (TableRow) inflater.inflate(R.layout.newtablerow, container, false);
 		tl.addView(tr);
 		
 		//-- FABRICADO POR VICTOR
@@ -214,34 +220,40 @@ public class Item1 extends SherlockFragment{
 		1. Lo primero que traiga todos los registros
 		*/
 		
+		//if (padre.size() != 0){
 		
-		SystemClock.sleep(40);
+		SystemClock.sleep(1000);
 		Log.e("paso1", "paso1");
 		
 		//FABRICADO POR TRIANA *****************************************************
 		
 		//System.out.println("largo de padre = "+padre.size());
-		//System.out.println("PADRE = "+padre);
+		//System.out.println("PADRE = "+padre);,
 			
 		//for(int index = 0; index < 10; index++){
 		for(int index = 0; index < padre.size(); index++){
 		
-			View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
+			View tabler = inflater.inflate(R.layout.newtablerow_editable, container, false);
 			
+			TextView fech = (TextView)tabler.findViewById(R.id.fech);
 			TextView hora = (TextView)tabler.findViewById(R.id.hora);
 			TextView sala = (TextView)tabler.findViewById(R.id.sala);
 			TextView pa = (TextView)tabler.findViewById(R.id.pa);
 			TextView dg = (TextView)tabler.findViewById(R.id.dg);
+			TextView accion = (TextView)tabler.findViewById(R.id.accion);
 			
 			TableRow trow = (TableRow) tabler;
-						
+			
+			fech.setText("fecha:"+index);
 			hora.setText(padre.get(index).get(0));	
 			sala.setText(padre.get(index).get(1));
 			pa.setText(padre.get(index).get(2));
 			dg.setText(padre.get(index).get(3));
+			//accion.setText("action:"+index);
 				
 			tl.addView(trow);
-		}
+		}//Fin de ciclo for
+		//}//Fin de validacion
 		//FABRICADO POR TRIANA *********************************************************		
 		
 		
@@ -398,7 +410,7 @@ public class Item1 extends SherlockFragment{
 				        String sProcedencia = procedencia.getText().toString();
 				    	String sDiagnostico = diagnostico.getText().toString();
 				        String sMedico = medico.getText().toString();
-				        String sRiesgoQuirurgico = medico.getText().toString();
+				        String sRiesgoQuirurgico = riesgoQuirurgico.getText().toString();
 				    	String sInsumosIndispensables = insumosIndispensables.getText().toString();
 				    	String sRequerimientos = requerimientos.getText().toString();
 				    	String sHemoderivados = hemoderivados.getText().toString();
@@ -436,11 +448,11 @@ public class Item1 extends SherlockFragment{
 				        System.out.println("tipo sProtocolo = "+sProtocolo.getClass().getName()+"valor = "+sProtocolo);
 				        System.out.println("tipo sReintervencion = "+sReintervencion.getClass().getName()+"valor = "+sReintervencion);
 				        
-				        Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"protocolo = "+prot.getText(), Toast.LENGTH_SHORT);
-				 	    toast1.show();
+				        //Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"protocolo = "+prot.getText(), Toast.LENGTH_SHORT);
+				 	    //toast1.show();
 				 	    
-				 	    Toast toast2 = Toast.makeText(getActivity().getApplicationContext(),"reintervencion = "+reint.getText(), Toast.LENGTH_SHORT);
-				 	   	toast2.show();
+				 	    //Toast toast2 = Toast.makeText(getActivity().getApplicationContext(),"reintervencion = "+reint.getText(), Toast.LENGTH_SHORT);
+				 	   	//toast2.show();
 				        
 				        ProgramarCirugiaView pos = new ProgramarCirugiaView();
 				        
@@ -450,21 +462,23 @@ public class Item1 extends SherlockFragment{
 				        System.out.println("servicio = "+object.getServicio());
 				        System.out.println("atencion = "+object.getAtencion());
 				        
+				        /*
 				        Toast toa = Toast.makeText(getActivity().getApplicationContext(), 
 				        		"sala = "+object.getSala()+" duracion = "+object.getDuracion()+
 				        		" programacion = "+object.getProgramacion()+" servicio = "+
 				        		object.getServicio()+" atencion = "+object.getAtencion(),
 				        		Toast.LENGTH_SHORT);
 				        toa.show();
+				        */
 				        
 				        int sala = object.getSala();
-				        int duracion = object.getDuracion();
+				        String sDuracion = object.getDuracion();
 				        int programacion = object.getProgramacion();
 				        int servicio = object.getServicio();
 				        int atencion = object.getAtencion();
 				        
 				        String sSala = Integer.toString(sala);
-				        String sDuracion = Integer.toString(duracion);
+				        //String sDuracion = Integer.toString(duracion);
 				        String sProgramacion = Integer.toString(programacion);
 				        String sServicio = Integer.toString(servicio);
 				        String sAtencion = Integer.toString(atencion);
@@ -568,7 +582,7 @@ public class Item1 extends SherlockFragment{
 		//Spinners y RadioButton
 		datosEnviar.add(new BasicNameValuePair("sSala", sSala));
 		datosEnviar.add(new BasicNameValuePair("sDuracion", sDuracion));
-		datosEnviar.add(new BasicNameValuePair("sProgramacino", sProgramacion));
+		datosEnviar.add(new BasicNameValuePair("sProgramacion", sProgramacion));
 		datosEnviar.add(new BasicNameValuePair("sServicio", sServicio));
 		datosEnviar.add(new BasicNameValuePair("sAtencion", sAtencion));
 		datosEnviar.add(new BasicNameValuePair("sP", sP));

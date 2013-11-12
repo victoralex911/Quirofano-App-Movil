@@ -29,7 +29,7 @@ public class ProgramarCirugiaView extends Activity {
 	static //ObjetoSpinner obj = new ObjetoSpinner();
 	
 	int sala;
-	static int duracion;
+	static String duracion;
 	static int programacion;
 	static int servicio;
 	static int atencion;
@@ -92,11 +92,11 @@ public class ProgramarCirugiaView extends Activity {
 					int position, long id) {
 				//Toast.makeText(parentView.getContext(), "Has seleccionado " +
 				//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-				parentView.getItemAtPosition(position);
+				String tempo = parentView.getItemAtPosition(position).toString();
 				//spins.add(position);
 				//setDuracion(position);
 				int duracion = position;
-				ProgramarCirugiaView.duracion = duracion;
+				ProgramarCirugiaView.duracion = tempo;
 				//duracion = position;
 			}
 
@@ -120,7 +120,7 @@ public class ProgramarCirugiaView extends Activity {
 					int position, long id) {
 				//Toast.makeText(parentView.getContext(), "Has seleccionado " +
 				//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-				parentView.getItemAtPosition(position);
+				//parentView.getItemAtPosition(position);
 				//spins.add(position);
 				//obj.programacion = position;
 				//setProgramacion(position);
@@ -267,7 +267,7 @@ public class ProgramarCirugiaView extends Activity {
 	public void setSala(int sala){
 		this.sala = sala;
 	}
-	public void setDuracion(int duracion){
+	public void setDuracion(String duracion){
 		this.duracion = duracion;
 	}
 	public void setProgramacion(int programacion){
@@ -285,7 +285,7 @@ public class ProgramarCirugiaView extends Activity {
 		return sala;
 	}//Fin de getSala
 	
-	public int getDuracion(){
+	public String getDuracion(){
 		return duracion;
 	}//Fin de getDuracion
 	

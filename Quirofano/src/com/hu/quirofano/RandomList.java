@@ -38,22 +38,22 @@ public class RandomList extends ListFragment{
 		FragmentManager fm = getFragmentManager();
 		switch (position){
 		case 0:
-			newFragment = new Item1();
+			newFragment = new Item1(); //Quirofano central
 			break;
 		case 1:
-			newFragment = new Item2();
+			newFragment = new Item2(); //Cirugia ambulatoria
 			break;
 		case 2:
-			newFragment = new Item3();
+			newFragment = new Item3(); //Traumatologia
 			break;
 		case 3:
-			newFragment = new Item4();
+			newFragment = new Item4(); //Agenda del dia
 			break;
 		case 4:
-			newFragment = new Item5();
+			newFragment = new Item5(); //Contacto
 			break;
 		case 5:
-			newFragment = new Item6();
+			newFragment = new Item6(); //Cerrar sesion
 			break;
 		}
 
