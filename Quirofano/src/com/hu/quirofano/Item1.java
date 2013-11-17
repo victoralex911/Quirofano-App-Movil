@@ -2,6 +2,7 @@ package com.hu.quirofano;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.zip.Inflater;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -23,12 +24,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -48,8 +51,17 @@ import com.hu.libreria.HttpPostAux;
 //>>>>>>> f430b8bdebb5172a872119a5ea0a4c8815fe53e3
 public class Item1 extends SherlockFragment{
 	
+	//16noviembre
+	TextView agregarTema;
+	String[] myString;
+	//FIN - 16noviembre
+	
 	//22oct
 	//ArrayList<String> al = new ArrayList<String>(); 1st version
+	TableLayout tl;
+	//13nov
+	String quirofano_id;
+	String ID_quirofano;
 	
 	//3noviembre
 	ProgramarCirugiaView object = new ProgramarCirugiaView();
@@ -119,11 +131,12 @@ public class Item1 extends SherlockFragment{
     String IP_Server="192.168.1.73";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/schedule.php";//ruta en donde estan nuestros archivos
     String URL_connect2 = "http://"+IP_Server+"/androidlogin/mostrarAgenda.php"; //ruta alternativa
+    String URL_connect3 = "http://"+IP_Server+"/androidlogin/getQuirofanoId.php";
     
     /*
      * Programadas 1
      * Diferidas   -50
-     * 
+     * removeAllViews();
      * */
   
     boolean result_back;
@@ -135,12 +148,24 @@ public class Item1 extends SherlockFragment{
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		
+		/*Recuperar parametros del fragment donde se llama: Item01*/
+		
+		Bundle bundle = this.getArguments();
+		myString = bundle.getStringArray("parametro");
+		System.out.println("ITEM1 RECIBIDO quirofano_id = "+myString[0]);
+		System.out.println("ITEM1 RECIBIDO quirofano_name = "+myString[1]);
+		
+		ID_quirofano = myString[0];
+		
 		post = new HttpPostAux();
 		envio = new HttpPostAux();
 		
 		//*************************************************************
 		
 		View v = inflater.inflate(R.layout.qcentral, container, false);
+		//Poner tema a la vista: el titulo sera el quirofano seleccionado
+		agregarTema = (TextView)v.findViewById(R.id.titulo_quirofano);
+		agregarTema.setText("Quirófano "+myString[1]);
 		
 		final ScrollView sv = (ScrollView)v.findViewById(R.id.vista);
 		
@@ -183,8 +208,8 @@ public class Item1 extends SherlockFragment{
 		botonGuardar = (Button) programar.findViewById(R.id.botonGuardar);
 		//***************************************************************
 		
-		TableLayout tl = (TableLayout)home.findViewById(R.id.table);
-		TableRow tr = (TableRow) inflater.inflate(R.layout.newtablerow, container, false);
+		tl = (TableLayout)home.findViewById(R.id.table);
+		TableRow tr = (TableRow) inflater.inflate(R.layout.tablerow, container, false);
 		tl.addView(tr);
 		
 		//-- FABRICADO POR VICTOR
@@ -212,9 +237,9 @@ public class Item1 extends SherlockFragment{
 		// 21 oct-----------------------------------------------------------------------
 		
 		/*Lo siguiente ira dentro de la sub-clase Agenda*/
-		String val = "ok";
+		String val = ID_quirofano;
 		Log.e("antes de agenda", "antes de agenda");
-		new Agenda().execute(val);
+		new Agenda(inflater, container).execute(val);
 		
 		/*
 		1. Lo primero que traiga todos los registros
@@ -222,7 +247,7 @@ public class Item1 extends SherlockFragment{
 		
 		//if (padre.size() != 0){
 		
-		SystemClock.sleep(1000);
+		//SystemClock.sleep(1000);
 		Log.e("paso1", "paso1");
 		
 		//FABRICADO POR TRIANA *****************************************************
@@ -231,28 +256,28 @@ public class Item1 extends SherlockFragment{
 		//System.out.println("PADRE = "+padre);,
 			
 		//for(int index = 0; index < 10; index++){
-		for(int index = 0; index < padre.size(); index++){
-		
-			View tabler = inflater.inflate(R.layout.newtablerow_editable, container, false);
-			
-			TextView fech = (TextView)tabler.findViewById(R.id.fech);
-			TextView hora = (TextView)tabler.findViewById(R.id.hora);
-			TextView sala = (TextView)tabler.findViewById(R.id.sala);
-			TextView pa = (TextView)tabler.findViewById(R.id.pa);
-			TextView dg = (TextView)tabler.findViewById(R.id.dg);
-			TextView accion = (TextView)tabler.findViewById(R.id.accion);
-			
-			TableRow trow = (TableRow) tabler;
-			
-			fech.setText("fecha:"+index);
-			hora.setText(padre.get(index).get(0));	
-			sala.setText(padre.get(index).get(1));
-			pa.setText(padre.get(index).get(2));
-			dg.setText(padre.get(index).get(3));
-			//accion.setText("action:"+index);
-				
-			tl.addView(trow);
-		}//Fin de ciclo for
+//		for(int index = 0; index < padre.size(); index++){
+//
+//			View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
+//
+//			TextView fech = (TextView)tabler.findViewById(R.id.fech);
+//			TextView hora = (TextView)tabler.findViewById(R.id.hora);
+//			TextView sala = (TextView)tabler.findViewById(R.id.sala);
+//			TextView pa = (TextView)tabler.findViewById(R.id.pa);
+//			TextView dg = (TextView)tabler.findViewById(R.id.dg);
+//			TextView accion = (TextView)tabler.findViewById(R.id.accion);
+//
+//			TableRow trow = (TableRow) tabler;
+//
+//			fech.setText(padre.get(index).get(0));	//fecha
+//			hora.setText(padre.get(index).get(1));	//hora
+//			sala.setText(padre.get(index).get(2));	//sala
+//			pa.setText(padre.get(index).get(3));	//paciente
+//			dg.setText(padre.get(index).get(4));	//diagnostico
+//			//accion.setText("action:"+index);
+//
+//			tl.addView(trow);
+//		}//Fin de ciclo for
 		//}//Fin de validacion
 		//FABRICADO POR TRIANA *********************************************************		
 		
@@ -521,7 +546,7 @@ public class Item1 extends SherlockFragment{
 
 
 		//return inflater.inflate(R.layout.qcentral, null);
-	}
+	}// Fin de onCreateView
 	
 	//Primero validamos los campos
 	public boolean validarFormulario(String date, String hora, String reg, String paciente, 
@@ -588,13 +613,32 @@ public class Item1 extends SherlockFragment{
 		datosEnviar.add(new BasicNameValuePair("sP", sP));
 		datosEnviar.add(new BasicNameValuePair("sR", sR));
 		
+		//String con el "quirofano_id" --- 1:central, (2:ambulatoria, 3:traumatologia)
+		//Obtener el quirofano_id de la tabla "siga_quirofano", ej: central = 1
+		//Luego programar la cirugia con ese int
+		
+		//Forma antigua de obtener el id del quirofano
+//		String quirofano = "Central";
+//		new GetQuirofanoId().execute(quirofano);
+//		SystemClock.sleep(2000);
+//		System.out.println("q_id = "+quirofano_id); 
+		// FIN - Forma antigua de obtener el id del quirofano
+		
+		//Nueva forma de obtener el id del quirofano
+		System.out.println("q_id = "+ID_quirofano); 
+		datosEnviar.add(new BasicNameValuePair("q_id", ID_quirofano));
+
+		// FIN - Nueva forma de obtener el id del quirofano
+		
+		//datosEnviar.add(new BasicNameValuePair("q_id", quirofano_id));
+		
 		Log.e("datosEnviar","datosEnviar = "+datosEnviar);
 		Log.e("URL_connect","URL_connect = "+URL_connect);
 		
 		//realizamos una peticion y como respuesta obtienes un array JSON
   		JSONArray jdata=post.getserverdata(datosEnviar, URL_connect);
   		
-  		SystemClock.sleep(1450);
+  		//SystemClock.sleep(1450);
   		  		
   		//si lo que obtuvimos no es null
     	if (jdata!=null && jdata.length() > 0){
@@ -631,7 +675,7 @@ public class Item1 extends SherlockFragment{
 	//public ArrayList<String> mostrarAgenda(String s){
 	public void mostrarAgenda(String s) throws JSONException{	
 		//ArrayList<String> st = new ArrayList<String>();
-		
+		String val = "";
 		String value = "";
 		String value1 = "";
 		String value2 = "";
@@ -655,6 +699,7 @@ public class Item1 extends SherlockFragment{
 					//st.clear();
 					System.out.println("vuelta:"+n);
 					JSONObject json_data = jdata.getJSONObject(n);
+					val = json_data.getString("dat");
 					value = json_data.getString("dato");
 					value1 = json_data.getString("dato1");
 					value2 = json_data.getString("dato2");
@@ -662,6 +707,7 @@ public class Item1 extends SherlockFragment{
 					
 					ArrayList<String> temporary = new ArrayList<String>();
 					
+					temporary.add(val);
 					temporary.add(value);
 					temporary.add(value1);
 					temporary.add(value2);
@@ -724,6 +770,54 @@ public class Item1 extends SherlockFragment{
 		
 		
 	}//Fin de mostrarAgenda
+	
+	//ESTE METODO YA NO SE USA :v
+	public void getQuirofanoId(String qui){
+		
+		String qId;
+		
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		datosEnviar.add(new BasicNameValuePair("quirofano_name",qui));
+		
+		JSONArray jdata=post.getserverdata(datosEnviar, URL_connect3);
+  		
+  		//SystemClock.sleep(1450);
+  		  		
+  		//si lo que obtuvimos no es null
+    	if (jdata!=null && jdata.length() > 0){
+    		JSONObject json_data; //creamos un objeto JSON
+			try {
+				json_data = jdata.getJSONObject(0); //leemos el primer segmento en nuestro caso el unico
+				//status=json_data.getInt("logstatus");//accedemos al valor
+				qId = json_data.getString("quirofano_id");
+				Log.e("getQuirofanoId","status= "+qId);//muestro por log que obtuvimos
+				
+				quirofano_id = qId;
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		            
+             
+			//validamos el valor obtenido
+    		//if (qId.equals(null)){// [{"logstatus":"0"}] 
+    		//	Log.e("getQuirofanoId ", "no existe ese quirofano_id");
+    		//	return qId;
+    		//}
+    		//else{// [{"logstatus":"1"}]
+    		//	Log.e("loginstatus ", "envio exitoso");
+    		//	return true;
+    		//}
+    		 
+    	}//Fin de if(comprueba si lo obtenido no es "null")
+    	
+    	else{	//json obtenido invalido verificar parte WEB.
+    		Log.e("JSON getQuirofanoId  ", "ERROR");
+	    	//return false;
+	    }//Fin de else
+		
+		
+	}//Fin de getQuirofanoId
 	
 	public void error1(){
     	Vibrator vibrator =(Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
@@ -821,6 +915,14 @@ public class Item1 extends SherlockFragment{
 	
 	class Agenda extends AsyncTask< String, String, String> {
 		
+		LayoutInflater inflater;
+		ViewGroup container;
+		
+		Agenda(LayoutInflater inflater, ViewGroup container){
+			this.inflater = inflater;
+			this.container = container;
+		}
+		
 		//String date, hora, reg, paciente;
     	String st1; //El string que llevara la cadena "ok"
 		
@@ -849,6 +951,28 @@ public class Item1 extends SherlockFragment{
         protected void onPostExecute(String resultado) {
         	//progress.dismiss();//ocultamos progess dialog.
             Log.e("onPostExecute=","Todo bien="+resultado);
+            for(int index = 0; index < padre.size(); index++){
+        		
+    			View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
+    			
+    			TextView fech = (TextView)tabler.findViewById(R.id.fech);
+    			TextView hora = (TextView)tabler.findViewById(R.id.hora);
+    			TextView sala = (TextView)tabler.findViewById(R.id.sala);
+    			TextView pa = (TextView)tabler.findViewById(R.id.pa);
+    			TextView dg = (TextView)tabler.findViewById(R.id.dg);
+    			TextView accion = (TextView)tabler.findViewById(R.id.accion);
+    			
+    			TableRow trow = (TableRow) tabler;
+    			
+    			fech.setText(padre.get(index).get(0));	//fecha
+    			hora.setText(padre.get(index).get(1));	//hora
+    			sala.setText(padre.get(index).get(2));	//sala
+    			pa.setText(padre.get(index).get(3));	//paciente
+    			dg.setText(padre.get(index).get(4));	//diagnostico
+    			//accion.setText("action:"+index);
+    				
+    			tl.addView(trow);
+    		}//Fin de ciclo for
             //return al;
             //mostrarLeyenda();
             
@@ -858,34 +982,35 @@ public class Item1 extends SherlockFragment{
 	
 	
 	/*DatePicker - 26 octubre*/
-	
-	private DatePickerDialog.OnDateSetListener mDateSetListener = 
-			new DatePickerDialog.OnDateSetListener(){
+	//ESTA SUB-CLASE YA NO SE USA
+	class GetQuirofanoId extends AsyncTask< String, String, String> {
 		
-		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			updateDisplay();
-		}//Fin de onDataSet
-	};//Fin de DatePickerDialog
-	
-	private void updateDisplay(){
-		mDateDisplay.setText(
-				new StringBuilder()
-				//agregar 1, empieza en 0
-				.append(mMonth +1).append("-")
-				.append(mDay).append("-")
-				.append(mYear).append(" "));
-	}//Fin de updateDisplay
-	
-	protected Dialog onCreateDialog(int id){
-		switch (id){
-			case DATE_DIALOG_ID:
-				return new DatePickerDialog(getActivity(), mDateSetListener, mYear, mMonth, mDay);
-		}//Fin de switch
-		return null;
-	}//Fin de onCreateDialog
+    	String quir; //El string llevara el quirofano_name
+		
+    	protected void onPreExecute() {
+    		//progress = ProgressDialog.show(
+    		//getActivity(), null, "Accesando a agenda...");
+            super.onPreExecute();
+        }
+    	
+        protected String doInBackground(String... params) {
+			quir=params[0]; //obtenemos el string de quirofano_name 
+			
+			getQuirofanoId(quir);
+			//Log.e("last-array", "last-array = "+al.get(0));
+    		return "ok"; //login valido
+    		
+		}//Fin de doInBackground
+       
+        protected void onPostExecute(String resultado) {
+        	//progress.dismiss();//ocultamos progess dialog.
+            //Log.e("onPostExecute=","Todo bien="+resultado);
+            //return al;
+            //mostrarLeyenda();
+            
+        }//Fin de onPostExecute        
+		
+	}//Fin de la subclase GetQuirofanoId
 	
 	
 }//Fin de la clase Item1

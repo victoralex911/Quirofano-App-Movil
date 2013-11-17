@@ -84,6 +84,7 @@ public class MainView extends SherlockFragment{
 		
 			View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
 			
+			TextView fech = (TextView)tabler.findViewById(R.id.fech);
 			TextView hora = (TextView)tabler.findViewById(R.id.hora);
 			TextView sala = (TextView)tabler.findViewById(R.id.sala);
 			TextView pa = (TextView)tabler.findViewById(R.id.pa);
@@ -91,10 +92,11 @@ public class MainView extends SherlockFragment{
 			
 			TableRow trow = (TableRow) tabler;
 						
-			hora.setText(padre.get(index).get(0));	
-			sala.setText(padre.get(index).get(1));
-			pa.setText(padre.get(index).get(2));
-			dg.setText(padre.get(index).get(3));
+			fech.setText(padre.get(index).get(0));
+			hora.setText(padre.get(index).get(1));	
+			sala.setText(padre.get(index).get(2));
+			pa.setText(padre.get(index).get(3));
+			dg.setText(padre.get(index).get(4));
 				
 			tl.addView(trow);
 		}//Fin de ciclo for
@@ -108,6 +110,7 @@ public class MainView extends SherlockFragment{
 	public void mostrarAgendaDelDia(String s) throws JSONException{	
 		//ArrayList<String> st = new ArrayList<String>();
 		
+		String val = "";
 		String value = "";
 		String value1 = "";
 		String value2 = "";
@@ -131,6 +134,7 @@ public class MainView extends SherlockFragment{
 					//st.clear();
 					System.out.println("vuelta:"+n);
 					JSONObject json_data = jdata.getJSONObject(n);
+					val = json_data.getString("dat");
 					value = json_data.getString("dato");
 					value1 = json_data.getString("dato1");
 					value2 = json_data.getString("dato2");
@@ -138,6 +142,7 @@ public class MainView extends SherlockFragment{
 					
 					ArrayList<String> temporary = new ArrayList<String>();
 					
+					temporary.add(val);
 					temporary.add(value);
 					temporary.add(value1);
 					temporary.add(value2);

@@ -50,6 +50,8 @@ public class Item4 extends SherlockFragment{
     String IP_Server="192.168.1.73";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/agendaDelDia.php";
     
+    TableLayout tl;
+    
     ArrayList<ArrayList<String>> padre = new ArrayList<ArrayList<String>>();
     boolean result_back;
     private ProgressDialog progress;
@@ -60,35 +62,17 @@ public class Item4 extends SherlockFragment{
 		final ScrollView sv = (ScrollView)v.findViewById(R.id.vista);
 		final View home = inflater.inflate(R.layout.home, container, false);
 		
-		TableLayout tl = (TableLayout)home.findViewById(R.id.table);
+		tl = (TableLayout)home.findViewById(R.id.table);
 		TableRow tr = (TableRow) inflater.inflate(R.layout.tablerow, container, false);
 		tl.addView(tr);
 		
 		String val = "ok";
 		Log.e("antes de agenda", "antes de agenda");
-		new agendaDelDia().execute(val);
+		new agendaDelDia(inflater, container).execute(val);
 		
-		SystemClock.sleep(1000);
+		//SystemClock.sleep(1000);
 		Log.e("paso1", "paso1");
 			
-		for(int index = 0; index < padre.size(); index++){
-		
-			View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
-			
-			TextView hora = (TextView)tabler.findViewById(R.id.hora);
-			TextView sala = (TextView)tabler.findViewById(R.id.sala);
-			TextView pa = (TextView)tabler.findViewById(R.id.pa);
-			TextView dg = (TextView)tabler.findViewById(R.id.dg);
-			
-			TableRow trow = (TableRow) tabler;
-						
-			hora.setText(padre.get(index).get(0));	
-			sala.setText(padre.get(index).get(1));
-			pa.setText(padre.get(index).get(2));
-			dg.setText(padre.get(index).get(3));
-				
-			tl.addView(trow);
-		}//Fin de ciclo for
 		sv.addView(home);
 		
 		return v;
@@ -97,7 +81,7 @@ public class Item4 extends SherlockFragment{
 	
 	public void mostrarAgendaDelDia(String s) throws JSONException{	
 		//ArrayList<String> st = new ArrayList<String>();
-		
+		String val = "";
 		String value = "";
 		String value1 = "";
 		String value2 = "";
@@ -121,6 +105,7 @@ public class Item4 extends SherlockFragment{
 					//st.clear();
 					System.out.println("vuelta:"+n);
 					JSONObject json_data = jdata.getJSONObject(n);
+					val = json_data.getString("dat");
 					value = json_data.getString("dato");
 					value1 = json_data.getString("dato1");
 					value2 = json_data.getString("dato2");
@@ -128,6 +113,7 @@ public class Item4 extends SherlockFragment{
 					
 					ArrayList<String> temporary = new ArrayList<String>();
 					
+					temporary.add(val);
 					temporary.add(value);
 					temporary.add(value1);
 					temporary.add(value2);
@@ -163,6 +149,14 @@ public class Item4 extends SherlockFragment{
 		
 		//String date, hora, reg, paciente;
     	String st1; //El string que llevara la cadena "ok"
+    	
+		LayoutInflater inflater;
+		ViewGroup container;
+		
+		agendaDelDia(LayoutInflater inflater, ViewGroup container){
+			this.inflater = inflater;
+			this.container = container;
+		}
 		
     	protected void onPreExecute() {
     		//progress = ProgressDialog.show(
@@ -188,9 +182,30 @@ public class Item4 extends SherlockFragment{
        
         protected void onPostExecute(String resultado) {
         	//progress.dismiss();//ocultamos progess dialog.
-            Log.e("onPostExecute=","Todo bien="+resultado);
+            //Log.e("onPostExecute=","Todo bien="+resultado);
             //return al;
             //mostrarLeyenda();
+        	
+        	for(int index = 0; index < padre.size(); index++){
+        		
+        		View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
+        			
+        		TextView fech = (TextView)tabler.findViewById(R.id.fech);
+        		TextView hora = (TextView)tabler.findViewById(R.id.hora);
+        		TextView sala = (TextView)tabler.findViewById(R.id.sala);
+        		TextView pa = (TextView)tabler.findViewById(R.id.pa);
+        		TextView dg = (TextView)tabler.findViewById(R.id.dg);
+        			
+        		TableRow trow = (TableRow) tabler;
+        						
+        		fech.setText(padre.get(index).get(0));
+        		hora.setText(padre.get(index).get(1));	
+        		sala.setText(padre.get(index).get(2));
+        		pa.setText(padre.get(index).get(3));
+        		dg.setText(padre.get(index).get(4));
+        				
+        		tl.addView(trow);
+        	}//Fin de ciclo for
             
         }//Fin de onPostExecute        
 		

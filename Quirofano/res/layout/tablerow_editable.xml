@@ -4,6 +4,14 @@
     android:layout_gravity="left" >
 
     <TextView
+        android:id="@+id/fech"
+		android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="@string/fech" />
+    
+    <TextView
         android:id="@+id/hora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

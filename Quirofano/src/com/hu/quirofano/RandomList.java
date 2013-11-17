@@ -13,10 +13,11 @@ import android.widget.ListView;
 
 public class RandomList extends ListFragment{
 	
+	String p= "Prueba";
+	
 	String[] list_contents = {
-		"Quirófano central",
-		"Cirugía ambulatoria",
-		"Traumatología",
+		"Lista de quirófanos",
+		//"Quirófano central",
 		"Agenda del día",
 		"Contacto",
 		"Cerrar sesión"
@@ -38,23 +39,20 @@ public class RandomList extends ListFragment{
 		FragmentManager fm = getFragmentManager();
 		switch (position){
 		case 0:
-			newFragment = new Item1(); //Quirofano central
+			newFragment = new Item02(); //Lista de quirofanos
 			break;
 		case 1:
-			newFragment = new Item2(); //Cirugia ambulatoria
-			break;
-		case 2:
-			newFragment = new Item3(); //Traumatologia
-			break;
-		case 3:
 			newFragment = new Item4(); //Agenda del dia
 			break;
-		case 4:
+		case 2:
 			newFragment = new Item5(); //Contacto
 			break;
-		case 5:
+		case 3:
 			newFragment = new Item6(); //Cerrar sesion
 			break;
+		//case 5:
+		//	newFragment = new Item6(); //Cerrar sesion
+		//	break;
 		}
 
 		if (newFragment != null)

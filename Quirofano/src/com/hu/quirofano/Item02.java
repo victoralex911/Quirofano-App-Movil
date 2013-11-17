@@ -44,6 +44,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -61,7 +62,7 @@ import com.hu.quirofano.Item1.Agenda;
 
 /*Fragment de Quirofano Central
  * Incluyendo por primera vez las funcionalidades de la Activity*/
-public class Item01 extends SherlockFragment {
+public class Item02 extends SherlockFragment {
 
 	//Bundle extras = getIntent().getExtras();
 	//Obtenemos datos enviados en el intent.
@@ -72,7 +73,7 @@ public class Item01 extends SherlockFragment {
     View ll;
     
     ArrayList<ArrayList<String>> padre = new ArrayList<ArrayList<String>>();
-    ArrayList<String> nombresQuirofanos = new ArrayList<String>();
+    ArrayList<String> nombres = new ArrayList<String>();
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		
@@ -169,61 +170,42 @@ public class Item01 extends SherlockFragment {
        
         protected void onPostExecute(String resultado) {
         	
-        	OnClickListener clicks=new OnClickListener() {
-
-    		    @Override
-    		    public void onClick(View v) {
-    		    		//Esta es la posicion del array padre sobre el que se hizo click
-    		    		System.out.println("id = "+v.getId());  
-    		    		
-    		    		//Ahora se debe obtener el quirofano_id y el quirofano_name, desde v.getId()
-    		            
-    		    		//switch(v.getId())
-    		            //{
-    			            //case 0: System.out.println("0");
-    		                //break;
-	    		        Fragment duedateFrag = new Item1();	
-	    		        Bundle bundle = new Bundle();
-	    		                	    		                
-	    		        String miArreglo[] = new String[2];
-	    		              
-	    		        miArreglo[0] = padre.get(v.getId()).get(0);		//llenar con id_quirofano
-	    		        miArreglo[1] = padre.get(v.getId()).get(1);		//llenar con el nombre del quirofano
-	    		                
-	    		        System.out.println("POSICION DE QUIROFANO_ID = "+v.getId());
-	    		        System.out.println("ARREGLO-QUIROFANO_ID = "+miArreglo[0]);
-	    		        System.out.println("ARREGLO-QUIROFANO_NAME = "+miArreglo[1]);
-	    		                	    		                	    		                
-	    		        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Item1
-	    		        duedateFrag.setArguments(bundle);
-	    		                
-	    		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
-	    		        ft.replace(R.id.content_frame, duedateFrag);
-	    		        ft.addToBackStack(null);
-	    		        ft.commit();
-	    		        //break;
-    		                
-    		            //}       
-    		    } //Fin de onClick
-    		}; //Fin de onClickListener
-        	
-        	//View v = inflater.inflate(R.layout.lista_quirofanos, container, false);
-    		//View ll = v.findViewById(R.id.info);
-        	
         	for (int i = 0; i<padre.size(); i++){
-    			TextView tv = (TextView) new TextView(getActivity());
-    			tv.setText(padre.get(i).get(1));
-    			tv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
-    			((LinearLayout) ll).addView(tv);
     			
-    			//Primero pasamos la posicion del arraypadre en el que se hizo click
-    			tv.setId(i);
-    			//Opcion2 - settear Id con la posición de "padre" en que se hizo click
-    			tv.setOnClickListener(clicks);
+    			//Guardamos en un array todos los nombres de los quirofanos para desplegarlos en la listView
+    			nombres.add(padre.get(i).get(1));
     		}//Fin de for
-            
+        	
+        	ListView lista = new ListView(getActivity());
+        	lista.setAdapter(new ArrayAdapter<String>(getActivity(), 
+    				android.R.layout.simple_list_item_1, nombres)); 
+        	
+        	lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> av, View view, int i, long l) {
+                    Toast.makeText(getActivity(), "Accediste a quirófano: "+padre.get(i).get(1), Toast.LENGTH_LONG).show();
+                    
+                    Fragment duedateFrag = new Item1();	
+    		        Bundle bundle = new Bundle();
+    		        String miArreglo[] = new String[2];
+			              
+			        miArreglo[0] = padre.get(i).get(0);		//llenar con id_quirofano
+			        miArreglo[1] = padre.get(i).get(1);		//llenar con el nombre del quirofano
+			        
+			        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Item1
+    		        duedateFrag.setArguments(bundle);
+    		                
+    		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
+    		        ft.replace(R.id.content_frame, duedateFrag);
+    		        ft.addToBackStack(null);
+    		        ft.commit();
+                }// Fin de onItemClick
+            });
+//    		lista.setAdapter(new ArrayAdapter<String>(getActivity(), 
+//    				android.R.layout.simple_list_item_1, new String[]{"1","2","3","4"}));
+    		((LinearLayout)ll).addView(lista);
+        	
         }//Fin de onPostExecute        
 	}//Fin de la subclase GetQuirofanoName
 	
-}//Fin de la clase Item01
+}//Fin de la clase Item02
   	             
