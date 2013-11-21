@@ -1,42 +1,52 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="left" >
+    android:layout_gravity="left"
+    android:weightSum="5" >
 
     <TextView
         android:id="@+id/fech"
-		android:layout_width="wrap_content"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="@string/fech" />
-    
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Fecha"
+        android:textSize="20sp" />
+
     <TextView
         android:id="@+id/hora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="@string/hora_string" />
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Hora"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/sala"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="@string/sala_string" />
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Sala"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/pa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="@string/paciente_string" />
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Paciente"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/dg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="@string/diagnostico_string" />
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Diagnostico"
+        android:textSize="20sp" />
 
 </TableRow>
