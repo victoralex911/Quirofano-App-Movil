@@ -29,6 +29,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -51,6 +53,7 @@ public class Item4 extends SherlockFragment{
     String URL_connect="http://"+IP_Server+"/androidlogin/agendaDelDia.php";
     
     TableLayout tl;
+    ListView lista;
     
     ArrayList<ArrayList<String>> padre = new ArrayList<ArrayList<String>>();
     boolean result_back;
@@ -59,12 +62,14 @@ public class Item4 extends SherlockFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		post = new HttpPostAux();
 		View v = inflater.inflate(R.layout.agendadeldia, container, false);
-		final ScrollView sv = (ScrollView)v.findViewById(R.id.vista);
+		final LinearLayout sv = (LinearLayout)v.findViewById(R.id.vista);
 		final View home = inflater.inflate(R.layout.home, container, false);
-		
+	
 		tl = (TableLayout)home.findViewById(R.id.table);
 		TableRow tr = (TableRow) inflater.inflate(R.layout.tablerow, container, false);
 		tl.addView(tr);
+		
+		lista = (ListView)home.findViewById(R.id.lista);
 		
 		String val = "ok";
 		Log.e("antes de agenda", "antes de agenda");
@@ -185,27 +190,28 @@ public class Item4 extends SherlockFragment{
             //Log.e("onPostExecute=","Todo bien="+resultado);
             //return al;
             //mostrarLeyenda();
+        	lista.setAdapter(new MyVeryOwnArrayAdapter(getActivity(), R.layout.tablerow_editable, padre));
         	
-        	for(int index = 0; index < padre.size(); index++){
-        		
-        		View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
-        			
-        		TextView fech = (TextView)tabler.findViewById(R.id.fech);
-        		TextView hora = (TextView)tabler.findViewById(R.id.hora);
-        		TextView sala = (TextView)tabler.findViewById(R.id.sala);
-        		TextView pa = (TextView)tabler.findViewById(R.id.pa);
-        		TextView dg = (TextView)tabler.findViewById(R.id.dg);
-        			
-        		TableRow trow = (TableRow) tabler;
-        						
-        		fech.setText(padre.get(index).get(0));
-        		hora.setText(padre.get(index).get(1));	
-        		sala.setText(padre.get(index).get(2));
-        		pa.setText(padre.get(index).get(3));
-        		dg.setText(padre.get(index).get(4));
-        				
-        		tl.addView(trow);
-        	}//Fin de ciclo for
+//        	for(int index = 0; index < padre.size(); index++){
+//        		
+//        		View tabler = inflater.inflate(R.layout.tablerow_editable, container, false);
+//        			
+//        		TextView fech = (TextView)tabler.findViewById(R.id.fech);
+//        		TextView hora = (TextView)tabler.findViewById(R.id.hora);
+//        		TextView sala = (TextView)tabler.findViewById(R.id.sala);
+//        		TextView pa = (TextView)tabler.findViewById(R.id.pa);
+//        		TextView dg = (TextView)tabler.findViewById(R.id.dg);
+//        			
+//        		TableRow trow = (TableRow) tabler;
+//        						
+//        		fech.setText(padre.get(index).get(0));
+//        		hora.setText(padre.get(index).get(1));	
+//        		sala.setText(padre.get(index).get(2));
+//        		pa.setText(padre.get(index).get(3));
+//        		dg.setText(padre.get(index).get(4));
+//        				
+//        		tl.addView(trow);
+//        	}//Fin de ciclo for
             
         }//Fin de onPostExecute        
 		

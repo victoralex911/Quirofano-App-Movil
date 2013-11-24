@@ -12,16 +12,13 @@
         android:text="Agenda del dia"
         android:textSize="20sp" />
 
-    <LinearLayout
+   <LinearLayout
+        android:id="@+id/vista"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <ScrollView
-            android:id="@+id/vista"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </ScrollView>
+
     </LinearLayout>
 
 </LinearLayout>

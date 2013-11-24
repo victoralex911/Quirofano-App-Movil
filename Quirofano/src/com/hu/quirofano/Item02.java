@@ -71,6 +71,7 @@ public class Item02 extends SherlockFragment {
     String URL_connect="http://"+IP_Server+"/androidlogin/getQuirofanoName.php";
     
     View ll;
+    TextView agregarTema;
     
     ArrayList<ArrayList<String>> padre = new ArrayList<ArrayList<String>>();
     ArrayList<String> nombres = new ArrayList<String>();
@@ -80,9 +81,10 @@ public class Item02 extends SherlockFragment {
 		post = new HttpPostAux();
 		
 		String val = "ok";
-		new GetQuirofanoName(inflater, container).execute(val);
-		
+//		new GetQuirofanoName(inflater, container, v).execute(val);
 		View v = inflater.inflate(R.layout.lista_quirofanos, container, false);
+		new GetQuirofanoName(inflater, container, v).execute(val);
+		
 		ll = v.findViewById(R.id.info);
 		
 		return v;
@@ -145,10 +147,12 @@ public class Item02 extends SherlockFragment {
 		
 		LayoutInflater inflater;
 		ViewGroup container;
+		View v;
 		
-		GetQuirofanoName(LayoutInflater inflater, ViewGroup container){
+		GetQuirofanoName(LayoutInflater inflater, ViewGroup container, View v){
 			this.inflater = inflater;
 			this.container = container;
+			this.v = v;
 		}
 		
     	String quir; //El string llevara el quirofano_name
@@ -197,12 +201,45 @@ public class Item02 extends SherlockFragment {
     		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
     		        ft.replace(R.id.content_frame, duedateFrag);
     		        ft.addToBackStack(null);
+    		        //duedateFrag.getFragmentManager().popBackStackImmediate();
     		        ft.commit();
                 }// Fin de onItemClick
             });
 //    		lista.setAdapter(new ArrayAdapter<String>(getActivity(), 
 //    				android.R.layout.simple_list_item_1, new String[]{"1","2","3","4"}));
+        	if (nombres.size()==0){
+    			agregarTema = (TextView)v.findViewById(R.id.lista_quirofanos);
+    			agregarTema.setText("No hay quirófanos disponibles");
+    		}
     		((LinearLayout)ll).addView(lista);
+    		
+    		
+//    		OnClickListener clicks=new OnClickListener() {
+//
+//    		    @Override
+//    		    public void onClick(View v) {
+//
+//    		            switch(v.getId())
+//    		            {
+//    		                case 1000: System.out.println("FIRST");
+//    		                break;
+//
+//    		                case 1004: System.out.println("FOURTH");
+//    		                break; 
+//    		            }       
+//    		    }
+//    		};
+//    		for (int toShow = 1; toShow <= nShips; toShow++)
+//    		{
+//    		        btn = new Button(this);
+//    		        btn.setBackgroundResource(shipDrawable.get(ima));
+//    		        btn.setLayoutParams(params);
+//    		        row[pos].addView(btn);
+//    		        btn.setId(shipId.get(ima));
+//    		        btn.setOnClickListener(clicks);
+//    		        if (row[pos].getChildCount() == 3) pos++;
+//    		        ima++;
+//    		}
         	
         }//Fin de onPostExecute        
 	}//Fin de la subclase GetQuirofanoName
