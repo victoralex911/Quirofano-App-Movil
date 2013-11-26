@@ -135,7 +135,7 @@ public class Item1 extends SherlockFragment{
 	HttpPostAux envio;
     String IP_Server="192.168.1.73";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/schedule.php";//ruta en donde estan nuestros archivos
-    String URL_connect2 = "http://"+IP_Server+"/androidlogin/mostrarAgenda.php"; //ruta alternativa
+    String URL_connect2 = "http://"+IP_Server+"/androidlogin/mostrarAgenda.php"; 
     String URL_connect3 = "http://"+IP_Server+"/androidlogin/getQuirofanoId.php";
     String URL_connect4 = "http://"+IP_Server+"/androidlogin/getSalas.php";
     String URL_connect5 = "http://"+IP_Server+"/androidlogin/llenarProcedimientos.php";
@@ -825,6 +825,7 @@ public class Item1 extends SherlockFragment{
 		String value1 = "";
 		String value2 = "";
 		String value3 = "";
+		String value4 = "";
 		String cont = "";
 		
 		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
@@ -844,11 +845,12 @@ public class Item1 extends SherlockFragment{
 					//st.clear();
 					System.out.println("vuelta:"+n);
 					JSONObject json_data = jdata.getJSONObject(n);
-					val = json_data.getString("dat");
-					value = json_data.getString("dato");
-					value1 = json_data.getString("dato1");
-					value2 = json_data.getString("dato2");
-					value3 = json_data.getString("dato3");
+					val = json_data.getString("dat");		//Fecha
+					value = json_data.getString("dato");	//Hora
+					value1 = json_data.getString("dato1");	//Sala
+					value2 = json_data.getString("dato2");	//Paciente
+					value3 = json_data.getString("dato3");	//Diagnostico
+					value4 = json_data.getString("dato4");	//ID
 					
 					ArrayList<String> temporary = new ArrayList<String>();
 					
@@ -857,6 +859,7 @@ public class Item1 extends SherlockFragment{
 					temporary.add(value1);
 					temporary.add(value2);
 					temporary.add(value3);
+					temporary.add(value4);
 					//st.add(value);
 					//st.add(value1);
 					//st.add(value2);
@@ -1270,10 +1273,14 @@ public class Item1 extends SherlockFragment{
                     
                     Fragment duedateFrag = new Accion();	//Nuevo item para las acciones
     		        Bundle bundle = new Bundle();
-    		        String miArreglo[] = new String[1]; 	//Llenar arreglo con el nombre del paciente y el id
+    		        String miArreglo[] = new String[6]; 	//Llenar arreglo con el nombre del paciente y el id
 			              
-			        //miArreglo[0] = padre.get(i).get(0);			//llenar con id de la cirugia programada
-			        miArreglo[0] = padre.get(i).get(3);				//llenar con el nombre del paciente de la cirugia programada
+			        miArreglo[0] = padre.get(i).get(0);		//Llenar con la fecha
+			        miArreglo[1] = padre.get(i).get(1);		//Llenar con la hora
+			        miArreglo[2] = padre.get(i).get(2);		//Sala	
+			        miArreglo[3] = padre.get(i).get(3);		//Paciente
+			        miArreglo[4] = padre.get(i).get(4);		//Diagnostico
+			        miArreglo[5] = padre.get(i).get(5);		//ID
 			        
 			        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Item1
     		        duedateFrag.setArguments(bundle);
