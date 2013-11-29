@@ -63,12 +63,11 @@ import com.hu.libreria.HttpPostAux;
 import com.hu.quirofano.Item02.GetQuirofanoName;
 import com.hu.quirofano.Item1.Agenda;
 
-public class Accion extends SherlockFragment{
+public class AccionDiferida extends SherlockFragment{
 
 	HttpPostAux post;
-    String IP_Server="172.16.0.125";//IP DE NUESTRO PC
+    String IP_Server="172.16.0.150";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/cancelarCirugia.php";
-    String URL_connect1="http://"+IP_Server+"/androidlogin/iniciarCirugia.php";
     
     View ll;
     TextView agregarTema;
@@ -76,30 +75,11 @@ public class Accion extends SherlockFragment{
     
     ArrayList<ArrayList<String>> padre = new ArrayList<ArrayList<String>>();
     ArrayList<String> nombres = new ArrayList<String>();
-    
-    EditText ingresar;
-    EditText medico_name;
-    EditText cirujano_name;
-    EditText anestesiologo;
-    EditText anestesiologo_supervisor;
-    EditText tecnica;
-    EditText instrumentista;
-    EditText circulante;
-    EditText observaciones;
-    
-	Button guardar;
 	
-	//*****************
-	
-	RadioGroup tiempoFuera;
-	RadioButton si;
-	RadioButton no;
-	RadioButton tiempo;
-    
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState){
     	
     	post = new HttpPostAux();
-    	View v = inflater.inflate(R.layout.acciones, container, false);
+    	View v = inflater.inflate(R.layout.acciones_diferida, container, false);
     	final View iniciar = inflater.inflate(R.layout.transoperatorio, container, false);
     	final View diferir = inflater.inflate(R.layout.diferir, container, false);
     	
@@ -116,22 +96,8 @@ public class Accion extends SherlockFragment{
 		//ll = v.findViewById(R.id.info);
 		
 		Button cancelar = (Button)v.findViewById(R.id.cancelar);
-		Button iniciarButton = (Button)v.findViewById(R.id.iniciar);
-		Button diferirButton = (Button)v.findViewById(R.id.diferir);
-		
-		tiempoFuera = (RadioGroup) iniciar.findViewById(R.id.tiempoFuera);
-		
-		//EditText
-		ingresar = (EditText) iniciar.findViewById(R.id.ingreso);
-		medico_name = (EditText) iniciar.findViewById(R.id.medico);
-		cirujano_name = (EditText) iniciar.findViewById(R.id.cirujano);
-		anestesiologo = (EditText) iniciar.findViewById(R.id.anestesiologo);
-		anestesiologo_supervisor = (EditText) iniciar.findViewById(R.id.anestesiologoSupervisa);
-		tecnica = (EditText) iniciar.findViewById(R.id.tecnicaAnestesica);
-		instrumentista = (EditText) iniciar.findViewById(R.id.instrumentista);
-		circulante = (EditText) iniciar.findViewById(R.id.circulante);
-		observaciones = (EditText) iniciar.findViewById(R.id.observaciones);
-
+//		Button iniciarButton = (Button)v.findViewById(R.id.iniciar);
+//		Button diferirButton = (Button)v.findViewById(R.id.diferir);
 		//Button po = (Button)v.findViewById(R.id.po);
 		//Button salas = (Button)v.findViewById(R.id.salas);
 		
@@ -170,108 +136,27 @@ public class Accion extends SherlockFragment{
 			}
 		});
 		
-		//INICIAR BUTTON *************************************************
+		//INICIAR BUTTON
 		
-		iniciarButton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				sv.removeAllViews();
-				sv.addView(iniciar);
-				//Primer spinner - turno del instrumentista
-				ArrayList<String> a1 = new ArrayList<String>();
-				a1.add("test1");
-				Spinner sp = (Spinner) iniciar.findViewById(R.id.turnoInstrumentista);
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_spinner_item, a1);
-				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				
-				sp.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-					public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-							int position, long id) {
-						//Toast.makeText(parentView.getContext(), "Has seleccionado " +
-						//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-						parentView.getItemAtPosition(position);
-					
-						Log.e("spiner1 = ", "posicion1="+position);
-								
-						int sala=position;
-						Item1.salaSpinner = sala;
-					}
-
-					public void onNothingSelected(AdapterView<?> parentView) {
-
-					}
-				});
-				
-				//Segundo spinner - turno del circulante
-				Spinner sp1 = (Spinner) iniciar.findViewById(R.id.turnoCirculante);
-				ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_spinner_item, a1);
-				adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-				
-				sp1.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-					public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-							int position, long id) {
-						//Toast.makeText(parentView.getContext(), "Has seleccionado " +
-						//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-						parentView.getItemAtPosition(position);
-					
-						Log.e("spiner1 = ", "posicion1="+position);
-								
-						int sala=position;
-						Item1.salaSpinner = sala;
-					}
-
-					public void onNothingSelected(AdapterView<?> parentView) {
-
-					}
-				});
-				
-				//Obtener enteros de RadioGroup
-		        int tiempoFueraSelected = 0;
-		        tiempoFueraSelected = tiempoFuera.getCheckedRadioButtonId();
-				tiempo = (RadioButton) getActivity().findViewById(tiempoFueraSelected);	
-				
-				String time = tiempo.getText().toString();
-		        int t = 0;
-		        
-		        if (time.equals("No")){
-		        	t = 0;
-		        }
-        		else t = 1;
-				
-				System.out.println("Tiempo fuera int = "+t);
-		        System.out.println("tipo sProtocolo = "+time.getClass().getName()+"tiempo fuera st = "+time);
-				
-        		String ingreso = ingresar.getText().toString();
-        		String nombre_medico = medico_name.getText().toString();
-        		String nombre_cirujano = cirujano_name.getText().toString();
-        		String nombre_anestesiologo = anestesiologo.getText().toString();
-        		String nombre_supervisor = anestesiologo_supervisor.getText().toString();
-        		String tipo_tecnica = tecnica.getText().toString();
-        		String nombre_instrumentista = instrumentista.getText().toString();
-        		String nombre_circulante = circulante.getText().toString();
-        		String obs = observaciones.getText().toString();
-        		
-        		System.out.println("ingreso: "+ingreso);
-        		System.out.println("nombre_medico: "+nombre_medico);
-        		System.out.println("nombre_cirujano: "+nombre_cirujano);
-				
-			}//Fin de onclick
-		});//fin de iniciar boton setOnClick
-		
-		diferirButton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				sv.removeAllViews();
-				sv.addView(diferir);
-				
-			}
-		});
+//		iniciarButton.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View v) {
+//				sv.removeAllViews();
+//				sv.addView(iniciar);
+//				
+//			}
+//		});
+//		
+//		diferirButton.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View v) {
+//				sv.removeAllViews();
+//				sv.addView(diferir);
+//				
+//			}
+//		});
 		
 		return v;
     	

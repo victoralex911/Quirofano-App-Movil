@@ -67,7 +67,7 @@ public class Item02 extends SherlockFragment {
 	//Bundle extras = getIntent().getExtras();
 	//Obtenemos datos enviados en el intent.
 	HttpPostAux post;
-    String IP_Server="192.168.1.73";//IP DE NUESTRO PC
+    String IP_Server="172.16.0.125";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/getQuirofanoName.php";
     
     View ll;

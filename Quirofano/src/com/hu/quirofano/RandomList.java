@@ -18,7 +18,7 @@ public class RandomList extends ListFragment{
 	String[] list_contents = {
 		"Lista de quirófanos",
 		//"Quirófano central",
-		"Agenda del día",
+		//"Agenda del día",
 		"Contacto",
 		"Cerrar sesión"
 	};
@@ -42,14 +42,14 @@ public class RandomList extends ListFragment{
 			newFragment = new Item02(); //Lista de quirofanos
 			break;
 		case 1:
-			newFragment = new Item4(); //Agenda del dia
-			break;
-		case 2:
 			newFragment = new Item5(); //Contacto
 			break;
-		case 3:
+		case 2:
 			newFragment = new Item6(); //Cerrar sesion
 			break;
+		//case 3:
+		//	newFragment = new Item6(); //Cerrar sesion
+		//	break;
 		//case 5:
 		//	newFragment = new Item6(); //Cerrar sesion
 		//	break;

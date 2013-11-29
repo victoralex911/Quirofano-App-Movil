@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="4" >
+            android:weightSum="2" >
 		<!--  
      	<Button
        		android:id="@+id/po"
@@ -40,20 +40,24 @@
             android:text="Pre Operatorio" />
             -->
 
-        <Button
-           	android:id="@+id/modificar"
+		<Button
+           	android:id="@+id/finalizar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Modificar cirugía" />
+            android:text="Finalizar cirugía" />
 
-        <Button
-           	android:id="@+id/iniciar"
+		<Button
+           	android:id="@+id/agregarPersonal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Iniciar cirugía" />
+            android:text="Agregar Personal" />
+
+
             
+        <!--  
+        
         <Button
          	android:id="@+id/diferir"
             android:layout_width="match_parent"
@@ -67,6 +71,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Cancelar cirugía" />
+        -->
     </LinearLayout>
 	<!--  
 	<LinearLayout

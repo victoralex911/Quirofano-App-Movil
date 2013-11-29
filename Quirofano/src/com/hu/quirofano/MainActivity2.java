@@ -66,7 +66,7 @@ public class MainActivity2 extends BaseActivity{
 		if (savedInstanceState != null)
 			mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
 		if (mContent == null)
-			mContent = new MainView();
+			mContent = new Item02();
 
 		setContentView(R.layout.content_frame); //content_frame
 		getSupportFragmentManager()

@@ -30,7 +30,7 @@ import com.hu.quirofano.Item1.Agenda;
 public class MainView extends SherlockFragment{
 	
 	HttpPostAux post;
-    String IP_Server="192.168.1.73";//IP DE NUESTRO PC
+    String IP_Server="172.16.0.125";//IP DE NUESTRO PC
     String URL_connect="http://"+IP_Server+"/androidlogin/agendaDelDia.php";
     
     TableLayout tl;

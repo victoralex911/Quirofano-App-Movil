@@ -13,7 +13,7 @@
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center"
 	    android:layout_marginTop="10dp"
-	    android:text="Acciones"
+	    android:text="Información de la cirugía"
 	    android:textSize="20sp" />
 	
 	<TextView
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="4" >
+            android:weightSum="2" >
 		<!--  
      	<Button
        		android:id="@+id/po"
@@ -39,34 +39,41 @@
             android:background="@drawable/login_selector"
             android:text="Pre Operatorio" />
             -->
-
+		<!--  
         <Button
            	android:id="@+id/modificar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Modificar cirugía" />
+        -->
 
+        <!--  
         <Button
            	android:id="@+id/iniciar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Iniciar cirugía" />
+        -->
             
+        <!--     
         <Button
          	android:id="@+id/diferir"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Diferir cirugía" />
+        --> 
 
+		<!--  
     	<Button
         	android:id="@+id/cancelar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Cancelar cirugía" />
+        -->
     </LinearLayout>
 	<!--  
 	<LinearLayout
