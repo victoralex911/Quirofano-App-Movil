@@ -180,10 +180,17 @@
                     android:layout_height="wrap_content"
                     android:text="Evento adverso" />
 
+                <Spinner
+                    android:id="@+id/eventoAdverso"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+                
+                <!-- 
                 <EditText
                     android:id="@+id/eventoAdverso"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
+             	-->
             </LinearLayout>
 
             <LinearLayout
@@ -198,10 +205,16 @@
                     android:layout_height="wrap_content"
                     android:text="Contaminación" />
 
+                <Spinner
+                    android:id="@+id/contaminacion"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+                <!-- 
                 <EditText
                     android:id="@+id/contaminacion"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
+             	-->
                 
             </LinearLayout>
 
@@ -231,10 +244,16 @@
                     android:layout_height="wrap_content"
                     android:text="Infección de sitio quirúrgico" />
 
+                <Spinner
+                    android:id="@+id/infeccion"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+                <!--  
                 <EditText
                     android:id="@+id/infeccion"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
+                -->
             </LinearLayout>
 
             <LinearLayout

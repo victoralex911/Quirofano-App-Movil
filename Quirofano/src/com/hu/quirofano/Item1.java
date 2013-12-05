@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -151,8 +152,9 @@ public class Item1 extends SherlockFragment{
 	HttpPostAux post;
 	HttpPostAux envio;
 	HttpPostAux send;
-    String IP_Server="172.16.0.125";//IP DE NUESTRO PC
-    String URL_connect="http://"+IP_Server+"/androidlogin/schedule.php";//ruta en donde estan nuestros archivos
+    //String IP_Server="172.16.0.125";//IP DE NUESTRO PC
+	String IP_Server = MainActivity.IP_Server;
+	String URL_connect="http://"+IP_Server+"/androidlogin/schedule.php";//ruta en donde estan nuestros archivos
     String URL_connect2 = "http://"+IP_Server+"/androidlogin/mostrarAgenda.php"; 
     String URL_connect3 = "http://"+IP_Server+"/androidlogin/getQuirofanoId.php";
     String URL_connect4 = "http://"+IP_Server+"/androidlogin/getSalas.php";
@@ -1612,7 +1614,7 @@ public class Item1 extends SherlockFragment{
 	    		        Fragment duedateFrag = new Accion();	
 	    		        Bundle bundle = new Bundle();
 	    		                	    		                
-	    		        String miArreglo[] = new String[6];
+	    		        String miArreglo[] = new String[7];
 	    		              
 //	    		        miArreglo[0] = padre.get(v.getId()).get(0);		//llenar con id_quirofano
 //	    		        miArreglo[1] = padre.get(v.getId()).get(1);		//llenar con el nombre del quirofano
@@ -1623,6 +1625,7 @@ public class Item1 extends SherlockFragment{
 				        miArreglo[3] = padre.get(v.getId()).get(3);		//Paciente
 				        miArreglo[4] = padre.get(v.getId()).get(4);		//Diagnostico
 				        miArreglo[5] = padre.get(v.getId()).get(5);		//ID
+				        miArreglo[6] = ID_quirofano;					//Pasar el id del quirofano seleccionado
 	    		                
 //	    		        System.out.println("POSICION DE QUIROFANO_ID = "+v.getId());
 //	    		        System.out.println("ARREGLO-QUIROFANO_ID = "+miArreglo[0]);
@@ -1658,7 +1661,7 @@ public class Item1 extends SherlockFragment{
 	    		        Fragment duedateFrag = new AccionTransoperatorio();	
 	    		        Bundle bundle = new Bundle();
 	    		                	    		                
-	    		        String miArreglo[] = new String[6];
+	    		        String miArreglo[] = new String[7];
 	    		              
 //	    		        miArreglo[0] = padre.get(v.getId()).get(0);		//llenar con id_quirofano
 //	    		        miArreglo[1] = padre.get(v.getId()).get(1);		//llenar con el nombre del quirofano
@@ -1669,6 +1672,7 @@ public class Item1 extends SherlockFragment{
 				        miArreglo[3] = arrayTransoperatorio.get(v.getId()).get(3);		//Paciente
 				        miArreglo[4] = arrayTransoperatorio.get(v.getId()).get(4);		//Diagnostico
 				        miArreglo[5] = arrayTransoperatorio.get(v.getId()).get(5);		//ID
+				        miArreglo[6] = ID_quirofano;									//Pasar el id del quirofano seleccionado
 	    		                
 //	    		        System.out.println("POSICION DE QUIROFANO_ID = "+v.getId());
 //	    		        System.out.println("ARREGLO-QUIROFANO_ID = "+miArreglo[0]);
@@ -1810,6 +1814,7 @@ public class Item1 extends SherlockFragment{
 				pa.setText(padre.get(i).get(3));	//paciente
 				dg.setText(padre.get(i).get(4));	//diagnostico
 				//accion.setText("action:"+index);
+				
 					
 				tl.addView(trow);
     			//Primero pasamos la posicion del arraypadre en el que se hizo click
@@ -1875,6 +1880,7 @@ public class Item1 extends SherlockFragment{
 				pa.setText(arrayTransoperatorio.get(i).get(3));	//paciente
 				dg.setText(arrayTransoperatorio.get(i).get(4));	//diagnostico
 				//accion.setText("action:"+index);
+				trow.setBackgroundColor(Color.GREEN);
 					
 				tl.addView(trow);
     			//Primero pasamos la posicion del arraypadre en el que se hizo click
@@ -1962,6 +1968,7 @@ public class Item1 extends SherlockFragment{
 				pa.setText(arrayDiferidas.get(i).get(3));	//paciente
 				dg.setText(arrayDiferidas.get(i).get(4));	//diagnostico
 				//accion.setText("action:"+index);
+				trow.setBackgroundColor(Color.RED);
 					
 				tl.addView(trow);
     			//Primero pasamos la posicion del arraypadre en el que se hizo click

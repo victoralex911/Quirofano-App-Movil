@@ -62,21 +62,30 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.hu.libreria.HttpPostAux;
 import com.hu.quirofano.Item02.GetQuirofanoName;
 import com.hu.quirofano.Item1.Agenda;
+import com.hu.quirofano.Item1.EnviarProcedimientos;
+import com.hu.quirofano.Item1.Formulario;
+import com.hu.quirofano.Item1.GetSalas;
 
 public class Accion extends SherlockFragment{
 
 	HttpPostAux post;
-    String IP_Server="172.16.0.125";//IP DE NUESTRO PC
+    //String IP_Server="172.16.0.125";//IP DE NUESTRO PC
+    String IP_Server = MainActivity.IP_Server;
     String URL_connect="http://"+IP_Server+"/androidlogin/cancelarCirugia.php";
     String URL_connect1="http://"+IP_Server+"/androidlogin/iniciarCirugia.php";
+    String URL_connect2="http://"+IP_Server+"/androidlogin/getTurno.php";
+    String URL_connect3="http://"+IP_Server+"/androidlogin/diferirCirugia.php";
     
     View ll;
     TextView agregarTema;
-    String myString[] = new String[6];
+    String myString[] = new String[7];
     
     ArrayList<ArrayList<String>> padre = new ArrayList<ArrayList<String>>();
     ArrayList<String> nombres = new ArrayList<String>();
+    ArrayList<ArrayList<String>> turnos = new ArrayList<ArrayList<String>>();
+    ArrayList<String> nombreTurnos = new ArrayList<String>();
     
+    //INICIAR CIRUGIA ****************************
     EditText ingresar;
     EditText medico_name;
     EditText cirujano_name;
@@ -95,6 +104,19 @@ public class Accion extends SherlockFragment{
 	RadioButton si;
 	RadioButton no;
 	RadioButton tiempo;
+	
+	//spinners*****************
+	static int turnoInstrumentista;
+	static int turnoCirculante;
+	//INICIAR CIRUGIA ***********************
+	
+	//DIFERIR CIRUGIA ***********************
+	EditText causaDiferido;
+	Button aceptar;
+	//DIFERIR CIRUGIA ***********************
+	
+	boolean result_back;
+    private ProgressDialog progress;
     
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState){
     	
@@ -118,6 +140,7 @@ public class Accion extends SherlockFragment{
 		Button cancelar = (Button)v.findViewById(R.id.cancelar);
 		Button iniciarButton = (Button)v.findViewById(R.id.iniciar);
 		Button diferirButton = (Button)v.findViewById(R.id.diferir);
+		guardar = (Button)iniciar.findViewById(R.id.botonGuardar);
 		
 		tiempoFuera = (RadioGroup) iniciar.findViewById(R.id.tiempoFuera);
 		
@@ -131,6 +154,13 @@ public class Accion extends SherlockFragment{
 		instrumentista = (EditText) iniciar.findViewById(R.id.instrumentista);
 		circulante = (EditText) iniciar.findViewById(R.id.circulante);
 		observaciones = (EditText) iniciar.findViewById(R.id.observaciones);
+		
+		//DIFERIR CIRUGIA
+		causaDiferido = (EditText) diferir.findViewById(R.id.causa_diferido);
+		aceptar = (Button) diferir.findViewById(R.id.botonGuardar);
+		//DIFERIR CIRUGIA
+		
+		new GetTurno().execute(myString[6]);
 
 		//Button po = (Button)v.findViewById(R.id.po);
 		//Button salas = (Button)v.findViewById(R.id.salas);
@@ -179,12 +209,11 @@ public class Accion extends SherlockFragment{
 				sv.removeAllViews();
 				sv.addView(iniciar);
 				//Primer spinner - turno del instrumentista
-				ArrayList<String> a1 = new ArrayList<String>();
-				a1.add("test1");
 				Spinner sp = (Spinner) iniciar.findViewById(R.id.turnoInstrumentista);
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_spinner_item, a1);
-				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        android.R.layout.simple_spinner_item, nombreTurnos);
+						adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				sp.setAdapter(adapter);
 				
 				sp.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -193,11 +222,8 @@ public class Accion extends SherlockFragment{
 						//Toast.makeText(parentView.getContext(), "Has seleccionado " +
 						//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 						parentView.getItemAtPosition(position);
-					
-						Log.e("spiner1 = ", "posicion1="+position);
-								
-						int sala=position;
-						Item1.salaSpinner = sala;
+						turnoInstrumentista = position;
+						Log.e("spiner1 = ", "turnoInstrumentista="+turnoInstrumentista);
 					}
 
 					public void onNothingSelected(AdapterView<?> parentView) {
@@ -208,8 +234,9 @@ public class Accion extends SherlockFragment{
 				//Segundo spinner - turno del circulante
 				Spinner sp1 = (Spinner) iniciar.findViewById(R.id.turnoCirculante);
 				ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_spinner_item, a1);
-				adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        android.R.layout.simple_spinner_item, nombreTurnos);
+						adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				sp1.setAdapter(adapter1);
 				
 				sp1.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -218,11 +245,9 @@ public class Accion extends SherlockFragment{
 						//Toast.makeText(parentView.getContext(), "Has seleccionado " +
 						//parentView.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
 						parentView.getItemAtPosition(position);
-					
-						Log.e("spiner1 = ", "posicion1="+position);
-								
-						int sala=position;
-						Item1.salaSpinner = sala;
+						
+						turnoCirculante = position;
+						Log.e("spiner2 = ", "turnoCirculante="+turnoCirculante);
 					}
 
 					public void onNothingSelected(AdapterView<?> parentView) {
@@ -230,36 +255,60 @@ public class Accion extends SherlockFragment{
 					}
 				});
 				
-				//Obtener enteros de RadioGroup
-		        int tiempoFueraSelected = 0;
-		        tiempoFueraSelected = tiempoFuera.getCheckedRadioButtonId();
-				tiempo = (RadioButton) getActivity().findViewById(tiempoFueraSelected);	
+				guardar.setOnClickListener(new OnClickListener(){
+					public void onClick(View v){
 				
-				String time = tiempo.getText().toString();
-		        int t = 0;
-		        
-		        if (time.equals("No")){
-		        	t = 0;
-		        }
-        		else t = 1;
+						//Obtener enteros de RadioGroup
+				        int tiempoFueraSelected = 0;
+				        tiempoFueraSelected = tiempoFuera.getCheckedRadioButtonId();
+						tiempo = (RadioButton) getActivity().findViewById(tiempoFueraSelected);	
+						
+						String time = tiempo.getText().toString();
+				        int t = 0;
+				        
+				        if (time.equals("No")){
+				        	t = 0;
+				        }
+		        		else t = 1;
+						
+						System.out.println("Tiempo fuera int = "+t);
+				        System.out.println("tipo sProtocolo = "+time.getClass().getName()+"tiempo fuera st = "+time);
+						
+		        		String ingreso = ingresar.getText().toString();
+		        		String nombre_medico = medico_name.getText().toString();
+		        		String nombre_cirujano = cirujano_name.getText().toString();
+		        		String nombre_anestesiologo = anestesiologo.getText().toString();
+		        		String nombre_supervisor = anestesiologo_supervisor.getText().toString();
+		        		String tipo_tecnica = tecnica.getText().toString();
+		        		String nombre_instrumentista = instrumentista.getText().toString();
+		        		String nombre_circulante = circulante.getText().toString();
+		        		String obs = observaciones.getText().toString();
+		        		
+		        		System.out.println("ingreso: "+ingreso);
+		        		System.out.println("nombre_medico: "+nombre_medico);
+		        		System.out.println("nombre_cirujano: "+nombre_cirujano);
+		        		
+		        		//Convertir int de radio button en string
+		        		String tiempoFuera = Integer.toString(t);
+		        		
+		        		//Convertir turnos en string para enviarlos
+		        		String sTurnoInstrumentista = turnos.get(turnoInstrumentista).get(0);
+		        		String sTurnoCirculante = turnos.get(turnoCirculante).get(0);
+		        		
+		        		if (validarFormulario(ingreso, nombre_medico, nombre_cirujano, 
+		        				nombre_anestesiologo, nombre_supervisor, tipo_tecnica, nombre_instrumentista,
+		        				nombre_circulante, obs) == true){
+		        			new Formulario().execute(ingreso, nombre_medico, nombre_cirujano, nombre_anestesiologo,
+		        					nombre_supervisor, tipo_tecnica, nombre_instrumentista, nombre_circulante,
+		        					obs, tiempoFuera, sTurnoInstrumentista, sTurnoCirculante);
+		        			
+		        		}//Fin de if
+		        		else{
+		        			error1();
+		        		}
 				
-				System.out.println("Tiempo fuera int = "+t);
-		        System.out.println("tipo sProtocolo = "+time.getClass().getName()+"tiempo fuera st = "+time);
-				
-        		String ingreso = ingresar.getText().toString();
-        		String nombre_medico = medico_name.getText().toString();
-        		String nombre_cirujano = cirujano_name.getText().toString();
-        		String nombre_anestesiologo = anestesiologo.getText().toString();
-        		String nombre_supervisor = anestesiologo_supervisor.getText().toString();
-        		String tipo_tecnica = tecnica.getText().toString();
-        		String nombre_instrumentista = instrumentista.getText().toString();
-        		String nombre_circulante = circulante.getText().toString();
-        		String obs = observaciones.getText().toString();
-        		
-        		System.out.println("ingreso: "+ingreso);
-        		System.out.println("nombre_medico: "+nombre_medico);
-        		System.out.println("nombre_cirujano: "+nombre_cirujano);
-				
+					}//Fin de onclick
+				});//fin de iniciar boton setOnClick
 			}//Fin de onclick
 		});//fin de iniciar boton setOnClick
 		
@@ -270,12 +319,61 @@ public class Accion extends SherlockFragment{
 				sv.removeAllViews();
 				sv.addView(diferir);
 				
+				aceptar.setOnClickListener(new OnClickListener(){
+					public void onClick(View v){
+						String causa_dif = causaDiferido.getText().toString();
+						
+						if (validarDiferido(causa_dif) == true){
+		        			new CausaDiferido().execute(causa_dif);
+		        		}//Fin de if
+		        		else{
+		        			error1();
+		        		}
+					}//Fin de onclick
+				});//fin de iniciar boton setOnClick
 			}
 		});
 		
 		return v;
     	
     }//Fin de onCreateView
+    
+    public boolean validarDiferido(String causa_diferido){
+		if 	(causa_diferido.equals("")){
+			Log.e("formulario-diferido", "formulario incompleto");
+        	return false;
+        
+        }else{
+        	return true;
+        }
+	}//fin de validarDiferido
+    
+    public boolean validarFormulario(String ingreso, String nombre_medico, String nombre_cirujano, 
+			String nombre_anestesiologo, String nombre_supervisor, String tipo_tecnica, 
+			String nombre_instrumentista, String nombre_circulante, String obs){
+		if 	(ingreso.equals("") || nombre_medico.equals("") || nombre_cirujano.equals("") || 
+				nombre_anestesiologo.equals("") || nombre_supervisor.equals("") || tipo_tecnica.equals("") || 
+				nombre_instrumentista.equals("") || nombre_circulante.equals("") || obs.equals("")){
+//			Log.e("date = ", "date="+date);
+//			Log.e("hora = ", "hora="+hora);
+			Log.e("formulario-iniciar cirugia", "formulario incompleto");
+			//Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"Validacion d = "+d+" h = "+h, Toast.LENGTH_SHORT);
+	 	    //toast1.show();
+        	return false;
+        
+        }else{
+        	//Toast toast2 = Toast.makeText(getActivity().getApplicationContext(),"Validacion d = "+d+" h = "+h, Toast.LENGTH_SHORT);
+        	//toast2.show();
+        	return true;
+        }
+	}//fin de validarFormulario
+    
+    public void error1(){
+    	Vibrator vibrator =(Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+	    vibrator.vibrate(200);
+	    Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"Error:Favor de llenar todos los campos", Toast.LENGTH_SHORT);
+ 	    toast1.show();    	
+    }
     
     public void aceptar() {
     	new CancelarCirugia().execute(myString[0], myString[1], myString[2], myString[3], myString[4], myString[5]);
@@ -324,6 +422,204 @@ public class Accion extends SherlockFragment{
 	    	return false;
 	    }//Fin de else
     }//Fin de cancelarCirugia
+    
+    public void getTurno(String id_quir){
+    	turnos.clear();
+    	nombreTurnos.clear();
+    	int status = -1;
+    	
+    	String id = "";
+    	String nombre = ""; 
+    	
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		datosEnviar.add(new BasicNameValuePair("ID",id_quir));
+				
+		JSONArray jdata=post.getserverdata(datosEnviar, URL_connect2);
+  		  		  		
+  		//si lo que obtuvimos no es null
+		if (jdata!=null && jdata.length() > 0){
+    		//JSONObject json_data; //creamos un objeto JSON
+			try {
+				
+				for(int n = 0; n < jdata.length(); n++){
+					//st.clear();
+					System.out.println("vuelta:"+n);
+					JSONObject json_data = jdata.getJSONObject(n);
+					
+					int temporal_id = json_data.getInt("dato");
+					id = Integer.toString(temporal_id);
+					
+					nombre = json_data.getString("dato1");
+					
+					ArrayList<String> temporary = new ArrayList<String>();
+					
+					temporary.add(id);
+					temporary.add(nombre);
+					
+					Log.e("log-st", "array temprary = "+temporary);
+					
+					turnos.add(temporary);
+					//st.clear();
+				}
+				
+				Log.e("array turnos", "turnos = "+turnos);
+				
+				for (int index = 0; index<turnos.size(); index ++){
+					nombreTurnos.add(turnos.get(index).get(1));
+				}
+				Log.e("array nombreTurnos", "turnos agregados en spinner = "+nombreTurnos);
+								
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("hi", "hi");
+			}		            
+			//return st;
+			
+    	}//Fin de if(comprueba si lo obtenido no es "null")
+    	
+    	else{	//json obtenido invalido verificar parte WEB.
+    		Log.e("JSON  ", "ERROR");
+	    	//return st;
+	    }
+    }//Fin de getTurno
+    
+    public boolean enviarFormulario(String ingreso, String nombre_medico, String nombre_cirujano, 
+			String nombre_anestesiologo, String nombre_supervisor, String tipo_tecnica, 
+			String nombre_instrumentista, String nombre_circulante, String obs, String tiempoFuera,
+			String sTurnoInstrumentista, String sTurnoCirculante){
+	
+		int status = -1;
+		
+		/*Creamos un ArrayList del tipo nombre valor para agregar los datos recibidos por los parametros anteriores
+    	 * y enviarlo mediante POST a nuestro sistema para relizar la validacion*/
+		
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		
+		datosEnviar.add(new BasicNameValuePair("ingreso",ingreso));
+		datosEnviar.add(new BasicNameValuePair("nombre_medico",nombre_medico));
+		datosEnviar.add(new BasicNameValuePair("nombre_cirujano",nombre_cirujano));
+		datosEnviar.add(new BasicNameValuePair("nombre_anestesiologo",nombre_anestesiologo));
+		datosEnviar.add(new BasicNameValuePair("nombre_supervisor",nombre_supervisor));
+		datosEnviar.add(new BasicNameValuePair("tipo_tecnica",tipo_tecnica));
+		datosEnviar.add(new BasicNameValuePair("nombre_instrumentista",nombre_instrumentista));
+		datosEnviar.add(new BasicNameValuePair("nombre_circulante",nombre_circulante));
+		datosEnviar.add(new BasicNameValuePair("observaciones",obs));
+		//EditText hasta aqui
+		
+		//Spinners y RadioButton
+		datosEnviar.add(new BasicNameValuePair("tiempoFuera",tiempoFuera));
+		datosEnviar.add(new BasicNameValuePair("turnoInstrumentista",sTurnoInstrumentista));
+		datosEnviar.add(new BasicNameValuePair("turnoCirculante",sTurnoCirculante));
+		datosEnviar.add(new BasicNameValuePair("agenda_id",myString[5]));
+
+		//Nueva forma de obtener el id del quirofano
+		//System.out.println("q_id = "+ID_quirofano); 
+		//datosEnviar.add(new BasicNameValuePair("q_id", ID_quirofano));
+
+		// FIN - Nueva forma de obtener el id del quirofano
+		
+		Log.e("datosEnviar","datosEnviar = "+datosEnviar);
+		Log.e("URL_connect","URL_connect iniciar = "+URL_connect1);
+		
+		//realizamos una peticion y como respuesta obtienes un array JSON
+  		JSONArray jdata=post.getserverdata(datosEnviar, URL_connect1);
+  		  		  		
+  		//si lo que obtuvimos no es null
+    	if (jdata!=null && jdata.length() > 0){
+    		JSONObject json_data; //creamos un objeto JSON
+			try {
+				json_data = jdata.getJSONObject(0); //leemos el primer segmento en nuestro caso el unico
+//				status=json_data.getInt("logstatus");//accedemos al valor
+				status=json_data.getInt("logstatus");//nuevo valor 18-noviembre
+				Log.e("enviarFormulario","status= "+status);//muestro por log que obtuvimos
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		            
+             
+			//validamos el valor obtenido
+    		if (status==0){// [{"logstatus":"0"}] 
+    			Log.e("Los datos no han sido guardados ", "envio fallido");
+    			return false;
+    		}
+    		else{// [{"logstatus":"1"}]
+    			Log.e("Los datos de iniciar cirugia han sido guardados ", "envio exitoso");
+    			return true;
+    		}
+    		 
+    	}//Fin de if(comprueba si lo obtenido no es "null")
+    	
+    	else{	//json obtenido invalido verificar parte WEB.
+    		Log.e("JSON  ", "ERROR");
+	    	return false;
+	    }//Fin de else
+		
+	}//Fin de enviar formulario
+    
+    public boolean causaDiferido(String causa_dif){
+	
+		int status = -1;
+		
+		/*Creamos un ArrayList del tipo nombre valor para agregar los datos recibidos por los parametros anteriores
+    	 * y enviarlo mediante POST a nuestro sistema para relizar la validacion*/
+		
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		
+		datosEnviar.add(new BasicNameValuePair("causa_diferido",causa_dif));
+		datosEnviar.add(new BasicNameValuePair("agenda_id",myString[5]));
+		
+		Log.e("datosEnviar","datosEnviar = "+datosEnviar);
+		Log.e("URL_connect","URL_connect iniciar = "+URL_connect3);
+		
+		//realizamos una peticion y como respuesta obtienes un array JSON
+  		JSONArray jdata=post.getserverdata(datosEnviar, URL_connect3);
+  		  		  		
+  		//si lo que obtuvimos no es null
+    	if (jdata!=null && jdata.length() > 0){
+    		JSONObject json_data; //creamos un objeto JSON
+			try {
+				json_data = jdata.getJSONObject(0); //leemos el primer segmento en nuestro caso el unico
+//				status=json_data.getInt("logstatus");//accedemos al valor
+				status=json_data.getInt("logstatus");//nuevo valor 18-noviembre
+				Log.e("diferirCirugia","status= "+status);//muestro por log que obtuvimos
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		            
+             
+			//validamos el valor obtenido
+    		if (status==0){// [{"logstatus":"0"}] 
+    			Log.e("Los datos de diferir cirugia no han sido guardados ", "envio fallido");
+    			return false;
+    		}
+    		else{// [{"logstatus":"1"}]
+    			Log.e("Los datos de diferir cirugia han sido guardados ", "envio exitoso");
+    			return true;
+    		}
+    		 
+    	}//Fin de if(comprueba si lo obtenido no es "null")
+    	
+    	else{	//json obtenido invalido verificar parte WEB.
+    		Log.e("JSON  ", "ERROR");
+	    	return false;
+	    }//Fin de else
+		
+	}//Fin de causaDiferido
+    
+    public void mostrarLeyenda(){
+		Toast t = Toast.makeText(getActivity().getApplicationContext(), "Datos guardados con éxito", Toast.LENGTH_SHORT);
+		t.show();
+	}
+    public void error2(){
+		Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(200);
+		Toast t = Toast.makeText(getActivity().getApplicationContext(), "Error: error en el envío de datos", Toast.LENGTH_SHORT);
+		t.show();
+	}
 
     class CancelarCirugia extends AsyncTask< String, String, String> {
 		
@@ -362,5 +658,122 @@ public class Accion extends SherlockFragment{
             
         }//Fin de onPostExecute        
 	}//Fin de la subclase CancelarCirugia
+    
+    class Formulario extends AsyncTask< String, String, String > {
+      	 
+    	String ingreso, nombre_medico, nombre_cirujano, 
+		nombre_anestesiologo, nombre_supervisor, tipo_tecnica, nombre_instrumentista,
+		nombre_circulante, obs, tiempoFuera, sTurnoInstrumentista, sTurnoCirculante;
+    	
+    	//Seran convertidos a enteros, excepto duracion, sera convertido a TIME
+    	String sSala, sDuracion, sProgramacion, sServicio, sAtencion, sP, sR;
+    	
+    	protected void onPreExecute() {
+    		progress = ProgressDialog.show(
+    		getActivity(), null, "Guardando ...");
+            super.onPreExecute();
+        }
+    	
+        protected String doInBackground(String... params) {
+			//obtnemos datos
+        	//EditText
+			ingreso=params[0];						
+			nombre_medico=params[1];				
+			nombre_cirujano=params[2];  			
+			nombre_anestesiologo=params[3];			
+			nombre_supervisor=params[4];			
+			tipo_tecnica=params[5];					
+			nombre_instrumentista=params[6];		
+			nombre_circulante=params[7];			
+			obs=params[8];	
+			
+			//Radiobutton "tiempo fuera"
+			tiempoFuera = params[9];
+			
+			//spinners
+			sTurnoInstrumentista = params[10];
+			sTurnoCirculante = params[11];
+			
+			//enviamos y recibimos y analizamos los datos en segundo plano.
+    		if (enviarFormulario(ingreso, nombre_medico, nombre_cirujano, nombre_anestesiologo,
+    				nombre_supervisor, tipo_tecnica, nombre_instrumentista, nombre_circulante, obs,
+    				tiempoFuera, sTurnoInstrumentista, sTurnoCirculante)==true){    		    		
+    			return "ok"; //login valido
+    		}else{    		
+    			return "error"; //login invalido     	          	  
+    		}	
+		}//Fin de doInBackground
+        
+        protected void onPostExecute(String result) {
+        	progress.dismiss();//ocultamos progess dialog.
+            Log.e("onPostExecute=",""+result);
+            
+            if (result.equals("ok")){
+            	mostrarLeyenda();
+            }
+            else {
+             	error2();
+            }
+        }//Fin de onPostExecute        
+	}//Fin de la subclase Formulario
+    
+    class GetTurno extends AsyncTask< String, String, String> {
+		String st1; //String con el del quirofano
+    	protected void onPreExecute() {
+    		//progress = ProgressDialog.show(
+    		//getActivity(), null, "Accesando a agenda...");
+            super.onPreExecute();
+        }
+    	
+        protected String doInBackground(String... params) {
+			st1=params[0]; //obtenemos el string con el id del quirofano 
+//			if (getTurno(st1) == true){
+//				return "ok";
+//			}
+//			else return "error";
+			getTurno(st1);
+			return "ok";
+		}//Fin de doInBackground
+       
+        protected void onPostExecute(String resultado) {
+            Log.e("onPostExecute=","status="+resultado);            
+        }//Fin de onPostExecute        
+	}//Fin de la subclase GetTurno
+    
+    class CausaDiferido extends AsyncTask< String, String, String > {
+     	 
+    	String causa_dif;
+    	
+    	protected void onPreExecute() {
+    		progress = ProgressDialog.show(
+    		getActivity(), null, "Guardando ...");
+            super.onPreExecute();
+        }
+    	
+        protected String doInBackground(String... params) {
+			//obtnemos datos
+        	//EditText
+			causa_dif=params[0];						
+			
+			//enviamos y recibimos y analizamos los datos en segundo plano.
+    		if (causaDiferido(causa_dif)==true){    		    		
+    			return "ok"; //login valido
+    		}else{    		
+    			return "error"; //login invalido     	          	  
+    		}	
+		}//Fin de doInBackground
+        
+        protected void onPostExecute(String result) {
+        	progress.dismiss();//ocultamos progess dialog.
+            Log.e("onPostExecute=",""+result);
+            
+            if (result.equals("ok")){
+            	mostrarLeyenda();
+            }
+            else {
+             	error2();
+            }
+        }//Fin de onPostExecute        
+	}//Fin de la subclase Formulario
     
 }//Fin de la clase Accion

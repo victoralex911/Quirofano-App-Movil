@@ -48,7 +48,7 @@
                     android:text="Causa diferido" />
 
                 <EditText
-                    android:id="@+id/causaDiferido"
+                    android:id="@+id/causa_diferido"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" />
                 

@@ -101,5 +101,37 @@
 		<item>Bla 4</item>
 	</string-array>
 	
+	<!-- AGREGAR PERSONAL -->
+	
+	<string-array name="tipo_personal">
+		<item>Cirujano</item>
+		<item>Anestesista</item>
+		<item>Enfermería</item>
+		<item>Otro</item>
+	</string-array>
+	
+	<string-array name="status1">
+		<item>Ayudante</item>
+		<item>Supervisor</item>
+	</string-array>
+	
+	<string-array name="status2">
+		<item>Instrumentista</item>
+		<item>Circulante</item>
+	</string-array>
+	
+	<string-array name="status3">
+		<item>Ayudante</item>
+		<item>Supervisor</item>
+		<item>Instrumentista</item>
+		<item>Circulante</item>
+	</string-array>	
+	
+	<string-array name="turno">
+		<item>Matutino</item>
+		<item>Vespertino</item>
+		<item>Nocturno</item>
+		<item>Plan piloto</item>
+	</string-array>	
 	
 </resources>
