@@ -218,6 +218,7 @@ public class ProgramarCirugiaView extends Activity {
 
 		Button agregar = (Button)view.findViewById(R.id.agregar);
 		Button eliminar = (Button)view.findViewById(R.id.eliminar);
+		/*
 		Button test = (Button)view.findViewById(R.id.test);
 		vista.clear();
 		test.setOnClickListener(new OnClickListener(){
@@ -247,7 +248,7 @@ public class ProgramarCirugiaView extends Activity {
 				procedimientos.clear();
 
 			}});
-		
+		*/
 //		********************************************************************+
 		final ObjectoX objeto = new ObjectoX(inflater, context);
 		System.out.println("VISTA = "+(vista.size()+1));

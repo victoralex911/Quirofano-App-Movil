@@ -1,6 +1,8 @@
 package com.hu.quirofano;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -8,7 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -19,6 +25,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -27,25 +34,63 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.hu.libreria.HttpPostAux;
 import com.hu.quirofano.Item4.agendaDelDia;
+
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.text.format.DateFormat;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+ 
+import com.hu.quirofano.TimePickerFragment;
+
 //<<<<<<< HEAD
 //prueba1
 //	=======
 //>>>>>>> f430b8bdebb5172a872119a5ea0a4c8815fe53e3
-public class Item1 extends SherlockFragment{
+public class Item1 extends SherlockFragment {
+	
+	//10 Dic
+	ArrayList<ArrayList<String>> procedimientosTraidos = new ArrayList<ArrayList<String>>();
+	//10 Dic
+	
+	//PARA EL DATE PICKER ************************
+	static int anio;
+	static int mesDelAnio;
+    static int diaDelMes;
+	
+	private TextView pDisplayDate;
+    private Button pPickDate;
+    private int pYear;
+    private int pMonth;
+    private int pDay;
+    /** This integer will uniquely define the dialog to be used for displaying date picker.*/
+    static final int DATE_DIALOG_ID = 0;
+    
+    //PARA EL TIME PICKER ************************
+    private TextView mPickedTimeText;
+    static int horas;
+    static int minutos;
 	
 	//16noviembre
 	TextView agregarTema;
@@ -96,6 +141,22 @@ public class Item1 extends SherlockFragment{
 	ArrayList<ArrayList<String>> arrayTransoperatorio = new ArrayList<ArrayList<String>>();
 	// ***Array de cirugias realizadas = 100 ***
 	ArrayList<ArrayList<String>> arrayRealizadas = new ArrayList<ArrayList<String>>();
+	// ***Array de cirugias programadas que pasaron de fecha
+	ArrayList<ArrayList<String>> arrayProgramadasPasadas = new ArrayList<ArrayList<String>>();
+	
+	/** ARRAYs PARA GUARDAR LOS PROCEDIMIENTOS OBTENIDOS - 12 DE DICIEMBRE */
+	//ArrayList<ArrayList<ArrayList<String>>> arrayProcedimientosProgramada = new ArrayList<ArrayList<ArrayList<String>>>();
+//	ArrayList<ArrayList<ArrayList<String>>> arrayProcedimientosDiferida = new ArrayList<ArrayList<ArrayList<String>>>();
+	ArrayList<ArrayList<String>> arrayProcedimientosProgramada = new ArrayList<ArrayList<String>>();
+	ArrayList<ArrayList<String>> arrayProcedimientosDiferida = new ArrayList<ArrayList<String>>();
+	ArrayList<ArrayList<String>> arrayProcedimientosTransoperatorio = new ArrayList<ArrayList<String>>();
+	ArrayList<ArrayList<String>> arrayProcedimientosRealizada = new ArrayList<ArrayList<String>>();
+	ArrayList<ArrayList<String>> arrayProcedimientosProgramadaPasada = new ArrayList<ArrayList<String>>();
+	
+//	ArrayList<ArrayList<ArrayList<String>>> arrayProcedimientosTransoperatorio = new ArrayList<ArrayList<ArrayList<String>>>();
+//	ArrayList<ArrayList<ArrayList<String>>> arrayProcedimientosRealizada = new ArrayList<ArrayList<ArrayList<String>>>();
+//	ArrayList<ArrayList<ArrayList<String>>> arrayProcedimientosProgramadaPasada = new ArrayList<ArrayList<ArrayList<String>>>();
+	
 	
 	//18 de noviembre - Guarda los id y los nombres  de las salas
 	ArrayList<ArrayList<String>> salasArray = new ArrayList<ArrayList<String>>();
@@ -106,7 +167,7 @@ public class Item1 extends SherlockFragment{
 	private int mYear;
 	private int mMonth;
 	private int mDay;
-	static final int DATE_DIALOG_ID = 0;
+	//static final int DATE_DIALOG_ID = 0;
 	//26oct
 	
 	//Spinners
@@ -164,6 +225,11 @@ public class Item1 extends SherlockFragment{
     String URL_connect8 = "http://"+IP_Server+"/androidlogin/registroTransoperatorio.php";
     String URL_connect9 = "http://"+IP_Server+"/androidlogin/registroRealizada.php";
     String URL_connect10 = "http://"+IP_Server+"/androidlogin/registroPasada.php";
+    String URL_connect11 = "http://"+IP_Server+"/androidlogin/getProcedimientosProgramada.php";
+    String URL_connect12 = "http://"+IP_Server+"/androidlogin/getProcedimientosDiferida.php";
+    String URL_connect13 = "http://"+IP_Server+"/androidlogin/getProcedimientosTransoperatorio.php";
+    String URL_connect14 = "http://"+IP_Server+"/androidlogin/getProcedimientosRealizada.php";
+    String URL_connect15 = "http://"+IP_Server+"/androidlogin/getProcedimientosProgramadaPasada.php";
     
     /*
      * Programadas 1
@@ -213,7 +279,7 @@ public class Item1 extends SherlockFragment{
 		agregarTema = (TextView)v.findViewById(R.id.titulo_quirofano);
 		agregarTema.setText("Quirófano "+myString[1]);
 		
-		final LinearLayout sv = (LinearLayout)v.findViewById(R.id.vista);
+		final ScrollView sv = (ScrollView)v.findViewById(R.id.vista);
 		
 		final View home = inflater.inflate(R.layout.home, container, false); //Layout incorrecto, no sera home
 		// ... a diferencia del MainView estas seran cirugias programas del dia, incluyendo diferidas.
@@ -312,10 +378,19 @@ public class Item1 extends SherlockFragment{
 		/*Lo siguiente ira dentro de la sub-clase Agenda*/
 		String val = ID_quirofano;
 		Log.e("antes de agenda", "antes de agenda");
-		new RegistroDiferida(inflater, container).execute(ID_quirofano);		//OBTENER CIRUGAS DIFERIDAS
-		new RegistroTransoperatorio(inflater, container).execute(ID_quirofano);	//OBTENER CIRUGIAS TRANSOPERATORIO
-		new RegistroRealizada(inflater, container).execute(ID_quirofano);		//OBTENER CIRUGIAS REALIZADAS
-		new Agenda(inflater, container).execute(val);							//OBTENER CIRUGIAS PROGRAMADAS
+		
+		new GetProcedimientosProgramada().execute(ID_quirofano);
+		new GetProcedimientosDiferida().execute(ID_quirofano);
+		new GetProcedimientosTransoperatorio().execute(ID_quirofano);
+//		new GetProcedimientosRealizada().execute(ID_quirofano);
+		new GetProcedimientosProgramadaPasada().execute(ID_quirofano);
+		
+		//Importa el orden
+		new RegistroDiferida(inflater, container).execute(ID_quirofano);			//OBTENER CIRUGAS DIFERIDAS
+		new RegistroTransoperatorio(inflater, container).execute(ID_quirofano);		//OBTENER CIRUGIAS TRANSOPERATORIO
+		new RegistroRealizada(inflater, container).execute(ID_quirofano);			//OBTENER CIRUGIAS REALIZADAS
+		new RegistroProgramadaPasada(inflater, container).execute(ID_quirofano);	//OBTENER CIRUGIAS PROGRAMADAS PASADAS
+		new Agenda(inflater, container).execute(val);								//OBTENER CIRUGIAS PROGRAMADAS	
 		
 		/*
 		1. Lo primero que traiga todos los registros
@@ -446,6 +521,34 @@ public class Item1 extends SherlockFragment{
 				TextView t = new TextView(getActivity());
 				t.setText("Hola de nuevo");
 				sv.addView(programar); //aqui termina victor
+				
+				/** PARA DATEPICKER **************************************************** */
+				
+				pDisplayDate = (TextView) programar.findViewById(R.id.displayDate);
+		        //pPickDate = (Button) programar.findViewById(R.id.pickDate);
+		 
+		        pDisplayDate.setOnClickListener(new OnClickListener() {
+		        	
+		        	   @Override
+		        	   public void onClick(View v) {
+		        	    showDatePicker();
+		        	    //pDisplayDate.setText(all);
+		        	   }
+		        	  });
+				
+				/** PARA DATEPICKER ******************************************************/
+		        
+		        /** PARA TIME PICKER***************************************************** */
+		        mPickedTimeText = (TextView) programar.findViewById(R.id.hour);
+		        mPickedTimeText.setOnClickListener(new OnClickListener()
+		        {
+		            @Override
+		            public void onClick(View v ){
+		            	showTimePicker();
+		            }
+		        });
+		        
+		        /** PARA TIME PICKER *****************************************************/
 				
 //				new GetSalas().execute(ID_quirofano);
 				
@@ -620,8 +723,12 @@ public class Item1 extends SherlockFragment{
 						//**********************************************************
 		        		/*TRAER DATOS DE LOS PROCEDIMIENTOS DINAMICOS*/
 		        		
-		        		String date = fecha.getText().toString();
-		        		String hora=horaPropuesta.getText().toString();
+		        		//String date = fecha.getText().toString();
+		        		//String hora=horaPropuesta.getText().toString();
+						
+						String date = Integer.toString(anio)+"-"+Integer.toString(mesDelAnio)+"-"+Integer.toString(diaDelMes); 
+						String hora = Integer.toString(horas)+":"+Integer.toString(minutos);
+						
 				        String reg = registro.getText().toString();
 				        String paciente = nombreDelPaciente.getText().toString();
 				        String sEdad = edad.getText().toString();
@@ -813,7 +920,12 @@ public class Item1 extends SherlockFragment{
 		
 		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
 		
-		datosEnviar.add(new BasicNameValuePair("date",date));
+//	    String laFecha = Integer.toString(anio)+"-"+Integer.toString(mesDelAnio)+"-"+Integer.toString(diaDelMes); 
+//	    String laHora = Integer.toString(horas)+":"+Integer.toString(minutos);
+	    
+//		datosEnviar.add(new BasicNameValuePair("date",date));
+//		datosEnviar.add(new BasicNameValuePair("hora",hora));
+	    datosEnviar.add(new BasicNameValuePair("date",date));
 		datosEnviar.add(new BasicNameValuePair("hora",hora));
 		datosEnviar.add(new BasicNameValuePair("reg",reg));
 		datosEnviar.add(new BasicNameValuePair("paciente",paciente));
@@ -910,6 +1022,8 @@ public class Item1 extends SherlockFragment{
 		String value2 = "";
 		String value3 = "";
 		String value4 = "";
+		String value5 = "";
+		String value6 = "";
 		String cont = "";
 		
 		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
@@ -935,6 +1049,8 @@ public class Item1 extends SherlockFragment{
 					value2 = json_data.getString("dato2");	//Paciente
 					value3 = json_data.getString("dato3");	//Diagnostico
 					value4 = json_data.getString("dato4");	//ID
+					value5 = json_data.getString("dato5");	//Registro
+					value6 = json_data.getString("dato6"); 	//Nombre del dr que programa
 					
 					ArrayList<String> temporary = new ArrayList<String>();
 					
@@ -944,6 +1060,8 @@ public class Item1 extends SherlockFragment{
 					temporary.add(value2);
 					temporary.add(value3);
 					temporary.add(value4);
+					temporary.add(value5);
+					temporary.add(value6);
 					//st.add(value);
 					//st.add(value1);
 					//st.add(value2);
@@ -1000,12 +1118,13 @@ public class Item1 extends SherlockFragment{
 	    }
 		
 		
-		
+	
 	}//Fin de mostrarAgenda
 	
 	public void mostrarRegistroDiferida(String s) throws JSONException{	
 		arrayDiferidas.clear();
-		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "", cont = "";
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "",
+				value5="", value6="",cont = "";
 		
 		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
 		datosEnviar.add(new BasicNameValuePair("stat", s));
@@ -1028,6 +1147,8 @@ public class Item1 extends SherlockFragment{
 					value2 = json_data.getString("dato2");	//Paciente
 					value3 = json_data.getString("dato3");	//Diagnostico
 					value4 = json_data.getString("dato4");	//ID
+					value5 = json_data.getString("dato5");	//Registro
+					value6 = json_data.getString("dato6"); 	//Nombre del dr que programa
 					
 					ArrayList<String> temporary = new ArrayList<String>();
 					
@@ -1037,6 +1158,8 @@ public class Item1 extends SherlockFragment{
 					temporary.add(value2);
 					temporary.add(value3);
 					temporary.add(value4);
+					temporary.add(value5);
+					temporary.add(value6);
 		
 					Log.e("RegistroDiferida", "array temporary = "+temporary);
 					
@@ -1063,7 +1186,8 @@ public class Item1 extends SherlockFragment{
 	//MOSTRAR REGISTRO TRANSOPERATORIO
 	public void mostrarRegistroTransoperatorio(String s) throws JSONException{	
 		arrayTransoperatorio.clear();
-		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "", cont = "";
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "", 
+				value5 = "", value6 = "", cont = "";
 		
 		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
 		datosEnviar.add(new BasicNameValuePair("stat", s));
@@ -1086,6 +1210,8 @@ public class Item1 extends SherlockFragment{
 					value2 = json_data.getString("dato2");	//Paciente
 					value3 = json_data.getString("dato3");	//Diagnostico
 					value4 = json_data.getString("dato4");	//ID
+					value5 = json_data.getString("dato5");	//Registro
+					value6 = json_data.getString("dato6"); 	//Nombre del dr que programa
 					
 					ArrayList<String> temporary = new ArrayList<String>();
 					
@@ -1095,7 +1221,9 @@ public class Item1 extends SherlockFragment{
 					temporary.add(value2);
 					temporary.add(value3);
 					temporary.add(value4);
-		
+					temporary.add(value5);
+					temporary.add(value6);
+					
 					Log.e("RegistroDiferida", "array temporary = "+temporary);
 					
 					arrayTransoperatorio.add(temporary);
@@ -1121,7 +1249,8 @@ public class Item1 extends SherlockFragment{
 	//MOSTRAR REGISTRO REALIZADAS
 	public void mostrarRegistroRealizada(String s) throws JSONException{	
 		arrayRealizadas.clear();
-		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "", cont = "";
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "", 
+				value5 = "", value6 = "", cont = "";
 			
 		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
 		datosEnviar.add(new BasicNameValuePair("stat", s));
@@ -1144,6 +1273,8 @@ public class Item1 extends SherlockFragment{
 					value2 = json_data.getString("dato2");	//Paciente
 					value3 = json_data.getString("dato3");	//Diagnostico
 					value4 = json_data.getString("dato4");	//ID
+					value5 = json_data.getString("dato5");	//Registro
+					value6 = json_data.getString("dato6"); 	//Nombre del dr que programa
 						
 					ArrayList<String> temporary = new ArrayList<String>();
 						
@@ -1153,6 +1284,8 @@ public class Item1 extends SherlockFragment{
 					temporary.add(value2);
 					temporary.add(value3);
 					temporary.add(value4);
+					temporary.add(value5);
+					temporary.add(value6);
 			
 					Log.e("Registro realizadas", "array temporary = "+temporary);
 						
@@ -1175,6 +1308,245 @@ public class Item1 extends SherlockFragment{
 		   	//return st;
 			}
 	}//Fin de mostrarRegistroRealizada
+	
+	/**mostrarRegistroProgramadaPasada*/
+	public void mostrarRegistroProgramadaPasada(String s) throws JSONException{	
+		arrayProgramadasPasadas.clear();
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "", 
+				value5 = "", value6 = "", cont = "";
+			
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		datosEnviar.add(new BasicNameValuePair("stat", s));
+
+		JSONArray jdata = envio.getserverdata(datosEnviar, URL_connect10);
+		//System.out.println("jdata = "+jdata.getString(0));
+		System.out.println(jdata.toString());
+		System.out.println("largo de jdata = "+jdata.length());
+		if (jdata!=null && jdata.length() > 0){
+	   		//JSONObject json_data; //creamos un objeto JSON
+			try {
+					
+				for(int n = 0; n < jdata.length(); n++){
+					//st.clear();
+					System.out.println("vuelta:"+n);
+					JSONObject json_data = jdata.getJSONObject(n);
+					val = json_data.getString("dat");		//Fecha
+					value = json_data.getString("dato");	//Hora
+					value1 = json_data.getString("dato1");	//Sala
+					value2 = json_data.getString("dato2");	//Paciente
+					value3 = json_data.getString("dato3");	//Diagnostico
+					value4 = json_data.getString("dato4");	//ID
+					value5 = json_data.getString("dato5");	//Registro
+					value6 = json_data.getString("dato6"); 	//Nombre del dr que programa
+						
+					ArrayList<String> temporary = new ArrayList<String>();
+						
+					temporary.add(val);
+					temporary.add(value);
+					temporary.add(value1);
+					temporary.add(value2);
+					temporary.add(value3);
+					temporary.add(value4);
+					temporary.add(value5);
+					temporary.add(value6);
+			
+					Log.e("Registro realizadas", "array temporary = "+temporary);
+						
+					arrayProgramadasPasadas.add(temporary);
+				}
+
+				Log.e("array RegistroProgramadasPasadas", "arrayProgramadasPasadas = "+arrayProgramadasPasadas);
+			
+				//Log.e("enviarFormulario","status= "+status);//muestro por log que obtuvimos
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("hi", "hi");
+			}		            	
+	    }//Fin de if(comprueba si lo obtenido no es "null")
+	    	
+	    else{	//json obtenido invalido verificar parte WEB.
+	    	Log.e("JSON  ", "ERROR");
+		   	//return st;
+			}
+	}//Fin de mostrarRegistroProgramadaPasada
+	
+	/** OBTENER PROCEDIMIENTOS PARA CIRUGIAS PROGRAMADAS */
+	public void getProcedimientosProgramada(String s) throws JSONException{	
+		arrayProcedimientosProgramada.clear();
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "", 
+				value5 = "", value6 = "", cont = "";
+			
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		datosEnviar.add(new BasicNameValuePair("stat", s));
+
+		JSONArray jdata = envio.getserverdata(datosEnviar, URL_connect11);
+		//System.out.println("jdata = "+jdata.getString(0));
+		System.out.println(jdata.toString());
+		System.out.println("largo de jdata = "+jdata.length());
+		if (jdata!=null && jdata.length() > 0){
+	   		//JSONObject json_data; //creamos un objeto JSON
+			try {
+					
+				for(int n = 0; n < jdata.length(); n++){
+					//st.clear();
+					System.out.println("vuelta:"+n);
+					JSONObject json_data = jdata.getJSONObject(n);
+					cont = json_data.getString("d");	//id de la cirugia
+					val = json_data.getString("d0");	//id de procedimiento
+					value = json_data.getString("d1");	//cie9mc
+					value1 = json_data.getString("d2");	//region
+					value2 = json_data.getString("d3");	//detalles
+					value3 = json_data.getString("d4");	//servicio
+						
+					ArrayList<String> temporary = new ArrayList<String>();
+						
+					temporary.add(cont);
+					temporary.add(val);
+					temporary.add(value);
+					temporary.add(value1);
+					temporary.add(value2);
+					temporary.add(value3);
+			
+					Log.e("Procedimientos programadas", "array temporary = "+temporary);
+						
+					arrayProcedimientosProgramada.add(temporary);
+				}
+
+				Log.e("array ProcedimientosProgramada", "arrayProcedimientosProgramada = "+arrayProcedimientosProgramada);
+			
+				//Log.e("enviarFormulario","status= "+status);//muestro por log que obtuvimos
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("hi", "hi");
+			}		            	
+	    }//Fin de if(comprueba si lo obtenido no es "null")
+	    	
+	    else{	//json obtenido invalido verificar parte WEB.
+	    	Log.e("JSON  ", "ERROR");
+		   	//return st;
+			}
+	}//Fin de getProcedimientosProgramada
+	
+	/** OBTENER PROCEDIMIENTOS DE CIRUGIAS DIFERIDAS*/
+	public void getProcedimientosDiferida(String s) throws JSONException{	
+		arrayProcedimientosDiferida.clear();
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", cont = "";
+			
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		datosEnviar.add(new BasicNameValuePair("stat", s));
+
+		JSONArray jdata = envio.getserverdata(datosEnviar, URL_connect12);
+		//System.out.println("jdata = "+jdata.getString(0));
+		System.out.println(jdata.toString());
+		System.out.println("largo de jdata = "+jdata.length());
+		if (jdata!=null && jdata.length() > 0){
+	   		//JSONObject json_data; //creamos un objeto JSON
+			try {
+					
+				for(int n = 0; n < jdata.length(); n++){
+					//st.clear();
+					System.out.println("vuelta:"+n);
+					JSONObject json_data = jdata.getJSONObject(n);
+					cont = json_data.getString("d");	//id de la cirugia
+					val = json_data.getString("d0");	//id de procedimiento
+					value = json_data.getString("d1");	//cie9mc
+					value1 = json_data.getString("d2");	//region
+					value2 = json_data.getString("d3");	//detalles
+					value3 = json_data.getString("d4");	//servicio
+						
+					ArrayList<String> temporary = new ArrayList<String>();
+						
+					temporary.add(cont);
+					temporary.add(val);
+					temporary.add(value);
+					temporary.add(value1);
+					temporary.add(value2);
+					temporary.add(value3);
+			
+					Log.e("Tempo-dif", "tempo-dif = "+temporary);
+						
+					arrayProcedimientosDiferida.add(temporary);
+				}
+
+				Log.e("array Procedimientos Diferida", "arrayProcedimientosDiferida = "+arrayProcedimientosDiferida);
+			
+				//Log.e("enviarFormulario","status= "+status);//muestro por log que obtuvimos
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("hi", "hi");
+			}		            	
+	    }//Fin de if(comprueba si lo obtenido no es "null")
+	    	
+	    else{	//json obtenido invalido verificar parte WEB.
+	    	Log.e("JSON  ", "ERROR");
+		   	//return st;
+			}
+	}//Fin de getProcedimientosDiferida
+	
+	/** OBTENER PROCEDIMIENTOS DE PROGRAMADAS CON FECHA PASADA*/
+	public void getProcedimientosProgramadaPasada(String s) throws JSONException{	
+		arrayProcedimientosProgramadaPasada.clear();
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", cont = "";
+			
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		datosEnviar.add(new BasicNameValuePair("stat", s));
+
+		JSONArray jdata = envio.getserverdata(datosEnviar, URL_connect15);
+		//System.out.println("jdata = "+jdata.getString(0));
+		System.out.println(jdata.toString());
+		System.out.println("largo de jdata = "+jdata.length());
+		if (jdata!=null && jdata.length() > 0){
+	   		//JSONObject json_data; //creamos un objeto JSON
+			try {
+					
+				for(int n = 0; n < jdata.length(); n++){
+					//st.clear();
+					System.out.println("vuelta:"+n);
+					JSONObject json_data = jdata.getJSONObject(n);
+					cont = json_data.getString("d");	//id de la cirugia
+					val = json_data.getString("d0");	//id de procedimiento
+					value = json_data.getString("d1");	//cie9mc
+					value1 = json_data.getString("d2");	//region
+					value2 = json_data.getString("d3");	//detalles
+					value3 = json_data.getString("d4");	//servicio
+						
+					ArrayList<String> temporary = new ArrayList<String>();
+						
+					temporary.add(cont);
+					temporary.add(val);
+					temporary.add(value);
+					temporary.add(value1);
+					temporary.add(value2);
+					temporary.add(value3);
+			
+					Log.e("Tempo-pasada", "tempo-pasada = "+temporary);
+						
+					arrayProcedimientosProgramadaPasada.add(temporary);
+				}
+
+				Log.e("array ProcedimientosPasadas", "arrayProcedimientosPasada = "+arrayProcedimientosProgramadaPasada);
+			
+				//Log.e("enviarFormulario","status= "+status);//muestro por log que obtuvimos
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("hi", "hi");
+			}		            	
+	    }//Fin de if(comprueba si lo obtenido no es "null")
+	    	
+	    else{	//json obtenido invalido verificar parte WEB.
+	    	Log.e("JSON  ", "ERROR");
+		   	//return st;
+			}
+	}//Fin de getProcedimientosProgramadaPasada
+	
 	
 	//public void getSalas(String quir_id){
 	public ArrayList<String> getSalas(String quir_id){
@@ -1594,6 +1966,7 @@ public class Item1 extends SherlockFragment{
             System.out.println("array Diferidas = "+arrayDiferidas);
             System.out.println("array Transoperatorio = "+arrayTransoperatorio);
             System.out.println("array Realizadas = "+arrayRealizadas);
+            System.out.println("array ProgramadasPasadas = "+arrayProgramadasPasadas);
             
             //new 28 nov
             
@@ -1636,7 +2009,7 @@ public class Item1 extends SherlockFragment{
 	    		                
 	    		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
 	    		        ft.replace(R.id.content_frame, duedateFrag);
-	    		        //ft.addToBackStack(null);
+	    		        ft.addToBackStack(null);
 	    		        ft.commit();
 	    		        //break;
     		                
@@ -1683,7 +2056,7 @@ public class Item1 extends SherlockFragment{
 	    		                
 	    		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
 	    		        ft.replace(R.id.content_frame, duedateFrag);
-	    		        //ft.addToBackStack(null);
+	    		        ft.addToBackStack(null);
 	    		        ft.commit();
 	    		        //break;
     		                
@@ -1729,7 +2102,7 @@ public class Item1 extends SherlockFragment{
 	    		                
 	    		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
 	    		        ft.replace(R.id.content_frame, duedateFrag);
-	    		        //ft.addToBackStack(null);
+	    		        ft.addToBackStack(null);
 	    		        ft.commit();
 	    		        //break;
     		                
@@ -1775,7 +2148,54 @@ public class Item1 extends SherlockFragment{
 	    		                
 	    		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
 	    		        ft.replace(R.id.content_frame, duedateFrag);
-	    		        //ft.addToBackStack(null);
+	    		        ft.addToBackStack(null);
+	    		        ft.commit();
+	    		        //break;
+    		                
+    		            //}       
+    		    } //Fin de onClick
+    		}; //Fin de onClickListener
+    		
+    		
+    		//ONCLICK PARA PROGRAMADAS PASADAS
+    		OnClickListener clicks4=new OnClickListener() {
+
+    		    @Override
+    		    public void onClick(View v) {
+    		    		//Esta es la posicion del array padre sobre el que se hizo click
+    		    		System.out.println("id = "+v.getId());  
+    		    		
+    		    		//Ahora se debe obtener el quirofano_id y el quirofano_name, desde v.getId()
+    		            
+    		    		//switch(v.getId())
+    		            //{
+    			            //case 0: System.out.println("0");
+    		                //break;
+	    		        Fragment duedateFrag = new AccionProgramadaPasada(); //se puede diferir y se puede eliminar	
+	    		        Bundle bundle = new Bundle();
+	    		                	    		                
+	    		        String miArreglo[] = new String[6];
+	    		              
+//	    		        miArreglo[0] = padre.get(v.getId()).get(0);		//llenar con id_quirofano
+//	    		        miArreglo[1] = padre.get(v.getId()).get(1);		//llenar con el nombre del quirofano
+	    		        
+	    		        miArreglo[0] = arrayProgramadasPasadas.get(v.getId()).get(0);	//Llenar con la fecha
+				        miArreglo[1] = arrayProgramadasPasadas.get(v.getId()).get(1);	//Llenar con la hora
+				        miArreglo[2] = arrayProgramadasPasadas.get(v.getId()).get(2);	//Sala	
+				        miArreglo[3] = arrayProgramadasPasadas.get(v.getId()).get(3);	//Paciente
+				        miArreglo[4] = arrayProgramadasPasadas.get(v.getId()).get(4);	//Diagnostico
+				        miArreglo[5] = arrayProgramadasPasadas.get(v.getId()).get(5);	//ID
+	    		                
+//	    		        System.out.println("POSICION DE QUIROFANO_ID = "+v.getId());
+//	    		        System.out.println("ARREGLO-QUIROFANO_ID = "+miArreglo[0]);
+//	    		        System.out.println("ARREGLO-QUIROFANO_NAME = "+miArreglo[1]);
+	    		                	    		                	    		                
+	    		        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Accion
+	    		        duedateFrag.setArguments(bundle);
+	    		                
+	    		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
+	    		        ft.replace(R.id.content_frame, duedateFrag);
+	    		        ft.addToBackStack(null);
 	    		        ft.commit();
 	    		        //break;
     		                
@@ -1803,18 +2223,56 @@ public class Item1 extends SherlockFragment{
     			TextView fech = (TextView)tabler.findViewById(R.id.fech);
 				TextView hora = (TextView)tabler.findViewById(R.id.hora);
 				TextView sala = (TextView)tabler.findViewById(R.id.sala);
+				//Registro
+				TextView registro = (TextView)tabler.findViewById(R.id.registro);
+		
 				TextView pa = (TextView)tabler.findViewById(R.id.pa);
 				TextView dg = (TextView)tabler.findViewById(R.id.dg);
+				//procedimiento - cirugia
+				TextView procedimiento = (TextView)tabler.findViewById(R.id.procedimiento);
+				
+				//medico que programo
+				TextView medico = (TextView)tabler.findViewById(R.id.medico);
 				
 				TableRow trow = (TableRow) tabler;
 				
-				fech.setText(padre.get(i).get(0));	//fecha
-				hora.setText(padre.get(i).get(1));	//hora
-				sala.setText(padre.get(i).get(2));	//sala
-				pa.setText(padre.get(i).get(3));	//paciente
-				dg.setText(padre.get(i).get(4));	//diagnostico
+				fech.setText(padre.get(i).get(0));				//fecha
+				hora.setText(padre.get(i).get(1));				//hora
+				sala.setText(padre.get(i).get(2));				//sala
+				registro.setText(padre.get(i).get(6));			//registro -new 10Dic
+				pa.setText(padre.get(i).get(3));				//paciente
+				dg.setText(padre.get(i).get(4));				//diagnostico
+				
+//				procedimiento.setText("Procedimiento "+i+" id = "+i+" cie9mc = "+i+" región = "+i+" detalles = "+i); 		//procedimientos de la cirugia
+				
+				int counter = 0;
+				String tempo = "";
+				
+				for (int x = 0; x<arrayProcedimientosProgramada.size(); x++){
+					if(padre.get(i).get(5).equals(arrayProcedimientosProgramada.get(x).get(0))){
+						if(counter == 0){
+							tempo += "Procedimiento "+(counter+1)+
+									", id = "+arrayProcedimientosProgramada.get(x).get(1)+
+									", cie9mc = "+arrayProcedimientosProgramada.get(x).get(2)+
+									", región = "+arrayProcedimientosProgramada.get(x).get(3);
+						}
+						else{
+							tempo += "\nProcedimiento "+(counter+1)+
+									", id = "+arrayProcedimientosProgramada.get(x).get(1)+
+									", cie9mc = "+arrayProcedimientosProgramada.get(x).get(2)+
+									", región = "+arrayProcedimientosProgramada.get(x).get(3); 
+						}
+						counter = counter+1;
+					}//Fin de if
+				}//Fin de for para procedimientos
+				procedimiento.setText(tempo);
+				
+				
+				medico.setText(padre.get(i).get(7));			//nombre del medico
+				
 				//accion.setText("action:"+index);
 				
+				trow.setBackgroundResource(android.R.drawable.list_selector_background);
 					
 				tl.addView(trow);
     			//Primero pasamos la posicion del arraypadre en el que se hizo click
@@ -1866,21 +2324,32 @@ public class Item1 extends SherlockFragment{
 //    			tv.setOnClickListener(clicks);
         		
         		View tabler = inflater.inflate(R.layout.newtablerow, container, false);
-    			TextView fech = (TextView)tabler.findViewById(R.id.fech);
+        		TextView fech = (TextView)tabler.findViewById(R.id.fech);
 				TextView hora = (TextView)tabler.findViewById(R.id.hora);
 				TextView sala = (TextView)tabler.findViewById(R.id.sala);
+				//Registro
+				TextView registro = (TextView)tabler.findViewById(R.id.registro);
+		
 				TextView pa = (TextView)tabler.findViewById(R.id.pa);
 				TextView dg = (TextView)tabler.findViewById(R.id.dg);
+				//procedimiento - cirugia
+				TextView procedimiento = (TextView)tabler.findViewById(R.id.procedimiento);
+				
+				//medico que programo
+				TextView medico = (TextView)tabler.findViewById(R.id.medico);
 				
 				TableRow trow = (TableRow) tabler;
 				
 				fech.setText(arrayTransoperatorio.get(i).get(0));	//fecha
 				hora.setText(arrayTransoperatorio.get(i).get(1));	//hora
 				sala.setText(arrayTransoperatorio.get(i).get(2));	//sala
-				pa.setText(arrayTransoperatorio.get(i).get(3));	//paciente
-				dg.setText(arrayTransoperatorio.get(i).get(4));	//diagnostico
+				registro.setText(arrayTransoperatorio.get(i).get(6));					//registro -new 10Dic
+				pa.setText(arrayTransoperatorio.get(i).get(3));		//paciente
+				dg.setText(arrayTransoperatorio.get(i).get(4));		//diagnostico
+				procedimiento.setText("Procedimiento "+i+", id = "+i+", cie9mc = "+i); 		//procedimientos de la cirugia
+				medico.setText(arrayTransoperatorio.get(i).get(7));						//medico que programa la cirugia
 				//accion.setText("action:"+index);
-				trow.setBackgroundColor(Color.GREEN);
+				trow.setBackgroundResource(R.drawable.selector_trans);
 					
 				tl.addView(trow);
     			//Primero pasamos la posicion del arraypadre en el que se hizo click
@@ -1911,19 +2380,30 @@ public class Item1 extends SherlockFragment{
 //    			tv.setOnClickListener(clicks);
         		
         		View tabler = inflater.inflate(R.layout.newtablerow, container, false);
-    			TextView fech = (TextView)tabler.findViewById(R.id.fech);
+        		TextView fech = (TextView)tabler.findViewById(R.id.fech);
 				TextView hora = (TextView)tabler.findViewById(R.id.hora);
 				TextView sala = (TextView)tabler.findViewById(R.id.sala);
+				//Registro
+				TextView registro = (TextView)tabler.findViewById(R.id.registro);
+		
 				TextView pa = (TextView)tabler.findViewById(R.id.pa);
 				TextView dg = (TextView)tabler.findViewById(R.id.dg);
+				//procedimiento - cirugia
+				TextView procedimiento = (TextView)tabler.findViewById(R.id.procedimiento);
+				
+				//medico que programo
+				TextView medico = (TextView)tabler.findViewById(R.id.medico);
 				
 				TableRow trow = (TableRow) tabler;
 				
 				fech.setText(arrayRealizadas.get(i).get(0));	//fecha
 				hora.setText(arrayRealizadas.get(i).get(1));	//hora
 				sala.setText(arrayRealizadas.get(i).get(2));	//sala
-				pa.setText(arrayRealizadas.get(i).get(3));	//paciente
-				dg.setText(arrayRealizadas.get(i).get(4));	//diagnostico
+				registro.setText(arrayRealizadas.get(i).get(6));				//registro -new 10Dic
+				pa.setText(arrayRealizadas.get(i).get(3));		//paciente
+				dg.setText(arrayRealizadas.get(i).get(4));		//diagnostico
+				procedimiento.setText("Procedimiento "+i+", id = "+i+", cie9mc = "+i); 		//procedimientos de la cirugia
+				medico.setText(arrayRealizadas.get(i).get(7));					//medico que programa la cirugia
 				//accion.setText("action:"+index);
 					
 				tl.addView(trow);
@@ -1954,21 +2434,77 @@ public class Item1 extends SherlockFragment{
 //    			tv.setOnClickListener(clicks);
         		
         		View tabler = inflater.inflate(R.layout.newtablerow, container, false);
-    			TextView fech = (TextView)tabler.findViewById(R.id.fech);
+        		TextView fech = (TextView)tabler.findViewById(R.id.fech);
 				TextView hora = (TextView)tabler.findViewById(R.id.hora);
 				TextView sala = (TextView)tabler.findViewById(R.id.sala);
+				//Registro
+				TextView registro = (TextView)tabler.findViewById(R.id.registro);
+		
 				TextView pa = (TextView)tabler.findViewById(R.id.pa);
 				TextView dg = (TextView)tabler.findViewById(R.id.dg);
+				//procedimiento - cirugia
+				TextView procedimiento = (TextView)tabler.findViewById(R.id.procedimiento);
+				
+				//medico que programo
+				TextView medico = (TextView)tabler.findViewById(R.id.medico);
 				
 				TableRow trow = (TableRow) tabler;
 				
 				fech.setText(arrayDiferidas.get(i).get(0));	//fecha
+				fech.setTextColor(Color.parseColor("#ffffff"));
+				
 				hora.setText(arrayDiferidas.get(i).get(1));	//hora
+				hora.setTextColor(Color.parseColor("#ffffff"));
+				
 				sala.setText(arrayDiferidas.get(i).get(2));	//sala
+				sala.setTextColor(Color.parseColor("#ffffff"));
+				
+				registro.setText(arrayDiferidas.get(i).get(6));				//registro -new 10Dic
+				registro.setTextColor(Color.parseColor("#ffffff"));
+				
 				pa.setText(arrayDiferidas.get(i).get(3));	//paciente
+				pa.setTextColor(Color.parseColor("#ffffff"));
+				
 				dg.setText(arrayDiferidas.get(i).get(4));	//diagnostico
+				dg.setTextColor(Color.parseColor("#ffffff"));
+				
+				int counter = 0;
+				String tempo = "";
+				
+				for (int x = 0; x<arrayProcedimientosDiferida.size(); x++){
+					if(arrayDiferidas.get(i).get(5).equals(arrayProcedimientosDiferida.get(x).get(0))){
+						if(counter == 0){
+							tempo += "Procedimiento "+(counter+1)+
+									", id = "+arrayProcedimientosDiferida.get(x).get(1)+
+									", cie9mc = "+arrayProcedimientosDiferida.get(x).get(2)+
+									", región = "+arrayProcedimientosDiferida.get(x).get(3);
+						}
+						else{
+							tempo += "\nProcedimiento "+(counter+1)+
+									", id = "+arrayProcedimientosDiferida.get(x).get(1)+
+									", cie9mc = "+arrayProcedimientosDiferida.get(x).get(2)+
+									", región = "+arrayProcedimientosDiferida.get(x).get(3); 
+						}
+						counter = counter+1;
+					}//Fin de if
+				}//Fin de for para procedimientos
+				
+				//String flag = "Procedimiento "+i+", id = "+i+", cie9mc = "+i;
+				//flag += "\nProcedimiento "+i+", id = "+i+", cie9mc = "+i;
+				//flag += "\nProcedimiento "+i+", id = "+i+", cie9mc = "+i;
+//				arrayDiferidas.get(i).get(5); //ID DE LA CIRUGIA
+				//for (int x = 0; x<3; x++){
+					//procedimiento.setText("Procedimiento "+i+", id = "+i+", cie9mc = "+i+"\nProcedimiento "+(i+1)+"\n");
+				procedimiento.setText(tempo);
+				//}
+//				procedimiento.setText("Procedimiento "+i+", id = "+i+", cie9mc = "+i+"\nProcedimiento "+(i+1)); 
+				procedimiento.setTextColor(Color.parseColor("#ffffff"));
+				
+				medico.setText(arrayDiferidas.get(i).get(7));					//medico que programa la cirugia
+				medico.setTextColor(Color.parseColor("#ffffff"));
+				
 				//accion.setText("action:"+index);
-				trow.setBackgroundColor(Color.RED);
+				trow.setBackgroundResource(R.drawable.selector_dif);		
 					
 				tl.addView(trow);
     			//Primero pasamos la posicion del arraypadre en el que se hizo click
@@ -1980,6 +2516,102 @@ public class Item1 extends SherlockFragment{
     		}//Fin de for
         	
             //fin new 28 nov
+        	
+        	//10 dic
+        	View tab4 = inflater.inflate(R.layout.tiposde_cirugias, container, false);
+        	TextView titulo4 = (TextView)tab4.findViewById(R.id.title);
+        	titulo4.setText("Cirugías pasadas");
+			TableRow tabRow4 = (TableRow) tab4;
+			tl.addView(tabRow4);
+        	
+        	//PARA PROGRAMADAS PASADAS  **********************************************************
+        	for (int i = 0; i<arrayProgramadasPasadas.size(); i++){
+//    			TextView tv = (TextView) new TextView(getActivity());
+//    			tv.setText(arrayDiferidas.get(i).get(1));
+//    			tv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+//    			((LinearLayout) ll).addView(tv);
+//    			
+//    			//Primero pasamos la posicion del arraypadre en el que se hizo click
+//    			tv.setId(i);
+//    			//Opcion2 - settear Id con la posición de "padre" en que se hizo click
+//    			tv.setOnClickListener(clicks);
+        		
+        		View tabler = inflater.inflate(R.layout.newtablerow, container, false);
+        		TextView fech = (TextView)tabler.findViewById(R.id.fech);
+				TextView hora = (TextView)tabler.findViewById(R.id.hora);
+				TextView sala = (TextView)tabler.findViewById(R.id.sala);
+				//Registro
+				TextView registro = (TextView)tabler.findViewById(R.id.registro);
+		
+				TextView pa = (TextView)tabler.findViewById(R.id.pa);
+				TextView dg = (TextView)tabler.findViewById(R.id.dg);
+				//procedimiento - cirugia
+				TextView procedimiento = (TextView)tabler.findViewById(R.id.procedimiento);
+				
+				//medico que programo
+				TextView medico = (TextView)tabler.findViewById(R.id.medico);
+				
+				TableRow trow = (TableRow) tabler;
+				
+				fech.setText(arrayProgramadasPasadas.get(i).get(0));	//fecha
+				fech.setTextColor(Color.parseColor("#ffffff"));
+				
+				hora.setText(arrayProgramadasPasadas.get(i).get(1));	//hora
+				hora.setTextColor(Color.parseColor("#ffffff"));
+				
+				sala.setText(arrayProgramadasPasadas.get(i).get(2));	//sala
+				sala.setTextColor(Color.parseColor("#ffffff"));
+				
+				registro.setText(arrayProgramadasPasadas.get(i).get(6));				//registro -new 10Dic
+				registro.setTextColor(Color.parseColor("#ffffff"));
+				
+				pa.setText(arrayProgramadasPasadas.get(i).get(3));	//paciente
+				pa.setTextColor(Color.parseColor("#ffffff"));
+				
+				dg.setText(arrayProgramadasPasadas.get(i).get(4));	//diagnostico
+				dg.setTextColor(Color.parseColor("#ffffff"));
+				
+				//procedimiento.setText("Procedimiento "+i+", id = "+i+", cie9mc = "+i); 		//procedimientos de la cirugia
+				
+				int counter = 0;
+				String tempo = "";
+				
+				for (int x = 0; x<arrayProcedimientosProgramadaPasada.size(); x++){
+					if(arrayProgramadasPasadas.get(i).get(5).equals(arrayProcedimientosProgramadaPasada.get(x).get(0))){
+						if(counter == 0){
+							tempo += "Procedimiento "+(counter+1)+
+									", id = "+arrayProcedimientosProgramadaPasada.get(x).get(1)+
+									", cie9mc = "+arrayProcedimientosProgramadaPasada.get(x).get(2)+
+									", región = "+arrayProcedimientosProgramadaPasada.get(x).get(3);
+						}
+						else{
+							tempo += "\nProcedimiento "+(counter+1)+
+									", id = "+arrayProcedimientosProgramadaPasada.get(x).get(1)+
+									", cie9mc = "+arrayProcedimientosProgramadaPasada.get(x).get(2)+
+									", región = "+arrayProcedimientosProgramadaPasada.get(x).get(3); 
+						}
+						counter = counter+1;
+					}//Fin de if
+				}//Fin de for para procedimientos
+				procedimiento.setText(tempo);
+				
+				procedimiento.setTextColor(Color.parseColor("#ffffff"));
+
+				medico.setText(arrayProgramadasPasadas.get(i).get(7));					//medico que programa la cirugia
+				medico.setTextColor(Color.parseColor("#ffffff"));
+				
+				//accion.setText("action:"+index);
+				trow.setBackgroundResource(R.drawable.selector_dif);		
+					
+				tl.addView(trow);
+    			//Primero pasamos la posicion del arraypadre en el que se hizo click
+    			trow.setId(i);
+    			//Opcion2 - settear Id con la posición de "padre" en que se hizo click
+    			trow.setOnClickListener(clicks4);
+        		
+    		}//Fin de for
+        	
+        	//System.out.println("PASADAS<<"+arrayProgramadasPasadas.size());
             
             
 //            lista.setAdapter(new MyVeryOwnArrayAdapter(getActivity(), R.layout.tablerow_editable, padre));
@@ -2374,6 +3006,135 @@ public class Item1 extends SherlockFragment{
 		
 	}//Fin de la subclase RegistroRealizada
 	
+	class RegistroProgramadaPasada extends AsyncTask< String, String, String> {
+		
+		LayoutInflater inflater;
+		ViewGroup container;
+		
+		RegistroProgramadaPasada(LayoutInflater inflater, ViewGroup container){
+			this.inflater = inflater;
+			this.container = container;
+		}
+		
+    	String st1; //String con el id del quirofano seleccionado
+		
+    	protected void onPreExecute() {
+    		//progress = ProgressDialog.show(
+    		//getActivity(), null, "Accesando a agenda...");
+            super.onPreExecute();
+        }
+    	
+        protected String doInBackground(String... params) {
+			st1=params[0]; //obtenemos el string con "ok" 
+			
+			//enviamos y recibimos y analizamos los datos en segundo plano.
+    		try {
+				mostrarRegistroProgramadaPasada(st1);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Log.e("last-array", "last-array = "+al.get(0));
+    		return "ok"; //login valido
+    		
+		}//Fin de doInBackground
+       
+        protected void onPostExecute(String resultado) {
+        	//progress.dismiss();//ocultamos progess dialog.
+            Log.e("onPostExecute=","Todo bien="+resultado);
+            System.out.println(">>>"+arrayProgramadasPasadas);
+        }//Fin de onPostExecute        
+		
+	}//Fin de la subclase RegistroProgramadaPasada
+	
+//	new GetProcedimientosProgramada().execute(ID_quirofano);
+//	new GetProcedimientosDiferida().execute(ID_quirofano);
+//	new GetProcedimientosTransoperatorio().execute(ID_quirofano);
+//	new GetProcedimientosRealizada().execute(ID_quirofano);
+//	new GetProcedimientosProgramadaPasada().execute(ID_quirofano);
+	
+	class GetProcedimientosProgramada extends AsyncTask< String, String, String> {
+		
+    	String st1; //String con el id del quirofano seleccionado
+		
+    	protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        protected String doInBackground(String... params) {
+			st1=params[0]; //obtenemos el string con "ok" 
+			
+    		try {
+				getProcedimientosProgramada(st1);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Log.e("last-array", "last-array = "+al.get(0));
+    		return "ok"; //login valido
+		}//Fin de doInBackground
+       
+        protected void onPostExecute(String resultado) {
+        	//progress.dismiss();//ocultamos progess dialog.
+            Log.e("onPostExecute=","Todo bien="+resultado);
+            System.out.println(">>>PROCEDIMIENTOS-PROGRAMADA"+arrayProcedimientosProgramada);
+        }//Fin de onPostExecute        
+	}//Fin de la subclase GetProcedimientosProgramada
+	
+	// GetProcedimientosDiferida
+	class GetProcedimientosDiferida extends AsyncTask< String, String, String> {
+		
+    	String st1; //String con el id del quirofano seleccionado
+		
+    	protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        protected String doInBackground(String... params) {
+			st1=params[0]; //obtenemos el string con "ok" 
+			
+    		try {
+				getProcedimientosDiferida(st1);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Log.e("last-array", "last-array = "+al.get(0));
+    		return "ok"; //login valido
+		}//Fin de doInBackground
+       
+        protected void onPostExecute(String resultado) {
+        	//progress.dismiss();//ocultamos progess dialog.
+            Log.e("onPostExecute=","Todo bien="+resultado);
+            System.out.println(">>>ARRAYDIF*** : "+arrayProcedimientosDiferida);
+        }//Fin de onPostExecute        
+	}//Fin de la subclase GetProcedimientosDiferida
+	
+	//GetProcedimientosProgramadaPasada
+	class GetProcedimientosProgramadaPasada extends AsyncTask< String, String, String> {
+		
+    	String st1; //String con el id del quirofano seleccionado
+		
+    	protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        protected String doInBackground(String... params) {
+			st1=params[0]; //obtenemos el string con "ok" 
+			
+    		try {
+				getProcedimientosProgramadaPasada(st1);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Log.e("last-array", "last-array = "+al.get(0));
+    		return "ok"; //login valido
+		}//Fin de doInBackground
+       
+        protected void onPostExecute(String resultado) {
+        	//progress.dismiss();//ocultamos progess dialog.
+            Log.e("onPostExecute=","Todo bien="+resultado);
+//            System.out.println(">>>ARRAY*** : "+arrayProcedimientosDiferida);
+        }//Fin de onPostExecute        
+	}//Fin de la subclase GetProcedimientosProgramadaPasada
 	
 //	new RegistroTransoperatorio(inflater, container).execute(ID_quirofano);	//OBTENER CIRUGIAS TRANSOPERATORIO
 //	new RegistroRealizada(inflater, container).execute(ID_quirofano);		//OBTENER CIRUGIAS REALIZADAS
@@ -2415,5 +3176,81 @@ public class Item1 extends SherlockFragment{
 	public int getSala(){
 		return salaSpinner;
 	}//Fin de getSala
+	
+	// *** PARA EL DATE PICKER **************************************************************************
+	
+	private void showDatePicker() {
+		  DatePickerFragment date = new DatePickerFragment();
+		  /**
+		   * Set Up Current Date Into dialog
+		   */
+		  Calendar calender = Calendar.getInstance();
+		  Bundle args = new Bundle();
+		  args.putInt("year", calender.get(Calendar.YEAR));
+		  args.putInt("month", calender.get(Calendar.MONTH));
+		  args.putInt("day", calender.get(Calendar.DAY_OF_MONTH));
+		  date.setArguments(args);
+		  /**
+		   * Set Call back to capture selected date
+		   */
+		  date.setCallBack(ondate);
+		  date.show(getFragmentManager(), "Date Picker");
+	}
+	
+	//2
+	OnDateSetListener ondate = new OnDateSetListener() {
+		  @Override
+		  public void onDateSet(DatePicker view, int year, int monthOfYear, //antes int
+		    int dayOfMonth) {
+			  anio = year;
+			  mesDelAnio = monthOfYear+1;
+			  diaDelMes = dayOfMonth;
+		   Toast.makeText(getActivity().getApplicationContext(), String.valueOf(year) + "-" + String.valueOf(monthOfYear+1) + "-" + String.valueOf(dayOfMonth), Toast.LENGTH_SHORT).show();
+		   String all = Integer.toString(anio)+"-"+ Integer.toString(mesDelAnio)+"-"+ Integer.toString(diaDelMes);
+		   pDisplayDate.setText("  "+all);
+		  }
+		 };
+		
+	//@Override
+	//public boolean onCreateOptionsMenu(Menu menu) {
+	//	getMenuInflater().inflate(R.menu.activity_main, menu);
+	//	return true;
+	//}
+		 
+	// *** PARA EL DATE PICKER **************************************************************************
+		 
+	//PARA TIMEPICKER ***********************************************************************************
+		 
+		 private void showTimePicker() {
+			  TimePickerFragment time = new TimePickerFragment();
+			  /**
+			   * Set Up Current Date Into dialog
+			   */
+			  Calendar calender = Calendar.getInstance();
+			  Bundle args = new Bundle();
+			  args.putInt("hour", calender.get(Calendar.YEAR));
+			  args.putInt("minutes", calender.get(Calendar.MONTH));
+			  time.setArguments(args);
+			  /**
+			   * Set Call back to capture selected date
+			   */
+			  time.setCallBack(ontime);
+			  time.show(getFragmentManager(), "Date Picker");
+		}
+		
+		//2
+		OnTimeSetListener ontime = new OnTimeSetListener() {
+			  @Override
+			  public void onTimeSet(TimePicker view, int hour, int minutes) {
+				  horas = hour;
+				  minutos = minutes;
+			   Toast.makeText(getActivity().getApplicationContext(), String.valueOf(hour) + ":" + String.valueOf(minutes), Toast.LENGTH_SHORT).show();
+			   String all = Integer.toString(horas)+":"+ Integer.toString(minutos);
+			   mPickedTimeText.setText("  "+all);
+			  }
+			 };
+		 
+	//PARA TIMEPICKER ***********************************************************************************
+	
 	
 }//Fin de la clase Item1

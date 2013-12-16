@@ -60,12 +60,12 @@
                 android:text="Salas" />
         </LinearLayout>
 
-        <LinearLayout
+        <ScrollView
             android:id="@+id/vista"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-        </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
 </LinearLayout>

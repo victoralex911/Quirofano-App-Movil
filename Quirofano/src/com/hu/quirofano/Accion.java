@@ -774,6 +774,6 @@ public class Accion extends SherlockFragment{
              	error2();
             }
         }//Fin de onPostExecute        
-	}//Fin de la subclase Formulario
+	}//Fin de la subclase CausaDiferido
     
 }//Fin de la clase Accion

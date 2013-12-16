@@ -134,4 +134,29 @@
 		<item>Plan piloto</item>
 	</string-array>	
 	
+	<string-array name="clasificacion_cirugia">
+		<item>Mayor</item>
+		<item>Menor</item>
+	</string-array>
+	
+	<string-array name="evento_adverso">
+		<item>Evento adverso</item>
+		<item>Evento centinela</item>
+		<item>Nocturno</item>
+		<item>Cuasi error</item>
+	</string-array>
+	
+	<string-array name="contaminacion">
+		<item>Limpia</item>
+		<item>Limpia-contaminada</item>
+		<item>Contaminada</item>
+		<item>Sucia o infectada</item>
+	</string-array>
+	
+	<string-array name="infeccion">
+		<item>Infección de herida quirúrgica incisional superficial</item>
+		<item>infección de herida quirúrgica incisional profunda</item>
+		<item>Infección de órganos y espacios</item>
+	</string-array>
+	
 </resources>
