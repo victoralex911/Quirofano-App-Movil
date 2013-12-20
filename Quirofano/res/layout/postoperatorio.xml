@@ -47,11 +47,19 @@
                     android:layout_height="wrap_content"
                     android:text="Salida de quirófano" />
 
+                <!--  
                 <EditText
                     android:id="@+id/salida"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" 
-                    android:hint="YYYY-MM-DD HH:MM" />
+                    android:hint="YYYY-MM-DD HH:MM" /> -->
+               
+               	<TextView
+                    android:id="@+id/hour"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" 
+                    android:textSize="18sp"
+                    android:text="HH:MM" />
             </LinearLayout>
 
             <LinearLayout

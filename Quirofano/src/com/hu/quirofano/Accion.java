@@ -27,6 +27,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,6 +55,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import android.widget.DatePicker;
@@ -64,6 +66,7 @@ import com.hu.quirofano.Item02.GetQuirofanoName;
 import com.hu.quirofano.Item1.Agenda;
 import com.hu.quirofano.Item1.EnviarProcedimientos;
 import com.hu.quirofano.Item1.Formulario;
+import com.hu.quirofano.Item1.GetProcedimientosProgramada;
 import com.hu.quirofano.Item1.GetSalas;
 
 public class Accion extends SherlockFragment{
@@ -75,6 +78,7 @@ public class Accion extends SherlockFragment{
     String URL_connect1="http://"+IP_Server+"/androidlogin/iniciarCirugia.php";
     String URL_connect2="http://"+IP_Server+"/androidlogin/getTurno.php";
     String URL_connect3="http://"+IP_Server+"/androidlogin/diferirCirugia.php";
+    String URL_connect4="http://"+IP_Server+"/androidlogin/getCausaDiferido.php";
     
     View ll;
     TextView agregarTema;
@@ -100,6 +104,11 @@ public class Accion extends SherlockFragment{
 	
 	//*****************
 	
+	//Para timePicker
+	private TextView mPickedTimeText;
+    static int horas;
+    static int minutos;
+	
 	RadioGroup tiempoFuera;
 	RadioButton si;
 	RadioButton no;
@@ -113,6 +122,11 @@ public class Accion extends SherlockFragment{
 	//DIFERIR CIRUGIA ***********************
 	EditText causaDiferido;
 	Button aceptar;
+	
+	ArrayList<ArrayList<String>> arrayCausaDiferido = new ArrayList<ArrayList<String>>();
+	ArrayList<String> arrayCausaDiferidoNombre = new ArrayList<String>();
+	static int causaNumber;
+	
 	//DIFERIR CIRUGIA ***********************
 	
 	boolean result_back;
@@ -145,7 +159,7 @@ public class Accion extends SherlockFragment{
 		tiempoFuera = (RadioGroup) iniciar.findViewById(R.id.tiempoFuera);
 		
 		//EditText
-		ingresar = (EditText) iniciar.findViewById(R.id.ingreso);
+		//ingresar = (EditText) iniciar.findViewById(R.id.ingreso);
 		medico_name = (EditText) iniciar.findViewById(R.id.medico);
 		cirujano_name = (EditText) iniciar.findViewById(R.id.cirujano);
 		anestesiologo = (EditText) iniciar.findViewById(R.id.anestesiologo);
@@ -156,11 +170,12 @@ public class Accion extends SherlockFragment{
 		observaciones = (EditText) iniciar.findViewById(R.id.observaciones);
 		
 		//DIFERIR CIRUGIA
-		causaDiferido = (EditText) diferir.findViewById(R.id.causa_diferido);
+		//causaDiferido = (EditText) diferir.findViewById(R.id.causa_diferido);
 		aceptar = (Button) diferir.findViewById(R.id.botonGuardar);
 		//DIFERIR CIRUGIA
 		
-		new GetTurno().execute(myString[6]);
+		new GetCausaDiferido().execute(myString[5]);	//ID del registro seleccionado
+		new GetTurno().execute(myString[6]);			//ID del quirofano
 
 		//Button po = (Button)v.findViewById(R.id.po);
 		//Button salas = (Button)v.findViewById(R.id.salas);
@@ -208,6 +223,19 @@ public class Accion extends SherlockFragment{
 			public void onClick(View v) {
 				sv.removeAllViews();
 				sv.addView(iniciar);
+				
+				/** PARA TIME PICKER***************************************************** */
+		        mPickedTimeText = (TextView) iniciar.findViewById(R.id.hour);
+		        mPickedTimeText.setOnClickListener(new OnClickListener()
+		        {
+		            @Override
+		            public void onClick(View v ){
+		            	showTimePicker();
+		            }
+		        });
+		        
+		        /** PARA TIME PICKER *****************************************************/
+				
 				//Primer spinner - turno del instrumentista
 				Spinner sp = (Spinner) iniciar.findViewById(R.id.turnoInstrumentista);
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
@@ -274,7 +302,8 @@ public class Accion extends SherlockFragment{
 						System.out.println("Tiempo fuera int = "+t);
 				        System.out.println("tipo sProtocolo = "+time.getClass().getName()+"tiempo fuera st = "+time);
 						
-		        		String ingreso = ingresar.getText().toString();
+		        		//String ingreso = ingresar.getText().toString();
+				        String ingreso = Integer.toString(horas)+":"+Integer.toString(minutos);
 		        		String nombre_medico = medico_name.getText().toString();
 		        		String nombre_cirujano = cirujano_name.getText().toString();
 		        		String nombre_anestesiologo = anestesiologo.getText().toString();
@@ -319,9 +348,30 @@ public class Accion extends SherlockFragment{
 				sv.removeAllViews();
 				sv.addView(diferir);
 				
+				Spinner sp = (Spinner) diferir.findViewById(R.id.causa_diferido);
+				
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_spinner_item, arrayCausaDiferidoNombre);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				
+				sp.setAdapter(adapter);
+				sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+					public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+							int position, long id) {
+
+						parentView.getItemAtPosition(position);
+						int causa=position;
+						causaNumber = causa;
+					}
+
+					public void onNothingSelected(AdapterView<?> parentView) {
+					}
+				});
+				
 				aceptar.setOnClickListener(new OnClickListener(){
 					public void onClick(View v){
-						String causa_dif = causaDiferido.getText().toString();
+						//String causa_dif = causaDiferido.getText().toString();
+						String causa_dif = arrayCausaDiferido.get(causaNumber).get(0);
 						
 						if (validarDiferido(causa_dif) == true){
 		        			new CausaDiferido().execute(causa_dif);
@@ -377,8 +427,8 @@ public class Accion extends SherlockFragment{
     
     public void aceptar() {
     	new CancelarCirugia().execute(myString[0], myString[1], myString[2], myString[3], myString[4], myString[5]);
-        Toast t=Toast.makeText(getActivity(),"Cirugía cancelada", Toast.LENGTH_SHORT);
-        t.show();
+        //Toast t=Toast.makeText(getActivity(),"Cirugía cancelada", Toast.LENGTH_SHORT);
+        //t.show();
     }
     
     public void cancelar() {
@@ -610,6 +660,52 @@ public class Accion extends SherlockFragment{
 		
 	}//Fin de causaDiferido
     
+    //Traer las causas de diferido del server, para llenar el spinner de diferir cirugia
+  	public ArrayList<String> getCausaDiferido(String registro_id){
+  		arrayCausaDiferido.clear();
+  		
+  		ArrayList<String> causaDiferidoTemporal = new ArrayList<String>();
+  		
+  		String val, value;
+  		
+  		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+  		datosEnviar.add(new BasicNameValuePair("registro_id",registro_id));
+  		
+  		JSONArray jdata=post.getserverdata(datosEnviar, URL_connect4);
+  		
+  		if (jdata!=null && jdata.length() > 0){
+  		
+  			try {
+  				
+  				for(int n = 0; n < jdata.length(); n++){
+
+  					JSONObject json_data = jdata.getJSONObject(n);
+  					val = json_data.getString("dat");		//Obtiene el id de la causa de diferido
+  					value = json_data.getString("dato");	//Obtiene los nombres de la causa de diferido
+  					
+  					ArrayList<String> temporary = new ArrayList<String>();
+  					temporary.add(val);
+  					temporary.add(value);
+  					
+  					arrayCausaDiferido.add(temporary);
+  					
+  					causaDiferidoTemporal.add(value);
+  				}
+  			}
+  			catch (JSONException e) {
+  				// TODO Auto-generated catch block
+  				e.printStackTrace();
+  				Log.e("hi", "hi");
+  			}		            			
+      	}//Fin de if(comprueba si lo obtenido no es "null")
+      	
+      	else{	//json obtenido invalido verificar parte WEB.
+      		Log.e("JSON getQuirofanoId  ", "ERROR");
+  	    	//return false;
+  	    }//Fin de else
+  		return causaDiferidoTemporal;
+  	}//Fin de getCausaDiferido
+    
     public void mostrarLeyenda(){
 		Toast t = Toast.makeText(getActivity().getApplicationContext(), "Datos guardados con éxito", Toast.LENGTH_SHORT);
 		t.show();
@@ -655,6 +751,15 @@ public class Accion extends SherlockFragment{
         protected void onPostExecute(String resultado) {
         	//progress.dismiss();//ocultamos progess dialog.
             Log.e("onPostExecute=","status="+resultado);
+            
+            if (resultado.equals("ok")){
+            	Toast t=Toast.makeText(getActivity(),"Cirugía cancelada", Toast.LENGTH_SHORT);
+                t.show();
+            }
+            else{
+            	Toast t=Toast.makeText(getActivity(),"No se pudo realizar la acción", Toast.LENGTH_SHORT);
+                t.show();
+            }
             
         }//Fin de onPostExecute        
 	}//Fin de la subclase CancelarCirugia
@@ -775,5 +880,59 @@ public class Accion extends SherlockFragment{
             }
         }//Fin de onPostExecute        
 	}//Fin de la subclase CausaDiferido
+    
+    //Sub clase para obtener las causas de diferido
+  	class GetCausaDiferido extends AsyncTask< String, String, ArrayList<String>> {
+  		String quir; //El string id del registro seleccionado
+  			
+  	    protected void onPreExecute() {
+  	    	super.onPreExecute();
+  	    }
+  	    	
+      	protected ArrayList<String> doInBackground(String... params) {
+  			quir=params[0]; //obtenemos el string de id del registro 
+  			ArrayList<String> tempoCausaDiferido = new ArrayList<String>();
+  			tempoCausaDiferido = getCausaDiferido(quir);
+      		return tempoCausaDiferido;
+  		}//Fin de doInBackground
+  	       
+      	protected void onPostExecute(ArrayList<String> resultado) {	    		
+  	    	arrayCausaDiferidoNombre = resultado;
+  	    	System.out.println("LAS-CAUSAS-DIFERIDO = "+arrayCausaDiferidoNombre);
+      	}//Fin de onPostExecute        		
+  	}//Fin de la subclase GetCausaDiferido
+    
+    //PARA TIMEPICKER ***********************************************************************************
+	 
+	 private void showTimePicker() {
+		  TimePickerFragment time = new TimePickerFragment();
+		  /**
+		   * Set Up Current Date Into dialog
+		   */
+		  Calendar calender = Calendar.getInstance();
+		  Bundle args = new Bundle();
+		  args.putInt("hour", calender.get(Calendar.YEAR));
+		  args.putInt("minutes", calender.get(Calendar.MONTH));
+		  time.setArguments(args);
+		  /**
+		   * Set Call back to capture selected date
+		   */
+		  time.setCallBack(ontime);
+		  time.show(getFragmentManager(), "Date Picker");
+	}
+	
+	//2
+	OnTimeSetListener ontime = new OnTimeSetListener() {
+		  @Override
+		  public void onTimeSet(TimePicker view, int hour, int minutes) {
+			  horas = hour;
+			  minutos = minutes;
+		   Toast.makeText(getActivity().getApplicationContext(), String.valueOf(hour) + ":" + String.valueOf(minutes), Toast.LENGTH_SHORT).show();
+		   String all = Integer.toString(horas)+":"+ Integer.toString(minutos);
+		   mPickedTimeText.setText("  "+all);
+		  }
+		 };
+	 
+	//PARA TIMEPICKER ***********************************************************************************
     
 }//Fin de la clase Accion

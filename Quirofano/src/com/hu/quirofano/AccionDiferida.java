@@ -66,12 +66,13 @@ import com.hu.quirofano.Item1.Agenda;
 public class AccionDiferida extends SherlockFragment{
 
 	HttpPostAux post;
-    String IP_Server="172.16.0.150";//IP DE NUESTRO PC
+    //String IP_Server="172.16.0.150";//IP DE NUESTRO PC
+	String IP_Server = MainActivity.IP_Server;
     String URL_connect="http://"+IP_Server+"/androidlogin/cancelarCirugia.php";
     
     View ll;
     TextView agregarTema;
-    String myString[] = new String[6];
+    String myString[] = new String[7];
     
     ArrayList<ArrayList<String>> padre = new ArrayList<ArrayList<String>>();
     ArrayList<String> nombres = new ArrayList<String>();
@@ -164,8 +165,8 @@ public class AccionDiferida extends SherlockFragment{
     
     public void aceptar() {
     	new CancelarCirugia().execute(myString[0], myString[1], myString[2], myString[3], myString[4], myString[5]);
-        Toast t=Toast.makeText(getActivity(),"Cirugía cancelada", Toast.LENGTH_SHORT);
-        t.show();
+        //Toast t=Toast.makeText(getActivity(),"Cirugía cancelada", Toast.LENGTH_SHORT);
+        //t.show();
     }
     
     public void cancelar() {
@@ -243,8 +244,17 @@ public class AccionDiferida extends SherlockFragment{
        
         protected void onPostExecute(String resultado) {
         	//progress.dismiss();//ocultamos progess dialog.
-            Log.e("onPostExecute=","status="+resultado);
+            //Log.e("onPostExecute=","status="+resultado);
             
+        	if (resultado.equals("ok")){
+            	Toast t=Toast.makeText(getActivity(),"Cirugía cancelada", Toast.LENGTH_SHORT);
+                t.show();
+            }
+            else{
+            	Toast t=Toast.makeText(getActivity(),"No se pudo realizar la acción", Toast.LENGTH_SHORT);
+                t.show();
+            }
+        	
         }//Fin de onPostExecute        
 	}//Fin de la subclase CancelarCirugia
     

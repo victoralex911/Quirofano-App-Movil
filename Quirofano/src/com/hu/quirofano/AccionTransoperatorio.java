@@ -27,6 +27,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,6 +53,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TimePicker;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -124,6 +126,12 @@ public class AccionTransoperatorio extends SherlockFragment{
     //RadioGroup y RadioButton
     RadioGroup destinoDelPaciente;
 	RadioButton destino;
+	
+	//Para timePicker
+	private TextView mPickedTimeText;
+	static int horas;
+	static int minutos;
+	
     //FINALIZAR CIRUGIA
     
     //RadioButton
@@ -163,7 +171,7 @@ public class AccionTransoperatorio extends SherlockFragment{
 		destinoDelPaciente = (RadioGroup) finalizar.findViewById(R.id.destino);
 		
 		//Finalizar cirugia - EditText
-		salida = (EditText) finalizar.findViewById(R.id.salida);
+		//salida = (EditText) finalizar.findViewById(R.id.salida);
 		eventosEnAnestesia = (EditText) finalizar.findViewById(R.id.eventosAnestesia);
 		complicaciones = (EditText) finalizar.findViewById(R.id.complicaciones);
 		
@@ -187,6 +195,19 @@ public class AccionTransoperatorio extends SherlockFragment{
 				sv.addView(finalizar);
 				//linearCheckBox.removeAllViews();
 				new GetPersonalNombreID(inflater, container, finalizar).execute(myString[5]);
+				
+				/** PARA TIME PICKER***************************************************** */
+		        mPickedTimeText = (TextView) finalizar.findViewById(R.id.hour);
+		        mPickedTimeText.setOnClickListener(new OnClickListener()
+		        {
+		            @Override
+		            public void onClick(View v ){
+		            	showTimePicker();
+		            }
+		        });
+		        
+		        /** PARA TIME PICKER *****************************************************/
+				
 				//SPINNER PARA LA CLASIFICACION DE LA CIRUGIA 
 				Spinner spinner01 = (Spinner) finalizar.findViewById(R.id.clasificacion);
     			
@@ -349,7 +370,8 @@ public class AccionTransoperatorio extends SherlockFragment{
 				        
 				        System.out.println("string destino = "+destiny+" - int destino = "+d);
 						
-						String sSalida = salida.getText().toString();
+						//String sSalida = salida.getText().toString();
+				        String sSalida = Integer.toString(horas)+":"+Integer.toString(minutos);
 						String sEventosEnAnestesia = eventosEnAnestesia.getText().toString();
 						String sComplicaciones = complicaciones.getText().toString();
 
@@ -1165,5 +1187,38 @@ public class AccionTransoperatorio extends SherlockFragment{
         }//Fin de onPostExecute        
 		
 	}//Fin de la subclase GetPersonalNombreID
+    
+    //PARA TIMEPICKER ***********************************************************************************
+	 
+  	 private void showTimePicker() {
+  		  TimePickerFragment time = new TimePickerFragment();
+  		  /**
+  		   * Set Up Current Date Into dialog
+  		   */
+  		  Calendar calender = Calendar.getInstance();
+  		  Bundle args = new Bundle();
+  		  args.putInt("hour", calender.get(Calendar.YEAR));
+  		  args.putInt("minutes", calender.get(Calendar.MONTH));
+  		  time.setArguments(args);
+  		  /**
+  		   * Set Call back to capture selected date
+  		   */
+  		  time.setCallBack(ontime);
+  		  time.show(getFragmentManager(), "Date Picker");
+  	}
+  	
+  	//2
+  	OnTimeSetListener ontime = new OnTimeSetListener() {
+  		  @Override
+  		  public void onTimeSet(TimePicker view, int hour, int minutes) {
+  			  horas = hour;
+  			  minutos = minutes;
+  		   Toast.makeText(getActivity().getApplicationContext(), String.valueOf(hour) + ":" + String.valueOf(minutes), Toast.LENGTH_SHORT).show();
+  		   String all = Integer.toString(horas)+":"+ Integer.toString(minutos);
+  		   mPickedTimeText.setText("  "+all);
+  		  }
+  		 };
+  	 
+  	//PARA TIMEPICKER ***********************************************************************************
     
 }//Fin de la clase AccionTransoperatorio

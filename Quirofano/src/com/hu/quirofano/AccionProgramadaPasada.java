@@ -61,6 +61,7 @@ import android.widget.DatePicker;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.hu.libreria.HttpPostAux;
 import com.hu.quirofano.Accion.CausaDiferido;
+import com.hu.quirofano.Accion.GetCausaDiferido;
 import com.hu.quirofano.Item02.GetQuirofanoName;
 import com.hu.quirofano.Item1.Agenda;
 
@@ -71,10 +72,16 @@ public class AccionProgramadaPasada extends SherlockFragment{
 	String IP_Server = MainActivity.IP_Server;
     String URL_connect="http://"+IP_Server+"/androidlogin/cancelarCirugia.php";
     String URL_connect2="http://"+IP_Server+"/androidlogin/diferirCirugia.php";
+    String URL_connect3="http://"+IP_Server+"/androidlogin/getCausaDiferido.php";
+
     
     //Diferir cirugia
     EditText causaDiferido;
     Button aceptar;
+    
+    ArrayList<ArrayList<String>> arrayCausaDiferido = new ArrayList<ArrayList<String>>();
+	ArrayList<String> arrayCausaDiferidoNombre = new ArrayList<String>();
+	static int causaNumber;
     //Diferir cirugia
     
     View ll;
@@ -109,8 +116,10 @@ public class AccionProgramadaPasada extends SherlockFragment{
 		Button diferirButton = (Button)v.findViewById(R.id.diferir);
 		
 		//DIFERIR CIRUGIA
-		causaDiferido = (EditText) diferir.findViewById(R.id.causa_diferido);
+		//causaDiferido = (EditText) diferir.findViewById(R.id.causa_diferido);
 		aceptar = (Button) diferir.findViewById(R.id.botonGuardar);
+		
+		new GetCausaDiferido().execute(myString[5]);	//ID del registro seleccionado
 		//DIFERIR CIRUGIA
 		
 		//CANCELAR BUTTON
@@ -144,9 +153,30 @@ public class AccionProgramadaPasada extends SherlockFragment{
 				sv.removeAllViews();
 				sv.addView(diferir);
 				
+				Spinner sp = (Spinner) diferir.findViewById(R.id.causa_diferido);
+				
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_spinner_item, arrayCausaDiferidoNombre);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				
+				sp.setAdapter(adapter);
+				sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+					public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+							int position, long id) {
+
+						parentView.getItemAtPosition(position);
+						int causa=position;
+						causaNumber = causa;
+					}
+
+					public void onNothingSelected(AdapterView<?> parentView) {
+					}
+				});
+				
 				aceptar.setOnClickListener(new OnClickListener(){
 					public void onClick(View v){
-						String causa_dif = causaDiferido.getText().toString();
+//						String causa_dif = causaDiferido.getText().toString();
+						String causa_dif = arrayCausaDiferido.get(causaNumber).get(0);
 						
 						if (validarDiferido(causa_dif) == true){
 		        			new CausaDiferido().execute(causa_dif);
@@ -289,6 +319,52 @@ public class AccionProgramadaPasada extends SherlockFragment{
 	    	return false;
 	    }//Fin de else
     }//Fin de cancelarCirugia
+    
+    //Traer las causas de diferido del server, para llenar el spinner de diferir cirugia
+  	public ArrayList<String> getCausaDiferido(String registro_id){
+  		arrayCausaDiferido.clear();
+  		
+  		ArrayList<String> causaDiferidoTemporal = new ArrayList<String>();
+  		
+  		String val, value;
+  		
+  		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+  		datosEnviar.add(new BasicNameValuePair("registro_id",registro_id));
+  		
+  		JSONArray jdata=post.getserverdata(datosEnviar, URL_connect3);
+  		
+  		if (jdata!=null && jdata.length() > 0){
+  		
+  			try {
+  				
+  				for(int n = 0; n < jdata.length(); n++){
+
+  					JSONObject json_data = jdata.getJSONObject(n);
+  					val = json_data.getString("dat");		//Obtiene el id de la causa de diferido
+  					value = json_data.getString("dato");	//Obtiene los nombres de la causa de diferido
+  					
+  					ArrayList<String> temporary = new ArrayList<String>();
+  					temporary.add(val);
+  					temporary.add(value);
+  					
+  					arrayCausaDiferido.add(temporary);
+  					
+  					causaDiferidoTemporal.add(value);
+  				}
+  			}
+  			catch (JSONException e) {
+  				// TODO Auto-generated catch block
+  				e.printStackTrace();
+  				Log.e("hi", "hi");
+  			}		            			
+      	}//Fin de if(comprueba si lo obtenido no es "null")
+      	
+      	else{	//json obtenido invalido verificar parte WEB.
+      		Log.e("JSON getQuirofanoId  ", "ERROR");
+  	    	//return false;
+  	    }//Fin de else
+  		return causaDiferidoTemporal;
+  	}//Fin de getCausaDiferido
 
     class CancelarCirugia extends AsyncTask< String, String, String> {
 		
@@ -371,5 +447,26 @@ public class AccionProgramadaPasada extends SherlockFragment{
             }
         }//Fin de onPostExecute        
 	}//Fin de la subclase CausaDiferido
+    
+    //Sub clase para obtener las causas de diferido
+  	class GetCausaDiferido extends AsyncTask< String, String, ArrayList<String>> {
+  		String quir; //El string id del registro seleccionado
+  			
+  	    protected void onPreExecute() {
+  	    	super.onPreExecute();
+  	    }
+  	    	
+      	protected ArrayList<String> doInBackground(String... params) {
+  			quir=params[0]; //obtenemos el string de id del registro 
+  			ArrayList<String> tempoCausaDiferido = new ArrayList<String>();
+  			tempoCausaDiferido = getCausaDiferido(quir);
+      		return tempoCausaDiferido;
+  		}//Fin de doInBackground
+  	       
+      	protected void onPostExecute(ArrayList<String> resultado) {	    		
+  	    	arrayCausaDiferidoNombre = resultado;
+  	    	System.out.println("LAS-CAUSAS-DIFERIDO = "+arrayCausaDiferidoNombre);
+      	}//Fin de onPostExecute        		
+  	}//Fin de la subclase GetCausaDiferido
     
 }//Fin de la clase Accion

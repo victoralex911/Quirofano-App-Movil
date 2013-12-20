@@ -2409,7 +2409,7 @@ public class Item1 extends SherlockFragment {
 	    	//return false;
 	    }//Fin de else
 		return serviciosTemporal;
-	}//Fin de getSalas
+	}//Fin de getServicios
 	
 	
 	
@@ -2725,20 +2725,11 @@ public class Item1 extends SherlockFragment {
     		    public void onClick(View v) {
     		    		//Esta es la posicion del array padre sobre el que se hizo click
     		    		System.out.println("id = "+v.getId());  
-    		    		
-    		    		//Ahora se debe obtener el quirofano_id y el quirofano_name, desde v.getId()
-    		            
-    		    		//switch(v.getId())
-    		            //{
-    			            //case 0: System.out.println("0");
-    		                //break;
+    		    	
 	    		        Fragment duedateFrag = new AccionDiferida();	
 	    		        Bundle bundle = new Bundle();
 	    		                	    		                
-	    		        String miArreglo[] = new String[6];
-	    		              
-//	    		        miArreglo[0] = padre.get(v.getId()).get(0);		//llenar con id_quirofano
-//	    		        miArreglo[1] = padre.get(v.getId()).get(1);		//llenar con el nombre del quirofano
+	    		        String miArreglo[] = new String[7];
 	    		        
 	    		        miArreglo[0] = arrayDiferidas.get(v.getId()).get(0);		//Llenar con la fecha
 				        miArreglo[1] = arrayDiferidas.get(v.getId()).get(1);		//Llenar con la hora
@@ -2746,10 +2737,7 @@ public class Item1 extends SherlockFragment {
 				        miArreglo[3] = arrayDiferidas.get(v.getId()).get(3);		//Paciente
 				        miArreglo[4] = arrayDiferidas.get(v.getId()).get(4);		//Diagnostico
 				        miArreglo[5] = arrayDiferidas.get(v.getId()).get(5);		//ID
-	    		                
-//	    		        System.out.println("POSICION DE QUIROFANO_ID = "+v.getId());
-//	    		        System.out.println("ARREGLO-QUIROFANO_ID = "+miArreglo[0]);
-//	    		        System.out.println("ARREGLO-QUIROFANO_NAME = "+miArreglo[1]);
+				        miArreglo[6] = ID_quirofano;					//Pasar el id del quirofano seleccionado
 	    		                	    		                	    		                
 	    		        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Accion
 	    		        duedateFrag.setArguments(bundle);
@@ -4093,12 +4081,12 @@ public class Item1 extends SherlockFragment {
 	    		                	    		                
 	    		        String miArreglo[] = new String[7];
 	    		        
-	    		        miArreglo[0] = arrayTransoperatorio.get(v.getId()).get(0);		//Llenar con la fecha
-				        miArreglo[1] = arrayTransoperatorio.get(v.getId()).get(1);		//Llenar con la hora
-				        miArreglo[2] = arrayTransoperatorio.get(v.getId()).get(2);		//Sala	
-				        miArreglo[3] = arrayTransoperatorio.get(v.getId()).get(3);		//Paciente
-				        miArreglo[4] = arrayTransoperatorio.get(v.getId()).get(4);		//Diagnostico
-				        miArreglo[5] = arrayTransoperatorio.get(v.getId()).get(5);		//ID
+	    		        miArreglo[0] = arrayTransoperatorioActual.get(v.getId()).get(0);		//Llenar con la fecha
+				        miArreglo[1] = arrayTransoperatorioActual.get(v.getId()).get(1);		//Llenar con la hora
+				        miArreglo[2] = arrayTransoperatorioActual.get(v.getId()).get(2);		//Sala	
+				        miArreglo[3] = arrayTransoperatorioActual.get(v.getId()).get(3);		//Paciente
+				        miArreglo[4] = arrayTransoperatorioActual.get(v.getId()).get(4);		//Diagnostico
+				        miArreglo[5] = arrayTransoperatorioActual.get(v.getId()).get(5);		//ID
 				        miArreglo[6] = ID_quirofano;									//Pasar el id del quirofano seleccionado
 	    		                	    		                	    		                
 	    		        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Accion
@@ -4126,12 +4114,12 @@ public class Item1 extends SherlockFragment {
 	    		                	    		                
 	    		        String miArreglo[] = new String[6];
 	    		        
-	    		        miArreglo[0] = arrayRealizadas.get(v.getId()).get(0);		//Llenar con la fecha
-				        miArreglo[1] = arrayRealizadas.get(v.getId()).get(1);		//Llenar con la hora
-				        miArreglo[2] = arrayRealizadas.get(v.getId()).get(2);		//Sala	
-				        miArreglo[3] = arrayRealizadas.get(v.getId()).get(3);		//Paciente
-				        miArreglo[4] = arrayRealizadas.get(v.getId()).get(4);		//Diagnostico
-				        miArreglo[5] = arrayRealizadas.get(v.getId()).get(5);		//ID
+	    		        miArreglo[0] = arrayRealizadasActual.get(v.getId()).get(0);		//Llenar con la fecha
+				        miArreglo[1] = arrayRealizadasActual.get(v.getId()).get(1);		//Llenar con la hora
+				        miArreglo[2] = arrayRealizadasActual.get(v.getId()).get(2);		//Sala	
+				        miArreglo[3] = arrayRealizadasActual.get(v.getId()).get(3);		//Paciente
+				        miArreglo[4] = arrayRealizadasActual.get(v.getId()).get(4);		//Diagnostico
+				        miArreglo[5] = arrayRealizadasActual.get(v.getId()).get(5);		//ID
 	    		                	    		                	    		                
 	    		        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Accion
 	    		        duedateFrag.setArguments(bundle);
@@ -4157,12 +4145,12 @@ public class Item1 extends SherlockFragment {
 	    		                	    		                
 	    		        String miArreglo[] = new String[6];
 	    		        
-	    		        miArreglo[0] = arrayDiferidas.get(v.getId()).get(0);		//Llenar con la fecha
-				        miArreglo[1] = arrayDiferidas.get(v.getId()).get(1);		//Llenar con la hora
-				        miArreglo[2] = arrayDiferidas.get(v.getId()).get(2);		//Sala	
-				        miArreglo[3] = arrayDiferidas.get(v.getId()).get(3);		//Paciente
-				        miArreglo[4] = arrayDiferidas.get(v.getId()).get(4);		//Diagnostico
-				        miArreglo[5] = arrayDiferidas.get(v.getId()).get(5);		//ID
+	    		        miArreglo[0] = arrayDiferidasActual.get(v.getId()).get(0);		//Llenar con la fecha
+				        miArreglo[1] = arrayDiferidasActual.get(v.getId()).get(1);		//Llenar con la hora
+				        miArreglo[2] = arrayDiferidasActual.get(v.getId()).get(2);		//Sala	
+				        miArreglo[3] = arrayDiferidasActual.get(v.getId()).get(3);		//Paciente
+				        miArreglo[4] = arrayDiferidasActual.get(v.getId()).get(4);		//Diagnostico
+				        miArreglo[5] = arrayDiferidasActual.get(v.getId()).get(5);		//ID
 	    		                	    		                	    		                
 	    		        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Accion
 	    		        duedateFrag.setArguments(bundle);
