@@ -4,6 +4,6 @@
     <item android:drawable="@android:drawable/list_selector_background" android:state_focused="true" android:state_pressed="true"></item>
     <item android:drawable="@android:drawable/list_selector_background" android:state_focused="true" android:state_pressed="false"></item>
     <item android:drawable="@android:drawable/list_selector_background" android:state_focused="false" android:state_pressed="true"/>
-    <item android:drawable="@color/realizada"></item>
+    <item android:drawable="@color/transoperatorio"></item>
 
 </selector>

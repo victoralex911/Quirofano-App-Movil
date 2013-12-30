@@ -270,6 +270,7 @@ public class ProgramarCirugiaView extends Activity {
 		
 		//Button test = (Button)view.findViewById(R.id.test);
 		vista.clear();
+		parent.removeAllViews();	//ELIMINAR LAS VISTAS DE LOS PROCEDIMIENTOS DINAMICOS
 		/*
 		test.setOnClickListener(new OnClickListener(){
 
@@ -305,7 +306,7 @@ public class ProgramarCirugiaView extends Activity {
 		vista.add(objeto);
 		LinearLayout ll = (LinearLayout) objeto.getView();
 		parent.addView(ll);
-
+		
 		Spinner region = (Spinner) ll.findViewById(R.id.region);
 		ArrayAdapter adapter5 = ArrayAdapter.createFromResource(
 				context, R.array.listaRegion, android.R.layout.simple_spinner_item);
