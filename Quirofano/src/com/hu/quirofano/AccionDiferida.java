@@ -116,12 +116,20 @@ public class AccionDiferida extends SherlockFragment{
 	static int anio;
 	static int mesDelAnio;
 	static int diaDelMes;
+	//3enero
+	static String sAnio;
+	static String sMesDelAnio;
+	static String sDiaDelMes;
+	
 	private TextView pDisplayDate;
 	
 	//PARA EL TIME PICKER ************************
     private TextView mPickedTimeText;
     static int horas;
     static int minutos;
+    //3enero
+    static String sHoras;
+    static String sMinutos;
     
 //    ArrayList<String> nombreDeSalas = new ArrayList<String>();	//Alojar nombre de salas
     ArrayList<String> nombreDeSalas = Item1.nombreSalas;
@@ -422,8 +430,11 @@ public class AccionDiferida extends SherlockFragment{
 		        		//String date = fecha.getText().toString();
 		        		//String hora=horaPropuesta.getText().toString();
 						
-						String date = Integer.toString(anio)+"-"+Integer.toString(mesDelAnio)+"-"+Integer.toString(diaDelMes); 
-						String hora = Integer.toString(horas)+":"+Integer.toString(minutos);
+//						String date = Integer.toString(anio)+"-"+Integer.toString(mesDelAnio)+"-"+Integer.toString(diaDelMes); 
+//						String hora = Integer.toString(horas)+":"+Integer.toString(minutos);
+						
+						String date = sAnio+"-"+sMesDelAnio+"-"+sDiaDelMes; 
+						String hora = sHoras+":"+sMinutos;
 						
 				        String reg = registro.getText().toString();
 				        String paciente = nombreDelPaciente.getText().toString();
@@ -785,6 +796,7 @@ public class AccionDiferida extends SherlockFragment{
   	
   	class Formulario extends AsyncTask< String, String, String > {
   	   	 
+  		String status;
     	//String date, hora, reg, paciente;
     	String registro_ID, date, hora, reg, paciente, sEdad, sGenero, sProcedencia, sDiagnostico, sMedico,
     	sRiesgoQuirurgico, sInsumosIndispensables, sRequerimientos, sHemoderivados, sRequisitos,
@@ -795,7 +807,7 @@ public class AccionDiferida extends SherlockFragment{
     	
     	protected void onPreExecute() {
     		progress = ProgressDialog.show(
-    		getActivity(), null, "Programando cirugía ...");
+    		getActivity(), null, "Modificando cirugía ...");
             super.onPreExecute();
         }
     	
@@ -827,27 +839,57 @@ public class AccionDiferida extends SherlockFragment{
 			registro_ID = params[22];
 			
 			//enviamos y recibimos y analizamos los datos en segundo plano.
-    		if (enviarFormulario(date, hora, reg, paciente, sEdad, sGenero, sProcedencia,
+//    		if (enviarFormulario(date, hora, reg, paciente, sEdad, sGenero, sProcedencia,
+//    				sDiagnostico, sMedico, sRiesgoQuirurgico, sInsumosIndispensables, sRequerimientos,
+//    				sHemoderivados, sRequisitos, sNecesidades, sSala, sDuracion, sProgramacion,
+//    				sServicio, sAtencion, sP , sR, registro_ID)==true){    		    		
+//    			return "ok"; //login valido
+//    		}else{    		
+//    			return "error"; //login invalido     	          	  
+//    		}	
+			//3 enero
+			status = enviarFormulario(date, hora, reg, paciente, sEdad, sGenero, sProcedencia,
     				sDiagnostico, sMedico, sRiesgoQuirurgico, sInsumosIndispensables, sRequerimientos,
     				sHemoderivados, sRequisitos, sNecesidades, sSala, sDuracion, sProgramacion,
-    				sServicio, sAtencion, sP , sR, registro_ID)==true){    		    		
-    			return "ok"; //login valido
-    		}else{    		
-    			return "error"; //login invalido     	          	  
-    		}	
+    				sServicio, sAtencion, sP , sR, registro_ID);
+			
+			return status;
+			
 		}//Fin de doInBackground
         
         protected void onPostExecute(String result) {
         	progress.dismiss();//ocultamos progess dialog.
             Log.e("onPostExecute=",""+result);
             
-            if (result.equals("ok")){
-            	//mostrarLeyenda(); //cambiar esto, mostrar leyenda despues de enviar los procedimientos
-            	//Nueva subclase: EnviarProcedimientos
-            	new EnviarProcedimientos().execute(registro_ID);
+//            if (result.equals("ok")){
+//            	//mostrarLeyenda(); //cambiar esto, mostrar leyenda despues de enviar los procedimientos
+//            	//Nueva subclase: EnviarProcedimientos
+//            	new EnviarProcedimientos().execute(registro_ID);
+//            }
+//            else {
+//             	error2();
+//            }
+            String sub = result.substring(0,1);
+            System.out.println("SUBSTRING: "+sub);
+
+            if (result.equals("error1")) {
+             	error3();
+//            	System.out.println("ERROR EN PROGRAMACION DE CIRUGIA!!");
+            }
+            else if (result.equals("error2")) {
+             	error4();
+//            	System.out.println("ERROR EN PROGRAMACION DE CIRUGIA!!");
+            }
+            else if (result.equals("error")) {
+             	error2();
+            	System.out.println("ERROR EN PROGRAMACION DE CIRUGIA!!");
+            }
+            else if (sub.equals("w")){
+            	error5(result);
             }
             else {
-             	error2();
+//            	new EnviarProcedimientos(inflater, container, sv, home).execute(registroID); para regresar a home
+            	new EnviarProcedimientos().execute(registro_ID);
             }
         }//Fin de onPostExecute        
 	}//Fin de la subclase Formulario
@@ -879,11 +921,30 @@ public class AccionDiferida extends SherlockFragment{
  		  @Override
  		  public void onDateSet(DatePicker view, int year, int monthOfYear, //antes int
  		    int dayOfMonth) {
- 			  anio = year;
- 			  mesDelAnio = monthOfYear+1;
- 			  diaDelMes = dayOfMonth;
- 		   Toast.makeText(getActivity().getApplicationContext(), String.valueOf(year) + "-" + String.valueOf(monthOfYear+1) + "-" + String.valueOf(dayOfMonth), Toast.LENGTH_SHORT).show();
- 		   String all = Integer.toString(anio)+"-"+ Integer.toString(mesDelAnio)+"-"+ Integer.toString(diaDelMes);
+// 			  anio = year;
+// 			  mesDelAnio = monthOfYear+1;
+// 			  diaDelMes = dayOfMonth;
+ 			  
+ 			 sAnio = Integer.toString(year);
+			  monthOfYear = monthOfYear+1;
+			  if(monthOfYear<10){
+				  sMesDelAnio = "0"+Integer.toString(monthOfYear);
+			  }
+			  else{
+				  sMesDelAnio = Integer.toString(monthOfYear);
+			  }
+			  
+			  if(dayOfMonth<10){
+				  sDiaDelMes = "0"+Integer.toString(dayOfMonth);
+			  }
+			  else{
+				  sDiaDelMes = Integer.toString(dayOfMonth);
+			  }
+ 			  
+ 			  
+ 		   Toast.makeText(getActivity().getApplicationContext(), String.valueOf(sAnio) + "-" + String.valueOf(sMesDelAnio) + "-" + String.valueOf(sDiaDelMes), Toast.LENGTH_SHORT).show();
+// 		   String all = Integer.toString(anio)+"-"+ Integer.toString(mesDelAnio)+"-"+ Integer.toString(diaDelMes);
+ 		   String all = sAnio+"-"+sMesDelAnio+"-"+sDiaDelMes;
  		   pDisplayDate.setText("  "+all);
  		  }
  	};
@@ -913,10 +974,28 @@ public class AccionDiferida extends SherlockFragment{
 	OnTimeSetListener ontime = new OnTimeSetListener() {
 		  @Override
 		  public void onTimeSet(TimePicker view, int hour, int minutes) {
+//			  horas = hour;
+//			  minutos = minutes;
+			  
+			  if (hour<10){
+				  sHoras = "0"+Integer.toString(hour);
+			  }
+			  else{
+				  sHoras = Integer.toString(hour);
+			  }
+			  if (minutes<10){
+				  sMinutos = "0"+Integer.toString(minutes);
+			  }
+			  else{
+				  sMinutos = Integer.toString(minutes); 
+			  }
+			  
 			  horas = hour;
 			  minutos = minutes;
-		   Toast.makeText(getActivity().getApplicationContext(), String.valueOf(hour) + ":" + String.valueOf(minutes), Toast.LENGTH_SHORT).show();
-		   String all = Integer.toString(horas)+":"+ Integer.toString(minutos);
+			  
+		   Toast.makeText(getActivity().getApplicationContext(), String.valueOf(sHoras) + ":" + String.valueOf(sMinutos), Toast.LENGTH_SHORT).show();
+//		   String all = Integer.toString(horas)+":"+ Integer.toString(minutos);
+		   String all = sHoras+":"+sMinutos;
 		   mPickedTimeText.setText("  "+all);
 		  }
 		 };
@@ -965,7 +1044,8 @@ public class AccionDiferida extends SherlockFragment{
 	}
 	
 	//Enviar formulario para modificar cirugia
-	public boolean enviarFormulario(String date, String hora, String reg, String paciente, String sEdad,
+	//Antes devolvia booleano - 3 ene
+	public String enviarFormulario(String date, String hora, String reg, String paciente, String sEdad,
 			String sGenero, String sProcedencia, String sDiagnostico, String sMedico,
 			String sRiesgoQuirurgico, String sInsumosIndispensables, String sRequerimientos, 
 			String sHemoderivados, String sRequisitos, String sNecesidades, 
@@ -1036,18 +1116,18 @@ public class AccionDiferida extends SherlockFragment{
 			//validamos el valor obtenido
     		if (status.equals("error")){// [{"logstatus":"0"}] 
     			Log.e("programacion-status ", "envio fallido");
-    			return false;
+    			return status;
     		}
     		else{// [{"logstatus":"1"}]
     			Log.e("programacion-status ", "envio exitoso");
-    			return true;
+    			return status;
     		}
     		 
     	}//Fin de if(comprueba si lo obtenido no es "null")
     	
     	else{	//json obtenido invalido verificar parte WEB.
     		Log.e("JSON  ", "ERROR");
-	    	return false;
+	    	return status;
 	    }//Fin de else
 		
 	}//Fin de enviar formulario
@@ -1241,5 +1321,36 @@ public class AccionDiferida extends SherlockFragment{
 		    }//Fin de else
 			return serviciosTemporal;
 		}//Fin de getServicios
+		
+	public void error3() {
+		Vibrator vibrator = (Vibrator) getActivity().getSystemService(
+				Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(200);
+		Toast t = Toast.makeText(getActivity().getApplicationContext(),
+				"Error: la fecha programada debe ser mayor a la fecha actual",
+				Toast.LENGTH_SHORT);
+		t.show();
+	}
+
+	public void error4() {
+		Vibrator vibrator = (Vibrator) getActivity().getSystemService(
+				Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(200);
+		Toast t = Toast.makeText(getActivity().getApplicationContext(),
+				"Error: la fecha programada no debe ser mayor a 30 días",
+				Toast.LENGTH_SHORT);
+		t.show();
+	}
+
+	public void error5(String result) {
+		Vibrator vibrator = (Vibrator) getActivity().getSystemService(
+				Context.VIBRATOR_SERVICE);
+		vibrator.vibrate(200);
+		Toast t = Toast.makeText(getActivity().getApplicationContext(),
+				"Error: la fecha y hora se empalman con otra cirugía: "
+						+ result.substring(1, (result.length())),
+				Toast.LENGTH_SHORT);
+		t.show();
+	}
 
 }//Fin de la clase Accion
