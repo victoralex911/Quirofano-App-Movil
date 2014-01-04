@@ -125,6 +125,9 @@ public class Item1 extends SherlockFragment {
 	TableLayout tablaDia;
 	TableLayout tablaDiferida;
 	
+	//3-ene
+	TableLayout tablaCancelada;
+	
 	//13nov
 	String quirofano_id;
 	String ID_quirofano;
@@ -154,6 +157,8 @@ public class Item1 extends SherlockFragment {
 	ArrayList<ArrayList<String>> arrayRealizadas = new ArrayList<ArrayList<String>>();
 	// ***Array de cirugias programadas que pasaron de fecha
 	ArrayList<ArrayList<String>> arrayProgramadasPasadas = new ArrayList<ArrayList<String>>();
+	// ***Array de cirugias canceladas
+	ArrayList<ArrayList<String>> arrayCanceladas = new ArrayList<ArrayList<String>>();
 	
 	/** ARRAYs PARA GUARDAR LOS PROCEDIMIENTOS OBTENIDOS - 12 DE DICIEMBRE */
 	//ArrayList<ArrayList<ArrayList<String>>> arrayProcedimientosProgramada = new ArrayList<ArrayList<ArrayList<String>>>();
@@ -163,6 +168,8 @@ public class Item1 extends SherlockFragment {
 	ArrayList<ArrayList<String>> arrayProcedimientosTransoperatorio = new ArrayList<ArrayList<String>>();
 	ArrayList<ArrayList<String>> arrayProcedimientosRealizada = new ArrayList<ArrayList<String>>();
 	ArrayList<ArrayList<String>> arrayProcedimientosProgramadaPasada = new ArrayList<ArrayList<String>>();
+	//3enero
+	ArrayList<ArrayList<String>> arrayProcedimientosCancelada = new ArrayList<ArrayList<String>>();
 	
 	/** ARRAYS DE CIRUGIAS DEL DIA DE HOY 
 	 * 17-dic
@@ -265,6 +272,8 @@ public class Item1 extends SherlockFragment {
     String URL_connect22 = "http://"+IP_Server+"/androidlogin/getProcedimientosTransoperatorioActual.php";
     String URL_connect23 = "http://"+IP_Server+"/androidlogin/getProcedimientosRealizadasActual.php";
     String URL_connect24 = "http://"+IP_Server+"/androidlogin/getServicios.php";
+    String URL_connect25 = "http://"+IP_Server+"/androidlogin/getCirugiasCanceladas.php";
+    String URL_connect26 = "http://"+IP_Server+"/androidlogin/getProcedimientosCancelada.php";
   
     ListView lista;
     ListView lista2; //prueba 27nov
@@ -318,7 +327,7 @@ public class Item1 extends SherlockFragment {
 		final View home2 = inflater.inflate(R.layout.home2, container, false);
 		final View home3 = inflater.inflate(R.layout.home, container, false);
 		final View home4 = inflater.inflate(R.layout.home, container, false); //Para diferidas
-
+		final View home5 = inflater.inflate(R.layout.home, container, false); //Para cirugias canceladas
 		
 		final View programar = inflater.inflate(R.layout.programar_cirugia, container, false);
 		//SALAS
@@ -423,6 +432,7 @@ public class Item1 extends SherlockFragment {
 		new GetProcedimientosTransoperatorio().execute(ID_quirofano);
 		new GetProcedimientosRealizada().execute(ID_quirofano);
 		new GetProcedimientosProgramadaPasada().execute(ID_quirofano);
+		new GetProcedimientosCancelada().execute(ID_quirofano);
 		
 		//Importa el orden
 		//new RegistroDiferida(inflater, container).execute(ID_quirofano);		//OBTENER CIRUGAS DIFERIDAS(agenda global)
@@ -506,6 +516,8 @@ public class Item1 extends SherlockFragment {
 		Button agenda = (Button)v.findViewById(R.id.agenda);
 		Button pc = (Button)v.findViewById(R.id.pc);
 		Button cd = (Button)v.findViewById(R.id.cd);
+		//3ene
+		Button cc = (Button)v.findViewById(R.id.cc);
 		Button agendaDia = (Button)v.findViewById(R.id.agenda_del_dia);
 		Button salas = (Button)v.findViewById(R.id.salas);
 		
@@ -549,6 +561,24 @@ public class Item1 extends SherlockFragment {
 				new RegistroDiferida(inflater, container).execute(ID_quirofano);
 				TextView temaDiferida = (TextView)home.findViewById(R.id.title);
 				temaDiferida.setText("Cirugías diferidas");
+				sv.addView(home);
+			}
+		});
+		
+		tablaCancelada = (TableLayout) home5.findViewById(R.id.table);
+		TableRow cabeceraCancelada = (TableRow) inflater.inflate(R.layout.tablerow, container, false);
+		tablaCancelada.addView(cabeceraCancelada);
+		
+		cc.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				sv.removeAllViews();
+				tl.removeAllViews();
+				TableRow tr = (TableRow) inflater.inflate(R.layout.tablerow, container, false);
+				tl.addView(tr);
+				new GetCirugiasCanceladas(inflater, container).execute(ID_quirofano);
+				TextView temaCancelada = (TextView)home.findViewById(R.id.title);
+				temaCancelada.setText("Cirugías canceladas");
 				sv.addView(home);
 			}
 		});
@@ -4951,6 +4981,311 @@ public class Item1 extends SherlockFragment {
 	    	//return st;
 	    }
 	}//Fin de mostrarRegistroDiferida2
+	
+	/** OBTENER CIRUGIAS CANCELADAS */
+	
+	class GetCirugiasCanceladas extends AsyncTask< String, String, String> {
+		
+		LayoutInflater inflater;
+		ViewGroup container;
+		
+		GetCirugiasCanceladas(LayoutInflater inflater, ViewGroup container){
+			this.inflater = inflater;
+			this.container = container;
+		}
+		
+    	String st1; //String con el id del quirofano seleccionado
+		
+    	protected void onPreExecute() {
+    		//progress = ProgressDialog.show(
+    		//getActivity(), null, "Accesando a agenda...");
+            super.onPreExecute();
+        }
+    	
+        protected String doInBackground(String... params) {
+			st1=params[0]; //obtenemos el string con "ok" 
+			
+			//enviamos y recibimos y analizamos los datos en segundo plano.
+    		try {
+				mostrarRegistroCancelada(st1);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Log.e("last-array", "last-array = "+al.get(0));
+    		return "ok"; //login valido
+    		
+		}//Fin de doInBackground
+       
+        protected void onPostExecute(String resultado) {
+        	//progress.dismiss();//ocultamos progess dialog.
+            Log.e("onPostExecute=","Todo bien="+resultado);
+            
+            //ONCLICK PARA DIFERIDAS
+    		OnClickListener clicks3=new OnClickListener() {
+
+    		    @Override
+    		    public void onClick(View v) {
+    		    		//Esta es la posicion del array padre sobre el que se hizo click
+    		    		System.out.println("id = "+v.getId());  
+    		    		
+	    		        Fragment duedateFrag = new AccionDiferida();	
+	    		        Bundle bundle = new Bundle();
+	    		                	    		                
+	    		        String miArreglo[] = new String[6];
+	    		        
+	    		        miArreglo[0] = arrayCanceladas.get(v.getId()).get(0);		//Llenar con la fecha
+				        miArreglo[1] = arrayCanceladas.get(v.getId()).get(1);		//Llenar con la hora
+				        miArreglo[2] = arrayCanceladas.get(v.getId()).get(2);		//Sala	
+				        miArreglo[3] = arrayCanceladas.get(v.getId()).get(3);		//Paciente
+				        miArreglo[4] = arrayCanceladas.get(v.getId()).get(4);		//Diagnostico
+				        miArreglo[5] = arrayCanceladas.get(v.getId()).get(5);		//ID
+	    		                	    		                	    		                
+	    		        bundle.putStringArray("parametro", miArreglo); //Arreglo para mandar a Accion
+	    		        duedateFrag.setArguments(bundle);
+	    		                
+	    		        FragmentTransaction ft  = getFragmentManager().beginTransaction();
+	    		        ft.replace(R.id.content_frame, duedateFrag);
+	    		        ft.addToBackStack(null);
+	    		        ft.commit();
+    		                
+    		    } //Fin de onClick
+    		}; //Fin de onClickListener
+    		
+    		View tab = inflater.inflate(R.layout.tiposde_cirugias, container, false);
+        	TextView titulo4 = (TextView)tab.findViewById(R.id.title);
+        	titulo4.setText("Cirugías canceladas");
+			TableRow tabRow4 = (TableRow) tab;
+			tl.addView(tabRow4);
+    		
+            //PARA CANCELADAS **************************************************************************
+        	for (int i = 0; i<arrayCanceladas.size(); i++){
+        		
+        		View tabler = inflater.inflate(R.layout.newtablerow, container, false);
+        		TextView fech = (TextView)tabler.findViewById(R.id.fech);
+				TextView hora = (TextView)tabler.findViewById(R.id.hora);
+				TextView sala = (TextView)tabler.findViewById(R.id.sala);
+				//Registro
+				TextView registro = (TextView)tabler.findViewById(R.id.registro);
+		
+				TextView pa = (TextView)tabler.findViewById(R.id.pa);
+				TextView dg = (TextView)tabler.findViewById(R.id.dg);
+				//procedimiento - cirugia
+				TextView procedimiento = (TextView)tabler.findViewById(R.id.procedimiento);
+				
+				//medico que programo
+				TextView medico = (TextView)tabler.findViewById(R.id.medico);
+				
+				TableRow trow = (TableRow) tabler;
+				
+				fech.setText(arrayCanceladas.get(i).get(0));	//fecha
+				fech.setTextColor(Color.parseColor("#ffffff"));
+				
+				hora.setText(arrayCanceladas.get(i).get(1));	//hora
+				hora.setTextColor(Color.parseColor("#ffffff"));
+				
+				sala.setText(arrayCanceladas.get(i).get(2));	//sala
+				sala.setTextColor(Color.parseColor("#ffffff"));
+				
+				registro.setText(arrayCanceladas.get(i).get(6));				//registro -new 10Dic
+				registro.setTextColor(Color.parseColor("#ffffff"));
+				
+				pa.setText(arrayCanceladas.get(i).get(3));	//paciente
+				pa.setTextColor(Color.parseColor("#ffffff"));
+				
+				dg.setText(arrayCanceladas.get(i).get(4));	//diagnostico
+				dg.setTextColor(Color.parseColor("#ffffff"));
+				
+				int counter = 0;
+				String tempo = "";
+				
+				for (int x = 0; x<arrayProcedimientosCancelada.size(); x++){
+					if(arrayCanceladas.get(i).get(5).equals(arrayProcedimientosCancelada.get(x).get(0))){
+						if(counter == 0){
+							tempo += "Procedimiento "+(counter+1)+
+									", id = "+arrayProcedimientosCancelada.get(x).get(1)+
+									", cie9mc = "+arrayProcedimientosCancelada.get(x).get(2)+
+									", región = "+arrayProcedimientosCancelada.get(x).get(3);
+						}
+						else{
+							tempo += "\nProcedimiento "+(counter+1)+
+									", id = "+arrayProcedimientosCancelada.get(x).get(1)+
+									", cie9mc = "+arrayProcedimientosCancelada.get(x).get(2)+
+									", región = "+arrayProcedimientosCancelada.get(x).get(3); 
+						}
+						counter = counter+1;
+					}//Fin de if
+				}//Fin de for para procedimientos
+				
+				procedimiento.setText(tempo);
+				procedimiento.setTextColor(Color.parseColor("#ffffff"));
+				
+				medico.setText(arrayCanceladas.get(i).get(7));					//medico que programa la cirugia
+				medico.setTextColor(Color.parseColor("#ffffff"));
+				
+				trow.setBackgroundResource(R.drawable.selector_dif);		
+					
+				tl.addView(trow);
+    			//Primero pasamos la posicion del arraypadre en el que se hizo click
+    			trow.setId(i);
+    			//Opcion2 - settear Id con la posición de "padre" en que se hizo click
+    			trow.setOnClickListener(clicks3);
+     
+    		}//Fin de for
+        }//Fin de onPostExecute        
+		
+	}//Fin de la subclase GetCirugiasCanceladas
+	
+	/** FIN DE OBTENER CIRUGIAS CANCELADAS */
+	
+	public void mostrarRegistroCancelada(String s) throws JSONException{	
+		arrayCanceladas.clear();
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", value4 = "",
+				value5="", value6="",cont = "";
+		
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		datosEnviar.add(new BasicNameValuePair("stat", s));
+
+		JSONArray jdata = envio.getserverdata(datosEnviar, URL_connect25);
+		//System.out.println("jdata = "+jdata.getString(0));
+		System.out.println(jdata.toString());
+		System.out.println("largo de jdata = "+jdata.length());
+		if (jdata!=null && jdata.length() > 0){
+    		//JSONObject json_data; //creamos un objeto JSON
+			try {
+				
+				for(int n = 0; n < jdata.length(); n++){
+					//st.clear();
+					System.out.println("vuelta:"+n);
+					JSONObject json_data = jdata.getJSONObject(n);
+					val = json_data.getString("dat");		//Fecha
+					value = json_data.getString("dato");	//Hora
+					value1 = json_data.getString("dato1");	//Sala
+					value2 = json_data.getString("dato2");	//Paciente
+					value3 = json_data.getString("dato3");	//Diagnostico
+					value4 = json_data.getString("dato4");	//ID
+					value5 = json_data.getString("dato5");	//Registro
+					value6 = json_data.getString("dato6"); 	//Nombre del dr que programa
+					
+					ArrayList<String> temporary = new ArrayList<String>();
+					
+					temporary.add(val);
+					temporary.add(value);
+					temporary.add(value1);
+					temporary.add(value2);
+					temporary.add(value3);
+					temporary.add(value4);
+					temporary.add(value5);
+					temporary.add(value6);
+		
+					Log.e("RegistroCancelada", "array temporary = "+temporary);
+					
+					arrayCanceladas.add(temporary);
+				}
+
+				Log.e("array RegistroCanceladas", "arrayCanceladas = "+arrayCanceladas);
+		
+				//Log.e("enviarFormulario","status= "+status);//muestro por log que obtuvimos
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("hi", "hi");
+			}		            	
+    	}//Fin de if(comprueba si lo obtenido no es "null")
+    	
+    	else{	//json obtenido invalido verificar parte WEB.
+    		Log.e("JSON  ", "ERROR");
+	    	//return st;
+	    }
+	}//Fin de mostrarRegistroCancelada
+	
+	// GetProcedimientosCancelada
+	class GetProcedimientosCancelada extends AsyncTask< String, String, String> {
+		
+    	String st1; //String con el id del quirofano seleccionado
+		
+    	protected void onPreExecute() {
+            super.onPreExecute();
+        }
+        protected String doInBackground(String... params) {
+			st1=params[0]; //obtenemos el string con "ok" 
+			
+    		try {
+				getProcedimientosCancelada(st1);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Log.e("last-array", "last-array = "+al.get(0));
+    		return "ok"; //login valido
+		}//Fin de doInBackground
+       
+        protected void onPostExecute(String resultado) {
+        	//progress.dismiss();//ocultamos progess dialog.
+            Log.e("onPostExecute=","Todo bien="+resultado);
+            System.out.println(">>>ARRAYCANCELADA*** : "+arrayProcedimientosCancelada);
+        }//Fin de onPostExecute        
+	}//Fin de la subclase GetProcedimientosCancelada
+	
+	/** OBTENER PROCEDIMIENTOS DE CIRUGIAS CANCELADAS*/
+	public void getProcedimientosCancelada(String s) throws JSONException{	
+		arrayProcedimientosCancelada.clear();
+		String val = "", value = "", value1 = "", value2 = "", value3 = "", cont = "";
+			
+		ArrayList<NameValuePair> datosEnviar= new ArrayList<NameValuePair>();
+		datosEnviar.add(new BasicNameValuePair("stat", s));
+
+		JSONArray jdata = envio.getserverdata(datosEnviar, URL_connect26);
+		//System.out.println("jdata = "+jdata.getString(0));
+		System.out.println(jdata.toString());
+		System.out.println("largo de jdata = "+jdata.length());
+		if (jdata!=null && jdata.length() > 0){
+	   		//JSONObject json_data; //creamos un objeto JSON
+			try {
+					
+				for(int n = 0; n < jdata.length(); n++){
+					//st.clear();
+					System.out.println("vuelta:"+n);
+					JSONObject json_data = jdata.getJSONObject(n);
+					cont = json_data.getString("d");	//id de la cirugia
+					val = json_data.getString("d0");	//id de procedimiento
+					value = json_data.getString("d1");	//cie9mc
+					value1 = json_data.getString("d2");	//region
+					value2 = json_data.getString("d3");	//detalles
+					value3 = json_data.getString("d4");	//servicio
+						
+					ArrayList<String> temporary = new ArrayList<String>();
+						
+					temporary.add(cont);
+					temporary.add(val);
+					temporary.add(value);
+					temporary.add(value1);
+					temporary.add(value2);
+					temporary.add(value3);
+			
+					Log.e("Tempo-dif", "tempo-dif = "+temporary);
+						
+					arrayProcedimientosCancelada.add(temporary);
+				}
+
+				Log.e("array Procedimientos Cancelada", "arrayProcedimientosCancelada = "+arrayProcedimientosCancelada);
+			
+				//Log.e("enviarFormulario","status= "+status);//muestro por log que obtuvimos
+			}
+			catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("hi", "hi");
+			}		            	
+	    }//Fin de if(comprueba si lo obtenido no es "null")
+	    	
+	    else{	//json obtenido invalido verificar parte WEB.
+	    	Log.e("JSON  ", "ERROR");
+		   	//return st;
+			}
+	}//Fin de getProcedimientosCancelada
+	
 	
 	
 }//Fin de la clase Item1
