@@ -1,6 +1,9 @@
 
 <?php 
-/*Schedule a surgery - Programar cirugia*/
+/*
+	 Modificar cirugia, recibe el id de la cirugia seleccionada + elementos nuevos del 
+	 formulario de programar cirugia, en base a eso entrega un status de exito o error.
+*/
 
 //EditText de la aplicacion
 $date = $_POST['date'];
@@ -28,7 +31,6 @@ $atencion = $_POST['sAtencion'];
 $p = $_POST['sP'];
 $r = $_POST['sR'];
 
-
 $newSala = (int)$sala;					//int
 $newDuracion = $duracion;				//time
 $newProgramacion = (int)$programacion;	//int
@@ -41,14 +43,18 @@ $newR = (int)$r; 						//tinyint(1)
 $quirofano = $_POST['q_id'];
 $newQuirofano = (int)$quirofano;
 
-$sala2 = $newSala; //Quite el +1, id de salas arreglado, 3 ene
+//ID del registro de cirugia que se va a modificar
+$registro_ID = $_POST['registro_ID'];
+$intRegistro_ID = (int) $registro_ID;
+
+$sala2 = $newSala; //Quite el id de salas, arreglado problema de id, 3 enero
 
 require_once 'funciones_bd.php';
 $db = new funciones_BD();
 
-	$db->programarCirugia($date, $hora, $registro, $paciente, $edad, $genero, $procedencia, $diagnostico, $medico, $riesgoQuirurgico,
+	$db->modificarCirugia($date, $hora, $registro, $paciente, $edad, $genero, $procedencia, $diagnostico, $medico, $riesgoQuirurgico,
 		$insumos, $requerimientosAnestesiologia, $hemoderivados, $requisitosLaboratorio, $otrasNecesidades, $sala2, $newDuracion,
-		$newProgramacion, $newServicio, $newAtencion, $newP, $newR, $newQuirofano);
+		$newProgramacion, $newServicio, $newAtencion, $newP, $newR, $newQuirofano, $intRegistro_ID);
 
 	/*
 	if($db->programarCirugia($date, $hora, $registro, $paciente, $edad, $genero, $procedencia, $diagnostico, $medico, $riesgoQuirurgico,

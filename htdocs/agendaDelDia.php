@@ -2,13 +2,12 @@
 <?php 
 /*Agenda del dia - Envia los registros del dia a la aplicacion Android*/
 
-$status = $_POST['stat'];
+$id_quirofano = $_POST['quirofano'];
 
 require_once 'funciones_bd.php';
 $db = new funciones_BD();
-	if($status == "ok"){
-		$db->agendaDelDia();	
-	}
+		$id = (int)$id_quirofano;
+		$db->agendaDelDia($id);	
 	//if($status == "ok"){
 		//$resultado[]=array("dato"=>"1");
 		//$resultado[]=array("logstatus"=>"0");

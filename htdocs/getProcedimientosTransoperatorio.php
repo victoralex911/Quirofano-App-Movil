@@ -1,12 +1,13 @@
 <?php 
-/*Show diary - Mostrar agenda*/
+/*Muestra los procedimientos de las cirugias en transoperatorio*/
 
-$status = $_POST['stat'];
+$status = $_POST['stat']; //valor de quirofano_id seleccionado
+$intQuirofano = (int) $status;
 
 require_once 'funciones_bd.php';
 
 $db = new funciones_BD();
-	$db->test($status);	
+	$db->getProcedimientosTransoperatorio($intQuirofano);	
 
 /*
 $db = new funciones_BD();
